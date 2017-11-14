@@ -1,0 +1,7 @@
+:backtrace: true
+:benchmark: false
+:verbose: true
+install: --no-document --env-shebang
+update: --no-document --env-shebang
+gem: --no-document
+

@@ -1,0 +1,4 @@
+#compdef cdls
+_cd
+
+# vim: ft=zsh

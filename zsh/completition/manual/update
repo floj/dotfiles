@@ -1,0 +1,9 @@
+#!/usr/bin/env zsh
+autoload -U compinit && compinit 
+# dont use this, its not up to date
+# wget "https://raw.githubusercontent.com/hashicorp/terraform/master/contrib/zsh-completion/_terraform"
+
+# kubectl
+source <(kubectl completion zsh)
+__kubectl_convert_bash_to_zsh > _kubectl
+

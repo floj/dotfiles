@@ -1,0 +1,39 @@
+# vim: ft=zsh
+[[ -n "$TMUX" ]] && export TERM='screen-256color' 
+
+if whence tmux>/dev/null 2>&1 && [[ -z "$TMUX" ]] && [[ -z "$TILIX_ID" ]]; then
+  tmux attach || tmux -2
+  exit
+fi
+
+[[ -f /etc/profile.d/vte.sh ]] && source /etc/profile.d/vte.sh
+
+ZSH_SOURCE_DIR="$HOME/dotfiles/zsh"
+source "$ZSH_SOURCE_DIR/functions.zsh" && sourceIncludeFiles "$ZSH_SOURCE_DIR"
+
+WORDCHARS="*?_-.[]~&;!#$%^(){}<>"
+source "$ZSH_SOURCE_DIR/kbd.zsh"
+
+if [[ -f  "$ZSH_SOURCE_DIR/modules.sh" ]]; then
+  source "$ZSH_SOURCE_DIR/modules.sh"
+  for mdir in "${moduleOrder[@]}"; do
+    module="$ZSH_SOURCE_DIR/modules/$mdir"
+    typeset -i mloaded=0
+    for f in "init.zsh" "$mdir.zsh" "$mdir.plugin.zsh"; do
+      if [[ -f "$module/$f" ]]; then
+        source "$module/$f"
+        mloaded=1
+        break
+      fi
+    done
+    (( mloaded == 0 )) && echo "Don't know how to load module '$module'"
+  done
+  unset subtrees
+  unset mloaded
+  unset moduleOrder
+fi
+
+FAST_HIGHLIGHT_STYLES[path]="fg=green"
+[[ -f "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"
+source "$ZSH_SOURCE_DIR/prompt.zsh"
+

@@ -1,0 +1,43 @@
+[user]
+  useconfigonly = true
+[alias]
+  # identities
+  iwork = "!echo -n \"applying work profile ($GIT_IWORK_NAME | $GIT_IWORK_EMAIL)\" && git config user.name \"$GIT_IWORK_NAME\" && git config user.email \"$GIT_IWORK_EMAIL\" && echo ' done.'"
+  ipriv = "!echo -n \"applying private profile ($GIT_IPRIV_NAME | $GIT_IPRIV_EMAIL)\" && git config user.name \"$GIT_IPRIV_NAME\" && git config user.email \"$GIT_IPRIV_EMAIL\" && echo ' done.'"
+  
+  st = status
+  
+  co = checkout
+  com = checkout master
+  
+  rb = rebase
+  rbm = rebase master
+  rbi = rabase --interactive
+
+  amend = commit --amend
+#[commit]
+#  gpgsign = true
+# [branch]
+#   autosetuprebase = always
+[push]
+  default = current
+[color]
+  diff = auto
+  status = auto
+  branch = auto
+  ui = true
+[color "status"]
+  untracked = yellow
+[merge]
+  tool = mymeld
+  conflictstyle = diff3
+[mergetool]
+  keepBackup = false
+[mergetool "mymeld"]
+  cmd = meld $LOCAL $BASE $REMOTE --output $MERGED
+  
+
+[core]
+	editor = nvim -c 'startinsert'
+[http "https://gopkg.in"]
+	followRedirects = true

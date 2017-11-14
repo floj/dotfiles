@@ -1,0 +1,5 @@
+#compdef chruby
+_chruby() {
+  compadd $(chruby | tr -d '* ') 
+}
+# vim: ft=zsh

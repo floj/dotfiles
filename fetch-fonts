@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+function downloadFontsTo(){
+  local tempdir="$(mktemp -d)"
+  echo "using tempdir $tempdir"
+  git clone git@github.com:gabrielelana/awesome-terminal-fonts.git "$tempdir"
+  cp $tempdir/build/*.ttf "$1"
+  rm -rf "$tempdir"
+}
+
+downloadFontsTo "home/.fonts"
+fc-cache -fv "$HOME/.fonts"

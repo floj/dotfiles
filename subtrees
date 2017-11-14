@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+
+if ! git diff-index --quiet HEAD --; then
+  echo "local changes detected. please commit before init/update subtrees"
+  exit 1
+fi
+
+modulesfile="zsh/modules.sh"
+[[ -f "$modulesfile" ]] || (echo "$modulesfile not found"; exit 1)
+
+declare -A subtrees
+source "$modulesfile"
+
+[[ ${#subtrees[@]} == 0 ]] && (echo "subtrees array not defined"; exit 1)
+
+cRed=$(tput setaf 1)
+cGreen=$(tput setaf 2)
+cYellow=$(tput setaf 3)
+cReset=$(tput sgr0)
+function log() {
+  echo "$*"
+}
+
+function eachSubtree() {
+  cmd="$1"
+  for module in "${!subtrees[@]}"; do
+    moduledir="zsh/modules/$module"
+    repo="git@github.com:${subtrees[$module]}.git"
+    remote="${subtrees[$module]/\//_}"
+    echo "${cYellow}$cmd subtree for $repo (-> $moduledir)${cReset}"
+    $cmd "$remote" "$repo" "$moduledir"
+  done
+}
+
+# args:
+# 1: remote name
+# 2: repo url
+# 3: module dir
+function init() {
+  if ! git remote | grep "$1" &>/dev/null ; then
+    echo "  ${cGreen}adding repo $2 with name $1${cReset}"
+    git remote add -f "$1" "$2"
+  else
+    echo "  ${cRed}remote $remote already exists${cReset}"
+    return 1
+  fi
+  if [[ ! -d "$3" ]]; then
+    echo "  ${cGreen}adding subtree from $1 to $3${cReset}"
+    git subtree add --prefix "$3" "$1" master --squash
+  else
+    echo "  ${cRed}$3 already exists, use 'subtree update' to update${cReset}"
+  fi
+}
+
+# args:
+# 1: remote name
+# 2: repo url
+# 3: module dir
+function update() {
+  git fetch "$1" master
+  git subtree pull --prefix "$3" "$1" master --squash
+}
+
+case "$1" in
+  init)
+    eachSubtree init
+    ;;
+  update)
+    eachSubtree update
+    ;;
+  *)
+    echo "usage subtrees (init|update)"
+esac
+
