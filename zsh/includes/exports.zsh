@@ -2,8 +2,7 @@
 # editors
 #
 export EDITOR=nvim
-export SVN_EDITOR="nvim -c ':1' -c 'startinsert'"
-
+export SYSTEMD_EDITOR=$EDITOR
 
 export GREP_COLOR='37;45'
 
