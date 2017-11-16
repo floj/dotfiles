@@ -19,7 +19,7 @@ if [[ -f  "$ZSH_SOURCE_DIR/modules.sh" ]]; then
   for mdir in "${moduleOrder[@]}"; do
     module="$ZSH_SOURCE_DIR/modules/$mdir"
     typeset -i mloaded=0
-    for f in "init.zsh" "$mdir.zsh" "$mdir.plugin.zsh"; do
+    for f in "init.zsh" "$mdir.zsh" "$mdir.plugin.zsh" "../$mdir.init.zsh"; do
       if [[ -f "$module/$f" ]]; then
         source "$module/$f"
         mloaded=1
