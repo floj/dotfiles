@@ -13,6 +13,9 @@ alias less='less -S'
 alias v='nvim'
 alias vi='v'
 
+alias ...='cd ../..'
+alias ....='cd ../../..'
+
 # knowing my typos
 alias dc='cd'
 alias grep='grep --color=auto'
