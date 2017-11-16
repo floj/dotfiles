@@ -59,3 +59,14 @@ fancy-ctrl-z () {
 }
 zle -N fancy-ctrl-z
 bindkey '^Z' fancy-ctrl-z
+
+# taken from grml
+zsh-restart () {
+  exec $SHELL $SHELL_ARGS "$@"
+}
+
+## Switching shell safely and efficiently? http://www.zsh.org/mla/workers/2001/msg02410.html
+#bash() {
+#    NO_SWITCH="yes" command bash "$@"
+#}
+
