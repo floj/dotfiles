@@ -24,19 +24,19 @@ if whence fzf > /dev/null 2>&1; then
     }
     local dir cdir
     cdir=${1:-$PWD}
-    dir=$(get_parent_dirs "${cdir:A}" | fzf-tmux) && cd "$dir"
+    dir=$(get_parent_dirs "${cdir:A}" | fzf) && cd "$dir"
   }
 
   # fd - cd to selected sub directory
   if whence fd >/dev/null; then
     ff() {
       local dir
-      dir=$(fd -d "${1:-3}" -t d -I -H 2> /dev/null | fzf-tmux) && cd "$dir"
+      dir=$(fd -d "${1:-3}" -t d -I -H 2> /dev/null | fzf) && cd "$dir"
     }
   else
     ff() {
       local dir
-      dir=$(find * -maxdepth "${1:-3}" -type d -print 2> /dev/null | fzf-tmux) && cd "$dir"
+      dir=$(find * -maxdepth "${1:-3}" -type d -print 2> /dev/null | fzf) && cd "$dir"
     }
   fi
 
@@ -49,7 +49,7 @@ if whence fzf > /dev/null 2>&1; then
   fgbr() {
     local branches branch
     branches=$(git for-each-ref --count=30 --sort=-committerdate refs/heads/ --format="%(refname:short)") || return
-    branch=$(echo "$branches" | fzf-tmux -d $(( 2 + $(wc -l <<< "$branches") )) +m) || return
+    branch=$(echo "$branches" | fzf -d $(( 2 + $(wc -l <<< "$branches") )) +m) || return
     git checkout $(echo "$branch" | sed "s/.* //" | sed "s#remotes/[^/]*/##")
   }
 
@@ -64,7 +64,7 @@ if whence fzf > /dev/null 2>&1; then
       sort -u          | awk '{print "\x1b[34;1mbranch\x1b[m\t" $1}') || return
     target=$(
       (echo "$tags"; echo "$branches") |
-      fzf-tmux -l30 -- --no-hscroll --ansi +m -d "\t" -n 2) || return
+      fzf --ansi +m -d "\t" -n 2) || return
     git checkout $(echo "$target" | awk '{print $2}')
   }
 
