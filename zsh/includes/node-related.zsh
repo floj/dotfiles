@@ -9,4 +9,3 @@
 # fi
 
 [[ -d "$HOME/.npm-packages/bin" ]] && path+=($HOME/.npm-packages/bin)
-# exportIfPresent "" "$HOME/.npm-global" true
