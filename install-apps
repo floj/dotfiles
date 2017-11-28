@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+set -eu
+
+# peco https://github.com/peco/peco
+# fzf  https://github.com/junegunn/fzf
+# gitql
+# ripgrep https://github.com/BurntSushi/ripgrep
+# 
+# shell check 
+# googler https://github.com/jarun/googler
+# exa https://github.com/ogham/exa
+# # pdsh https://linux.die.net/man/1/pdsh
+# 
+# hecate https://github.com/evanmiller/hecate
+# 
+# usql https://github.com/xo/usql
+# overmind https://github.com/DarthSim/overmind
+# goreman https://github.com/mattn/goreman
+# httpstat https://github.com/davecheney/httpstat
+# 
+# Alacritty https://github.com/jwilm/alacritty
+
+fromAur() {
+  local tmpdir
+  app=$1
+  tmpdir=$(mktemp -d) || { echo "could not create temp dir"; return 1; }
+  cd "$tmpdir"
+  curl -LO --fail "https://aur.archlinux.org/cgit/aur.git/snapshot/$app.tar.gz"
+  tar xf "$app.tar.gz"
+  cd "$app"
+  makepkg -si --noconfirm
+}
+
+fromAur package-query
+fromAur yaourt
+
+yaourt -S --needed fzf ripgrep shellcheck exa peco alacritty-git 
