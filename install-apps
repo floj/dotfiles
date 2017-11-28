@@ -34,4 +34,8 @@ fromAur() {
 fromAur package-query
 fromAur yaourt
 
-yaourt -S --needed fzf ripgrep shellcheck exa peco alacritty-git 
+yaourt -S --needed \
+  git \
+  neovim python-neovim shellcheck \
+  fzf ripgrep exa peco \
+  alacritty-git 
