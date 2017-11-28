@@ -40,3 +40,9 @@ zsh-restart () {
 #    NO_SWITCH="yes" command bash "$@"
 #}
 
+unpack-rar() {
+ [[ -z "$1" ]] && { echo "usage: unpack-rar <glob-pattern>"; return 1; }
+ for f in $1; do 
+   unrar x "$f" 
+ done
+}
