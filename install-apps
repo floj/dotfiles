@@ -20,6 +20,12 @@ set -eu
 # 
 # Alacritty https://github.com/jwilm/alacritty
 
+
+declare -A groups=()
+groups[default]="git neovim python-neovim shellcheck fzf ripgrep exa alacritty-git tmux"
+groups[i3]="i3-wm polybar rofi"
+groups[opt]="peco"
+
 fromAur() {
   local tmpdir
   app=$1
@@ -31,11 +37,22 @@ fromAur() {
   makepkg -si --noconfirm
 }
 
-fromAur package-query
-fromAur yaourt
+if ! command -v yaourt > /dev/null; then
+  fromAur package-query
+  fromAur yaourt
+fi
 
-yaourt -S --needed \
-  git \
-  neovim python-neovim shellcheck \
-  fzf ripgrep exa peco \
-  alacritty-git 
+declare -a groupKeys=($@)
+if [[ ${#groupKeys[@]} -eq 0 ]]; then
+  echo "No groups given, use one or more of"
+  for key in "${!groups[@]}"; do
+    echo "  $key"
+    echo "      ${groups[$key]}"
+  done
+  exit 1
+fi
+
+for key in "${groupKeys[@]}"; do
+  pkgs=${groups[$key]}
+  yaourt -S --needed $pkgs
+done
