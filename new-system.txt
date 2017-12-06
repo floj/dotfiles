@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# vim: ft=sh
+#
+# install according 
+# pacstrap /mnt base vim
+
+localectl set-keymap de
+timedatectl set-ntp true
+
+cat>/etc/profile.d/sane-defauls.sh <<EOF
+alias ls='ls --color=auto --group-directories-first'
+alias ll='ls -al'
+alias less='less -S'
+alias v='vim'
+alias vim='vim'
+alias ..='cd ..'
+
+export EDITOR=nvim
+EOF
+# disable anoying speeper beep as termbell
+echo "blacklist pcspkr" > /etc/modprobe.d/nobeep.conf
+
+pacman -S reflector
+reflector --verbose -c Germany -p https --age 12 --sort score -f 5 --save /etc/pacman.d/mirrorlist
+
+pacman -S sudo gnome gnome-tweak-tool openssh xf86-video-intel zsh
+
+echo '%wheel ALL=(ALL) ALL' > /etc/sudoers.d/allow-wheel
+chmod 0440 /etc/sudoers.d/allow-wheel
+visudo -c -s
+
+useradd -m -G users,wheel -s /usr/bin/zsh flo
+passwd flo
+
