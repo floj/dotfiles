@@ -6,21 +6,47 @@
 
 set -euo pipefail
 
-grep '^en_US.UTF-8 UTF-8' /etc/locale.gen || {
-  echo 'en_US.UTF-8 UTF-8' >> /etc/locale.gen
+declare -A ccodes=()
+ccodes[white]=$(tput setaf 7)
+ccodes[cyan]=$(tput setaf 6)
+ccodes[magenta]=$(tput setaf 5)
+ccodes[blue]=$(tput setaf 4)
+ccodes[yellow]=$(tput setaf 3)
+ccodes[green]=$(tput setaf 2)
+ccodes[red]=$(tput setaf 1)
+ccodes[black]=$(tput setaf 0)
+ccodes[reset]=$(tput sgr0)
+ccodes[bold]=$(tput bold)
+
+info() {
+  echo "${ccodes[bold]}${ccodes[white]}$*${ccodes[reset]}"
+}
+
+declare -A conf=()
+conf[locale]=en_US.UTF-8
+conf[keymap]=de
+conf[user]="${1:-}"
+
+if ! grep "^${conf[locale]} UTF-8" /etc/locale.gen >/dev/null; then
+  info "Generating ${conf[locale]} locale"
+  echo "${conf[locale]} UTF-8" >> /etc/locale.gen
   locale-gen
+fi
+
+localectl status | grep "System Locale: LANG=${conf[locale]}" > /dev/null || {
+  info "Setting system locale to ${conf[locale]}"
+  localectl set-locale "LANG=${conf[locale]}"
 }
 
-localectl status | grep 'System Locale: LANG=en_US.UTF-8' || {
-  localectl set-locale LANG=en_US.utf8
+localectl status | grep "VC Keymap: ${conf[keymap]}" > /dev/null || {
+  info "Setting keymap to ${conf[keymap]}"
+  localectl set-keymap "${conf[keymap]}"
 }
 
-localectl status | grep 'VC Keymap: de' || {
-  localectl set-keymap de
-}
-
+info "Enable NTP for system clock"
 timedatectl set-ntp true
 
+info "Adding convinience defauls to /etc/profile.d/sane-defauls.sh"
 cat>/etc/profile.d/sane-defauls.sh <<EOF
 alias ls='ls --color=auto --group-directories-first'
 alias ll='ls -al'
@@ -32,27 +58,49 @@ alias ..='cd ..'
 export EDITOR=nvim
 EOF
 
-# disable anoying speeper beep as termbell
+info "Disable anoying speeper beep as termbell (blacklist module pcspkr)"
 echo "blacklist pcspkr" > /etc/modprobe.d/nobeep.conf
 
-pacman -Sy
-pacman -S --needed reflector
+info "Updating pacman databases"
+pacman -Sy --noconfirm
+
+pacman -Q reflector &> /dev/null || {
+  info "Installing reflector to update pacmans mirrorlist"
+  pacman -S --noconfirm reflector
+}
+info "Updating pacmans mirrorlist"
 reflector --verbose -c Germany -p https --age 12 --sort score -f 5 --save /etc/pacman.d/mirrorlist
 
+# This are the gnome packages from pacmans 'gnome'-group I want.
+# Use pacman -Sgg gnome to see all the packages of group 'gnome'.
 gnomePkgs=(adwaita-icon-theme eog evince gdm gnome-backgrounds gnome-calculator gnome-control-center gnome-dictionary gnome-disk-utility gnome-font-viewer gnome-keyring gnome-screenshot gnome-session gnome-settings-daemon gnome-shell gnome-shell-extensions gnome-system-monitor gnome-terminal gnome-themes-standard gucharmap gvfs gvfs-mtp gvfs-smb mousetweaks mutter nautilus networkmanager tracker tracker-miners xdg-user-dirs-gtk)
 
-pacman -S --needed sudo ${gnomePkgs[@]} gnome-tweak-tool openssh xf86-video-intel zsh
+info "Checking for video drivers"
+xf86driver=""
+# Intel VGA, add nvidia and ati at some point
+if vgahw=$(lspci -d 8086::0300) > /dev/null; then
+  xf86driver=xf86-video-intel
+  info " => found Intel graphics card, will install $xf86driver"
+  echo " => $vgahw"
+fi
+
+info "Installing packages"
+pacman -S --needed sudo ${gnomePkgs[@]} $xf86driver gnome-tweak-tool openssh zsh
 
 for unit in gdm NetworkManager; do
+  info "Enabling systemd unit $unit"
   systemctl enable "$unit"
 done
 
+info "Adding rule to sudoers.d to allow sudo access for users of group 'wheel'"
 echo '%wheel ALL=(ALL) ALL' > /etc/sudoers.d/allow-wheel
 chmod 0440 /etc/sudoers.d/allow-wheel
+info "Checking sudo conf"
 visudo -c -s
 
-getent passwd flo || {
-  useradd -m -G users,wheel -s /usr/bin/zsh flo
-  passwd flo
-}
+if [[ -n ${conf[user]} ]] && ! getent passwd "${conf[user]}" >/dev/null; then
+  info "Adding user ${conf[user]}"
+  useradd -m -G users,wheel -s /usr/bin/zsh "${conf[user]}"
+  passwd "${conf[user]}"
+fi
 
