@@ -38,7 +38,8 @@ fromAur() {
 
 develPkgs=($(pacman -Sgg | cut -d' ' -f1))
 if ! pacman -Q ${develPkgs[*]}>/dev/null 2>&1; then
-  pacman -S --needed --noconfirm base-devel
+  echo "Need to install base-devel package group"
+  sudo pacman -S --needed --noconfirm base-devel
 fi
 
 if ! command -v yaourt > /dev/null; then
@@ -58,5 +59,5 @@ fi
 
 for key in "${groupKeys[@]}"; do
   pkgs=${groups[$key]}
-  yaourt -S --needed $pkgs
+  yaourt -S --needed --noconfirm $pkgs
 done
