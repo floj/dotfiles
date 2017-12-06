@@ -27,6 +27,7 @@ conf[locale]=en_US.UTF-8
 conf[keymap]=de
 conf[user]="${1:-}"
 
+info "Checking locale"
 if ! grep "^${conf[locale]} UTF-8" /etc/locale.gen >/dev/null; then
   info "Generating ${conf[locale]} locale"
   echo "${conf[locale]} UTF-8" >> /etc/locale.gen
@@ -85,7 +86,7 @@ if vgahw=$(lspci -d 8086::0300) > /dev/null; then
 fi
 
 info "Installing packages"
-pacman -S --needed sudo ${gnomePkgs[@]} $xf86driver gnome-tweak-tool openssh zsh
+pacman -S --needed --noconfirm sudo ${gnomePkgs[@]} $xf86driver gnome-tweak-tool openssh zsh
 
 for unit in gdm NetworkManager; do
   info "Enabling systemd unit $unit"
