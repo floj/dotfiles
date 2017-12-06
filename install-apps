@@ -36,8 +36,8 @@ fromAur() {
   makepkg -si --noconfirm
 }
 
-develPkgs=($(pacman -Sgg | cut -d' ' -f1))
-if ! pacman -Q ${develPkgs[*]}>/dev/null 2>&1; then
+develPkgs=($(pacman -Sgg base-devel | cut -d' ' -f1))
+if ! pacman -Q ${develPkgs[*]} &>/dev/null; then
   echo "Need to install base-devel package group"
   sudo pacman -S --needed --noconfirm base-devel
 fi
