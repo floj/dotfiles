@@ -6,7 +6,19 @@
 
 set -euo pipefail
 
-localectl set-keymap de
+grep '^en_US.UTF-8 UTF-8' /etc/locale.gen || {
+  echo 'en_US.UTF-8 UTF-8' >> /etc/locale.gen
+  locale-gen
+}
+
+localectl status | grep 'System Locale: LANG=en_US.UTF-8' || {
+  localectl set-locale LANG=en_US.utf8
+}
+
+localectl status | grep 'VC Keymap: de' || {
+  localectl set-keymap de
+}
+
 timedatectl set-ntp true
 
 cat>/etc/profile.d/sane-defauls.sh <<EOF
@@ -23,10 +35,13 @@ EOF
 # disable anoying speeper beep as termbell
 echo "blacklist pcspkr" > /etc/modprobe.d/nobeep.conf
 
-pacman -S reflector
+pacman -Sy
+pacman -S --needed reflector
 reflector --verbose -c Germany -p https --age 12 --sort score -f 5 --save /etc/pacman.d/mirrorlist
 
-pacman -S sudo gnome gnome-tweak-tool openssh xf86-video-intel zsh
+gnomePkgs=(gnome adwaita-icon-theme eog evince gdm gnome-backgrounds gnome-calculator gnome-control-center gnome-dictionary gnome-disk-utility gnome-font-viewer gnome-keyring gnome-screenshot gnome-session gnome-settings-daemon gnome-shell gnome-shell-extensions gnome-system-monitor gnome-terminal gnome-themes-standard gucharmap gvfs gvfs-mtp gvfs-smb mousetweaks mutter nautilus networkmanager tracker tracker-miners xdg-user-dirs-gtk)
+
+pacman -S --needed sudo ${gnomePkgs[@]} gnome-tweak-tool openssh xf86-video-intel zsh
 
 for unit in gdm NetworkManager; do
   systemctl enable "$unit"
@@ -36,6 +51,8 @@ echo '%wheel ALL=(ALL) ALL' > /etc/sudoers.d/allow-wheel
 chmod 0440 /etc/sudoers.d/allow-wheel
 visudo -c -s
 
-useradd -m -G users,wheel -s /usr/bin/zsh flo
-passwd flo
+getent passwd flo || {
+  useradd -m -G users,wheel -s /usr/bin/zsh flo
+  passwd flo
+}
 
