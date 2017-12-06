@@ -20,11 +20,10 @@ set -eu
 # 
 # Alacritty https://github.com/jwilm/alacritty
 
-
 declare -A groups=()
 groups[default]="git neovim python-neovim shellcheck fzf ripgrep exa alacritty-git tmux"
 groups[i3]="i3-wm polybar rofi"
-groups[opt]="peco"
+groups[opt]="peco grv-git"
 
 fromAur() {
   local tmpdir
@@ -36,6 +35,11 @@ fromAur() {
   cd "$app"
   makepkg -si --noconfirm
 }
+
+develPkgs=($(pacman -Sgg | cut -d' ' -f1))
+if ! pacman -Q ${develPkgs[*]}>/dev/null 2>&1; then
+  pacman -S --needed --noconfirm base-devel
+fi
 
 if ! command -v yaourt > /dev/null; then
   fromAur package-query
