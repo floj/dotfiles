@@ -4,6 +4,8 @@
 # install according 
 # pacstrap /mnt base vim
 
+set -euo pipefail
+
 localectl set-keymap de
 timedatectl set-ntp true
 
@@ -17,6 +19,7 @@ alias ..='cd ..'
 
 export EDITOR=nvim
 EOF
+
 # disable anoying speeper beep as termbell
 echo "blacklist pcspkr" > /etc/modprobe.d/nobeep.conf
 
@@ -24,6 +27,10 @@ pacman -S reflector
 reflector --verbose -c Germany -p https --age 12 --sort score -f 5 --save /etc/pacman.d/mirrorlist
 
 pacman -S sudo gnome gnome-tweak-tool openssh xf86-video-intel zsh
+
+for unit in gdm NetworkManager; do
+  systemctl enable "$unit"
+done
 
 echo '%wheel ALL=(ALL) ALL' > /etc/sudoers.d/allow-wheel
 chmod 0440 /etc/sudoers.d/allow-wheel
