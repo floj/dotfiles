@@ -8,8 +8,8 @@ if whence fzf > /dev/null 2>&1; then
   fi
 
   zz() {
-    local line=$(_z -l 2>&1 | fzf --height 40% --reverse -1 --inline-info +s --tac --query "$*") && \
-      cd "${line##* }"
+    local line=$(_z -l -t -e "$*" 2>&1 | fzf --height 40% --reverse -1 --inline-info +s --tac --query "$*") && \
+    cd "${line##* }"
   }
 
   # fdr - cd to selected parent directory
