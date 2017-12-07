@@ -100,6 +100,33 @@ if hostnamectl | grep "Chassis: laptop"; then
   enableUnits+=(tlp)
 fi
 
+# check if systemd-boot is used, if so install systemd-boot-pacman-hook
+if bootctl status &> /dev/null; then
+  info "EFI detected, assuming systemd-boot is used, adding pacman hook"
+  [[ -d /etc/pacman.d/hooks ]] || mkdir -p /etc/pacman.d/hooks
+cat>/etc/pacman.d/hooks/systemd-boot.hook <<EOF
+[Trigger]
+Type = Package
+Operation = Upgrade
+Target = systemd
+
+[Action]
+Description = Updating systemd-boot...
+When = PostTransaction
+Exec = /usr/bin/bootctl update
+EOF
+fi
+
+if grep "vendor_id.*GenuineIntel" /proc/cpuinfo &>/dev/null; then
+  info "Detected Intel CPU, will install intel-ucode"
+  installPkgs+=(intel-ucode)
+  info "############################################"
+  info " Don't forget to add"
+  info "   initrd /intel-ucode.img"
+  info " to /boot/loader/entries/*.conf"
+  info "############################################"
+fi
+
 info "Installing packages"
 pacman -S --needed --noconfirm ${installPkgs[@]}
 
