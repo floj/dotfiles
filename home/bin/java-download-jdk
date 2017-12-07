@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+function downloadJdk() {
+  echo "fetching java version list"
+
+  url=$(curl --silent "https://raw.githubusercontent.com/shyiko/jabba/master/index.json" | jq -r ".linux.amd64.jdk.\"$1\"")
+  if [[ -z "$url" ]]; then
+    echo "no download url found for java version $1"
+    return 1
+  fi
+
+  archive="${url%%+*}"
+  url="${url#*+}"
+  filename="${url##*/}"
+
+  echo ""
+  echo "downloading jdk $1"
+  echo "  from $url"
+  echo "  saving as $filename"
+  echo ""
+  
+  if ! curl -L --cookie "oraclelicense=accept-securebackup-cookie" -o "$filename" "$url"; then
+    return 1
+  fi
+
+  echo ""
+
+  case $archive in
+    tgz)
+      tar xvf "$filename"
+      ;;
+    *)
+      echo "unknown archive type: $archive"
+  esac
+}
+
+if [[ -z "$1" ]]; then
+  echo "usage: $0 <version>"
+  exit 1
+fi
+
+if [[ "$1" ==  "versions" ]]; then
+  curl --silent "https://raw.githubusercontent.com/shyiko/jabba/master/index.json" | jq -r ".linux.amd64.jdk | keys[]" | sort -h
+  exit
+fi
+downloadJdk "$1"

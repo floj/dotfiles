@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+function applyJce() {
+  local javaDir="$1"
+  local javaVer="${javaDir:5:1}"
+  local jceFile="jce_policy-$javaVer.zip"
+
+  if [[ ! -f "$jceFile" ]]; then
+    echo "jce_policy file for java version $javaVer not found ($jceFile)"
+    return 1
+  fi
+  echo "applying $jceFile to $javaDir"
+  unzip -joq "$jceFile" "*.jar" -d "$javaDir"
+}
+
+shopt -s globstar
+for file in jdk*/**/US_export_policy.jar; do
+  dir="${file%/*}"
+  applyJce "$dir"
+done
