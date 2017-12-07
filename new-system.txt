@@ -72,8 +72,11 @@ pacman -Q reflector &> /dev/null || {
   info "Installing reflector to update pacmans mirrorlist"
   pacman -S --noconfirm reflector
 }
-info "Updating pacmans mirrorlist"
-reflector --verbose -c Germany -p https --age 12 --sort score -f 5 --save /etc/pacman.d/mirrorlist
+info "Updating pacman mirrorlist"
+reflector -c Germany -p https --age 12 --sort score -f 5 --save /etc/pacman.d/mirrorlist
+
+info "Updating pacman databases again"
+pacman -Sy --noconfirm
 
 declare -a installPkgs=()
 declare -a enableUnits=(gdm NetworkManager)
@@ -93,8 +96,13 @@ installPkgs+=(sudo gnome-tweak-tool openssh zsh)
 #   echo " => $vgahw"
 # fi
 
+if btrfsPart=$(lsblk -o NAME,FSTYPE | grep btrfs); then
+  info "Found $btrfsPart, will install btrfs-progs"
+  installPkgs+=(btrfs-progs)
+fi
+
 # check if running on laptop, if so install tlp
-if hostnamectl | grep "Chassis: laptop"; then
+if hostnamectl | grep "Chassis: laptop" &>/dev/null; then
   info "Detected a laptop, will install TLP"
   installPkgs+=(tlp)
   enableUnits+=(tlp)
@@ -128,11 +136,13 @@ if grep "vendor_id.*GenuineIntel" /proc/cpuinfo &>/dev/null; then
 fi
 
 info "Installing packages"
-pacman -S --needed --noconfirm ${installPkgs[@]}
+pacman -S --needed --noconfirm ${installPkgs[@]} 2>&1 | grep -v "^warning: .* -- skipping"
 
 for unit in "${enableUnits[@]}"; do
-  info "Enabling systemd unit $unit"
-  systemctl enable "$unit"
+  if ! systemctl is-enabled "$unit" &>/dev/null; then
+    info "Enabling systemd unit $unit"
+    systemctl enable "$unit"
+  fi
 done
 
 info "Adding rule to sudoers.d to allow sudo access for users of group 'wheel'"
