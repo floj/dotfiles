@@ -21,7 +21,7 @@ set -eu
 # Alacritty https://github.com/jwilm/alacritty
 
 declare -A groups=()
-groups[term]="git tig neovim python-neovim shellcheck fzf ripgrep exa alacritty-git tmux"
+groups[term]="git tig neovim python-neovim shellcheck fzf ripgrep exa alacritty-git tmux xsel"
 groups[i3]="i3-wm polybar rofi"
 groups[gnome]="gpaste"
 groups[dropbox]="dropbox nautilus-dropbox"
