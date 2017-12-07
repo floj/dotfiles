@@ -5,7 +5,7 @@
 # - https://wiki.archlinux.org/index.php/Installation_guide
 # - https://wiki.archlinux.org/index.php/Systemd-boot
 # use
-# > pacstrap /mnt base vim
+# > pacstrap /mnt base vim wpa_supplicant btrfs-progs git
 
 set -euo pipefail
 
