@@ -159,4 +159,9 @@ if [[ -n ${conf[user]} ]] && ! getent passwd "${conf[user]}" >/dev/null; then
   passwd "${conf[user]}"
 fi
 
-"$(dirname "${BASH_SOURCE[0]}")/install-apps" term gnome fonts browser media dev
+if [[ -f "$(dirname "${BASH_SOURCE[0]}")/install-apps" ]]; then
+  "$(dirname "${BASH_SOURCE[0]}")/install-apps" term gnome fonts browser media dev
+else
+  info "Clone dotfiles repo and run"
+  info "  install-apps term gnome fonts browser media dev"
+fi
