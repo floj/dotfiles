@@ -85,16 +85,15 @@ declare -a enableUnits=(gdm NetworkManager)
 installPkgs+=(adwaita-icon-theme eog evince gdm gnome-backgrounds gnome-calculator gnome-control-center gnome-dictionary gnome-disk-utility gnome-font-viewer gnome-keyring gnome-screenshot gnome-session gnome-settings-daemon gnome-shell gnome-shell-extensions gnome-system-monitor gnome-terminal gnome-themes-standard gucharmap gvfs gvfs-mtp gvfs-smb mousetweaks mutter nautilus networkmanager tracker tracker-miners xdg-user-dirs-gtk)
 
 # install some additional packages
-installPkgs+=(sudo gnome-tweak-tool openssh zsh)
+installPkgs+=(sudo gnome-tweak-tool openssh zsh mesa)
 
-# info "Checking for video drivers"
-# xf86driver=""
-# # Intel VGA, add nvidia and ati at some point
-# if vgahw=$(lspci -d 8086::0300) > /dev/null; then
-#   pkgs+=(xf86-video-intel)
-#   info " => found Intel graphics card, will install $xf86driver"
-#   echo " => $vgahw"
-# fi
+info "Checking for video drivers"
+# Intel VGA, add nvidia and ati at some point
+if vgahw=$(lspci -d 8086::0300) > /dev/null; then
+  pkgs+=(vulkan-intel)
+  info " => Found Intel graphics card, will install vulkan-intel"
+  echo "    $vgahw"
+fi
 
 if btrfsPart=$(lsblk -o NAME,FSTYPE | grep btrfs); then
   info "Found $btrfsPart, will install btrfs-progs"
