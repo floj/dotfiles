@@ -94,7 +94,7 @@ installPkgs+=(sudo gnome-tweak-tool openssh zsh)
 # fi
 
 # check if running on laptop, if so install tlp
-if hostnamectl | grep "Chassis: lapop"; then
+if hostnamectl | grep "Chassis: laptop"; then
   info "Detected a laptop, will install TLP"
   installPkgs+=(tlp)
   enableUnits+=(tlp)
@@ -121,3 +121,4 @@ if [[ -n ${conf[user]} ]] && ! getent passwd "${conf[user]}" >/dev/null; then
   passwd "${conf[user]}"
 fi
 
+"$(dirname "${BASH_SOURCE[0]}")/install-apps" term gnome fonts browser
