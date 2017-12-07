@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
 # vim: ft=sh
 #
-# install according 
-# pacstrap /mnt base vim
+# Install according to
+# - https://wiki.archlinux.org/index.php/Installation_guide
+# - https://wiki.archlinux.org/index.php/Systemd-boot
+# use
+# > pacstrap /mnt base vim
 
 set -euo pipefail
 
@@ -56,7 +59,7 @@ alias v='vim'
 alias vim='vim'
 alias ..='cd ..'
 
-export EDITOR=nvim
+export EDITOR=vim
 EOF
 
 info "Disable anoying speeper beep as termbell (blacklist module pcspkr)"
@@ -72,30 +75,43 @@ pacman -Q reflector &> /dev/null || {
 info "Updating pacmans mirrorlist"
 reflector --verbose -c Germany -p https --age 12 --sort score -f 5 --save /etc/pacman.d/mirrorlist
 
+declare -a installPkgs=()
+declare -a enableUnits=(gdm NetworkManager)
 # This are the gnome packages from pacmans 'gnome'-group I want.
 # Use pacman -Sgg gnome to see all the packages of group 'gnome'.
-gnomePkgs=(adwaita-icon-theme eog evince gdm gnome-backgrounds gnome-calculator gnome-control-center gnome-dictionary gnome-disk-utility gnome-font-viewer gnome-keyring gnome-screenshot gnome-session gnome-settings-daemon gnome-shell gnome-shell-extensions gnome-system-monitor gnome-terminal gnome-themes-standard gucharmap gvfs gvfs-mtp gvfs-smb mousetweaks mutter nautilus networkmanager tracker tracker-miners xdg-user-dirs-gtk)
+installPkgs+=(adwaita-icon-theme eog evince gdm gnome-backgrounds gnome-calculator gnome-control-center gnome-dictionary gnome-disk-utility gnome-font-viewer gnome-keyring gnome-screenshot gnome-session gnome-settings-daemon gnome-shell gnome-shell-extensions gnome-system-monitor gnome-terminal gnome-themes-standard gucharmap gvfs gvfs-mtp gvfs-smb mousetweaks mutter nautilus networkmanager tracker tracker-miners xdg-user-dirs-gtk)
 
-info "Checking for video drivers"
-xf86driver=""
-# Intel VGA, add nvidia and ati at some point
-if vgahw=$(lspci -d 8086::0300) > /dev/null; then
-  xf86driver=xf86-video-intel
-  info " => found Intel graphics card, will install $xf86driver"
-  echo " => $vgahw"
+# install some additional packages
+installPkgs+=(sudo gnome-tweak-tool openssh zsh)
+
+# info "Checking for video drivers"
+# xf86driver=""
+# # Intel VGA, add nvidia and ati at some point
+# if vgahw=$(lspci -d 8086::0300) > /dev/null; then
+#   pkgs+=(xf86-video-intel)
+#   info " => found Intel graphics card, will install $xf86driver"
+#   echo " => $vgahw"
+# fi
+
+# check if running on laptop, if so install tlp
+if hostnamectl | grep "Chassis: lapop"; then
+  info "Detected a laptop, will install TLP"
+  installPkgs+=(tlp)
+  enableUnits+=(tlp)
 fi
 
 info "Installing packages"
-pacman -S --needed --noconfirm sudo ${gnomePkgs[@]} $xf86driver gnome-tweak-tool openssh zsh
+pacman -S --needed --noconfirm ${installPkgs[@]}
 
-for unit in gdm NetworkManager; do
+for unit in "${enableUnits[@]}"; do
   info "Enabling systemd unit $unit"
   systemctl enable "$unit"
 done
 
 info "Adding rule to sudoers.d to allow sudo access for users of group 'wheel'"
 echo '%wheel ALL=(ALL) ALL' > /etc/sudoers.d/allow-wheel
-chmod 0440 /etc/sudoers.d/allow-wheel
+echo 'Defaults passwd_timeout=0' > /etc/sudoers.d/timeout
+chmod 0440 /etc/sudoers.d/*
 info "Checking sudo conf"
 visudo -c -s
 
