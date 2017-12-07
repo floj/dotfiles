@@ -29,7 +29,7 @@ groups[dropbox]="dropbox nautilus-dropbox"
 groups[opt]="peco grv-git"
 groups[fonts]="ttf-google-fonts-opinionated-git"
 groups[browser]="vivaldi-snapshot vivaldi-snapshot-ffmpeg-codecs"
-groups[dev]="docker lxc nodejs npm go ruby-install slack-desktop networkmanager-openconnect"
+groups[dev]="docker lxc nodejs npm go ruby-install slack-desktop networkmanager-openconnect meld"
 
 fromAur() {
   local tmpdir
