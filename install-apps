@@ -9,7 +9,7 @@ set -eu
 # shell check 
 # googler https://github.com/jarun/googler
 # exa https://github.com/ogham/exa
-# # pdsh https://linux.die.net/man/1/pdsh
+# pdsh https://linux.die.net/man/1/pdsh
 # 
 # hecate https://github.com/evanmiller/hecate
 # 
@@ -24,6 +24,8 @@ declare -A groups=()
 groups[default]="git neovim python-neovim shellcheck fzf ripgrep exa alacritty-git tmux"
 groups[i3]="i3-wm polybar rofi"
 groups[opt]="peco grv-git"
+groups[fonts]="ttf-google-fonts-opinionated-git"
+groups[browser]="vivaldi-snapshot vivaldi-snapshot-ffmpeg-codecs"
 
 fromAur() {
   local tmpdir
@@ -36,7 +38,7 @@ fromAur() {
   makepkg -si --noconfirm
 }
 
-develPkgs=($(pacman -Sg base-devel | cut -d' ' -f1))
+develPkgs=($(pacman -Sg base-devel | cut -d' ' -f2))
 if ! pacman -Q ${develPkgs[*]} &>/dev/null; then
   echo "Need to install base-devel package group"
   sudo pacman -S --needed --noconfirm base-devel
@@ -47,17 +49,26 @@ if ! command -v yaourt > /dev/null; then
   fromAur yaourt
 fi
 
-declare -a groupKeys=($@)
+declare -a groupKeys
+if [[ "${1:-}" == "all" ]]; then
+  groupKeys=(${!groups[@]})
+else
+  groupKeys=($@)
+fi
+
 if [[ ${#groupKeys[@]} -eq 0 ]]; then
   echo "No groups given, use one or more of"
   for key in "${!groups[@]}"; do
     echo "  $key"
-    echo "      ${groups[$key]}"
+    echo "    ${groups[$key]}"
   done
+  echo "  all"
+  echo "    install all groups"
   exit 1
 fi
 
 for key in "${groupKeys[@]}"; do
   pkgs=${groups[$key]}
+  echo "Installing packages of group $key"
   yaourt -S --needed --noconfirm $pkgs
 done
