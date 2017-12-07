@@ -79,10 +79,12 @@ info "Updating pacman databases again"
 pacman -Sy --noconfirm
 
 declare -a installPkgs=()
-declare -a enableUnits=(gdm NetworkManager)
+declare -a enableUnits=()
+
 # This are the gnome packages from pacmans 'gnome'-group I want.
 # Use pacman -Sgg gnome to see all the packages of group 'gnome'.
 installPkgs+=(adwaita-icon-theme eog evince gdm gnome-backgrounds gnome-calculator gnome-control-center gnome-dictionary gnome-disk-utility gnome-font-viewer gnome-keyring gnome-screenshot gnome-session gnome-settings-daemon gnome-shell gnome-shell-extensions gnome-system-monitor gnome-terminal gnome-themes-standard gucharmap gvfs gvfs-mtp gvfs-smb mousetweaks mutter nautilus networkmanager tracker tracker-miners xdg-user-dirs-gtk)
+enableUnits+=(gdm NetworkManager)
 
 # install some additional packages
 installPkgs+=(sudo gnome-tweak-tool openssh zsh mesa)
