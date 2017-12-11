@@ -8,8 +8,12 @@ if whence fzf > /dev/null 2>&1; then
   fi
 
   zz() {
-    local line=$(_z -l -t -e "$*" 2>&1 | fzf --height 40% --reverse -1 --inline-info +s --tac --query "$*") && \
-    cd "${line##* }"
+    local matches=$(_z -e -l "$*" 2>&1)
+    if [[ $matches == common:* ]]; then
+      _z "$*"
+    else
+      local line=$(echo "$matches" | fzf --height 40% --reverse --tac --select-1 --query "$*") && cd "${line##* }"
+    fi
   }
 
   # fdr - cd to selected parent directory
