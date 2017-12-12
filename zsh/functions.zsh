@@ -46,3 +46,11 @@ unpack-rar() {
    unrar x "$f" 
  done
 }
+
+who-has-port() {
+  if pid=$(fuser $1/${2:-tcp} | awk '{ print $2 }'); then
+    readlink "/proc/$pid/exe"
+  else
+    echo "No process found"
+  fi
+}
