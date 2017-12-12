@@ -25,6 +25,10 @@ info() {
   echo "${ccodes[bold]}${ccodes[white]}$*${ccodes[reset]}"
 }
 
+declare -A flags=()
+flags[is_laptop]=0
+flags[has_btrfs]=0
+
 declare -A conf=()
 conf[locale]=en_US.UTF-8
 conf[keymap]=de
@@ -100,6 +104,7 @@ fi
 if btrfsPart=$(lsblk -o NAME,FSTYPE | grep btrfs); then
   info "Found $btrfsPart, will install btrfs-progs"
   installPkgs+=(btrfs-progs)
+  flags[has_btrfs]=1
 fi
 
 # check if running on laptop, if so install tlp
@@ -107,6 +112,7 @@ if hostnamectl | grep "Chassis: laptop" &>/dev/null; then
   info "Detected a laptop, will install TLP"
   installPkgs+=(tlp)
   enableUnits+=(tlp)
+  flags[is_laptop]=1
 fi
 
 # check if systemd-boot is used, if so install systemd-boot-pacman-hook
@@ -164,4 +170,10 @@ if [[ -f "$(dirname "${BASH_SOURCE[0]}")/install-apps" ]]; then
 else
   info "Clone dotfiles repo and run"
   info "  install-apps term gnome fonts browser media dev"
+fi
+
+# See https://wiki.archlinux.org/index.php/TLP#Btrfs
+if [[ ${flags[is_laptop]} == 1 ]] && [[ ${flags[has_btrfs]} == 1 ]] ; then
+  info "Changing TLP SATA_LINKPWR_ON_BAT to max_performace"
+  sed -i -e 's/SATA_LINKPWR_ON_BAT=.*/SATA_LINKPWR_ON_BAT=max_performace/g' /etc/default/tlp 
 fi
