@@ -75,3 +75,5 @@ alias dri='docker run -ti --rm'
 # arch/pacman
 #
 alias update-mirrors='sudo reflector --verbose -c Germany -p https --age 12 --sort score -f 5 --save /etc/pacman.d/mirrorlist'
+
+alias youtube-dl-mp3="youtube-dl --extract-audio --audio-format mp3"
