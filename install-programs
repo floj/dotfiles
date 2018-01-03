@@ -1,0 +1,93 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+declare -A versions=()
+versions[java]=1.9.0-1
+versions[maven]=3.5.2
+baseDir=$HOME/programs-test
+
+installMaven() {
+  local mvnDir=$baseDir/apache-maven
+  local url="https://www.apache.org/dist/maven/maven-3/${versions[maven]}/binaries/apache-maven-${versions[maven]}-bin.tar.gz"
+  local filename="$mvnDir/${url##*/}"
+  local expectedSHA1 actualSHA1
+
+  echo "Installing maven ${versions[maven]}"
+  echo "  from $url"
+  [[ -d "$mvnDir" ]] || mkdir -p "$mvnDir"
+  [[ -f "$filename" ]] || curl -L --fail -o "$filename" "$url" || return 2
+  expectedSHA1=$(curl -L --fail "$url.sha1" | sed -e 's/[ -]//g') || return 3
+  actualSHA1=$(sha1sum < "$filename" | sed -e 's/[ -]//g') || return 4
+  if [[ "$expectedSHA1" != "$actualSHA1" ]]; then
+    echo "Checksum mismatch"
+    echo "  expected $expectedSHA1"
+    echo "       got $actualSHA1"
+    return 5
+  fi
+  
+  echo "Extracting ${filename##*/}..."
+  tar xf "$filename" -C "$mvnDir"
+  echo "Creating symlink..."
+  ln -sfT "apache-maven-${versions[maven]}" "$mvnDir/current"
+  echo "Done."
+}
+
+installJava() {
+  local javaDir=$baseDir/java
+  local jdkJson url jdkVersion jdkDir
+
+  echo "Downloading JDK versions info"
+
+  jdkJson=$(curl -L --fail "https://raw.githubusercontent.com/shyiko/jabba/master/index.json")
+  echo "Downloadable JDK versions:"
+  jq '.linux.amd64.jdk | keys' <<< "$jdkJson"
+  url=$(jq -r ".linux.amd64.jdk.\"${versions[java]}\"" <<< "$jdkJson")
+  [[ -n $url ]] || { echo "Don't know how to download version ${versions[java]}"; return 1; }
+  url=${url//tgz\+/}
+
+  local filename="$javaDir/${url##*/}"
+
+  echo "Downloading JDK ${versions[java]}"
+  echo "  from $url"
+  [[ -d "$javaDir" ]] || mkdir -p "$javaDir"
+  [[ -f "$filename" ]] || curl -L --fail --cookie "oraclelicense=accept-securebackup-cookie" -o "$filename" "$url" || return 2
+  
+  echo "Extracting ${filename##*/}..."
+  tar xf "$filename" -C "$javaDir"
+  echo "Creating symlink..."
+  jdkVersion=$(awk -F '.' '{print $2}' <<< "${versions[java]}")
+  jdkDir=$(tar -t --exclude='*/*/*' -f "$filename" | cut -d'/' -f1 | uniq)
+  ln -sfT "$jdkDir" "$javaDir/java$jdkVersion"
+  ln -sfT "java$jdkVersion" "$javaDir/current"
+  echo "Done."
+}
+
+installSTS() {
+  local stsDir=$baseDir/sts
+  local url="http://download.springsource.com/release/STS/3.9.1.RELEASE/dist/e4.7/spring-tool-suite-3.9.1.RELEASE-e4.7.1a-linux-gtk-x86_64.tar.gz"
+  echo "Downloading STS"
+  local filename="$stsDir/${url##*/}"
+  
+  [[ -d "$stsDir" ]] || mkdir -p "$stsDir"
+  [[ -f "$filename" ]] || curl -L --fail -o "$filename" "$url" || return 2
+
+  echo "Extracting ${filename##*/}..."
+  
+}
+
+while [[ -n ${1:-} ]]; do
+  case $1 in
+    maven)
+      installMaven
+      ;;
+    java)
+      installJava
+      ;;
+    sts)
+      installSTS;;
+  esac
+  shift
+done
+
+
