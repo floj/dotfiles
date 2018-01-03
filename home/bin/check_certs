@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+
+if [[ -z "$1" ]]; then
+  echo "usage: $0 <host> [<port>]"
+  exit 1
+fi
+
+servername="$1"
+serverport="${2:-443}"
+
+typeset -a known
+
+function getCert() {
+  cert=$(openssl x509 -in <(openssl s_client -connect "$1" -prexit 2>/dev/null))
+  [[ -z "$cert" ]] && return 1
+  echo "$cert"
+}
+
+
+typeset -i i
+i=0
+for ((i=0; i<20; i++)); do
+  
+  echo "iteration $i, checking..."
+
+  isknown=false
+  if ! cert=$(getCert "${servername}:${serverport}"); then
+    echo "could not fetch certificate from $servername"
+    exit 1
+  fi
+
+  for c in "${known[@]}"; do
+    if [[ "$c" == "$cert" ]]; then
+      echo "  ${servername} returned a known cert"
+      isknown=true
+      break
+    fi
+  done
+
+  if [[ "$isknown" == false ]]; then
+    echo "  ${servername} returned a unknown certificate, adding..."
+    known+=("$cert")
+  fi
+  echo ""
+
+done
+
+echo "exporting ${#known[@]} certificates"
+for i in "${!known[@]}"; do
+    filename="cert_${servername}_$i.crt"
+    echo "  exporting $filename"
+    echo "${known[i]}" > "$filename"
+done
+
