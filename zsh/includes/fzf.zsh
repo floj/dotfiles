@@ -28,19 +28,19 @@ if whence fzf > /dev/null 2>&1; then
     }
     local dir cdir
     cdir=${1:-$PWD}
-    dir=$(get_parent_dirs "${cdir:A}" | fzf) && cd "$dir"
+    dir=$(get_parent_dirs "${cdir:A}" | fzf --height 40%) && cd "$dir"
   }
 
   # fd - cd to selected sub directory
   if whence fd >/dev/null; then
     ff() {
       local dir
-      dir=$(fd -d "${1:-3}" -t d -I -H 2> /dev/null | fzf) && cd "$dir"
+      dir=$(fd -d "${1:-3}" -t d -I -H 2> /dev/null | fzf --height 40%) && cd "$dir"
     }
   else
     ff() {
       local dir
-      dir=$(find * -maxdepth "${1:-3}" -type d -print 2> /dev/null | fzf) && cd "$dir"
+      dir=$(find * -maxdepth "${1:-3}" -type d -print 2> /dev/null | fzf --height 40%) && cd "$dir"
     }
   fi
 
