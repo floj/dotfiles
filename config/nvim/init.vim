@@ -280,13 +280,13 @@ let g:lightline = {
 " endfunction
 
 if executable('json_pp')
-  autocmd FileType json setlocal formatprg=json_pp
+  autocmd FileType json setlocal equalprg=json_pp
 endif
 
 if executable('xmllint')
-  autocmd FileType xml setlocal formatprg=xmllint\ --format\ --recover\ -
+  autocmd FileType xml setlocal equalprg=xmllint\ --format\ --recover\ -
 endif
 
 if executable('prettier')
-  autocmd FileType javascript setlocal formatprg=prettier\ --stdin\ --trailing-comma\ es5
+  autocmd FileType javascript setlocal equalprg=prettier\ --stdin\ --trailing-comma\ es5
 endif
