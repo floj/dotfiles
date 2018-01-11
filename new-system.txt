@@ -94,12 +94,14 @@ installPkgs+=(adwaita-icon-theme eog evince epiphany gdm gnome-backgrounds gnome
 enableUnits+=(gdm NetworkManager)
 
 # install some additional packages
-installPkgs+=(sudo gnome-tweak-tool openssh zsh mesa)
+installPkgs+=(sudo gnome-tweak-tool openssh zsh mesa screen neovim)
+# music player, gst-plugins-ugly is required for mp3 playback
+installPkgs+=(lollypop gst-plugins-ugly)
 
 info "Checking for video drivers"
 # Intel VGA, add nvidia and ati at some point
 if vgahw=$(lspci -d 8086::0300) > /dev/null; then
-  pkgs+=(vulkan-intel)
+  installPkgs+=(vulkan-intel libva-intel-driver gstreamer-vaapi libvdpau-va-gl)
   info " => Found Intel graphics card, will install vulkan-intel"
   echo "    $vgahw"
 fi
@@ -162,6 +164,10 @@ chmod 0440 /etc/sudoers.d/*
 info "Checking sudo conf"
 visudo -c -s
 
+#
+# more useful groups are:
+# uucp - access serial devices (/dev/tts/)
+# 
 if [[ -n ${conf[user]} ]] && ! getent passwd "${conf[user]}" >/dev/null; then
   info "Adding user ${conf[user]}"
   useradd -m -G users,wheel -s /usr/bin/zsh "${conf[user]}"
