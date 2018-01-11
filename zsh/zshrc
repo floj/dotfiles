@@ -1,11 +1,11 @@
 # vim: ft=zsh
-[[ -n "$TMUX" ]] && export TERM='screen-256color' 
 
-if whence tmux>/dev/null 2>&1 && [[ -z "$TMUX" ]] && [[ -z "$TILIX_ID" ]]; then
+if [[ -z "$TMUX" ]] && whence tmux>/dev/null 2>&1 && [[ "$(ps -o cmd= -p $(ps -o ppid= -p $$))" == "alacritty" ]]; then
   tmux attach || tmux -2
   exit
 fi
 
+[[ -n "$TMUX" ]] && export TERM='screen-256color' 
 [[ -f /etc/profile.d/vte.sh ]] && source /etc/profile.d/vte.sh
 
 ZSH_SOURCE_DIR="$HOME/dotfiles/zsh"
