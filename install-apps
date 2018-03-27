@@ -21,15 +21,15 @@ set -eu
 # Alacritty https://github.com/jwilm/alacritty
 
 declare -A groups=()
-groups[term]="git tig neovim python-neovim shellcheck fzf ripgrep exa alacritty-git tmux xsel jq"
+groups[term]="git tig neovim python-neovim shellcheck fzf ripgrep exa tilix xsel jq"
 #groups[i3]="i3-wm polybar rofi"
 groups[gnome]="gpaste"
 groups[media]="mpv vlc qt4 lollypop"
 groups[dropbox]="dropbox nautilus-dropbox passwordsafe"
 groups[opt]="peco grv-git"
 groups[fonts]="ttf-google-fonts-opinionated-git"
-groups[browser]="vivaldi-snapshot"
-groups[dev]="docker lxc nodejs npm go ruby-install slack-desktop networkmanager-openconnect meld"
+groups[browser]="vivaldi-snapshot vivaldi-snapshot-ffmpeg-codecs"
+groups[dev]="docker lxc nodejs npm go ruby-install meld"
 
 fromAur() {
   local tmpdir
