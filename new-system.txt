@@ -181,8 +181,9 @@ else
   info "  install-apps term gnome fonts browser media dev"
 fi
 
+# this is obsolete with kernel 4.15
 # See https://wiki.archlinux.org/index.php/TLP#Btrfs
-if [[ ${flags[is_laptop]} == 1 ]] && [[ ${flags[has_btrfs]} == 1 ]] ; then
-  info "Changing TLP SATA_LINKPWR_ON_BAT to max_performace"
-  sed -i -e 's/SATA_LINKPWR_ON_BAT=.*/SATA_LINKPWR_ON_BAT=max_performace/g' /etc/default/tlp 
-fi
+#if [[ ${flags[is_laptop]} == 1 ]] && [[ ${flags[has_btrfs]} == 1 ]] ; then
+#  info "Changing TLP SATA_LINKPWR_ON_BAT to max_performace"
+#  sed -i -e 's/SATA_LINKPWR_ON_BAT=.*/SATA_LINKPWR_ON_BAT=max_performace/g' /etc/default/tlp 
+#fi
