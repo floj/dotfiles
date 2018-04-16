@@ -1,0 +1,140 @@
+[org/gnome/settings-daemon/plugins/power]
+sleep-inactive-battery-type='nothing'
+sleep-inactive-ac-timeout=3600
+sleep-inactive-ac-type='nothing'
+sleep-inactive-battery-timeout=1800
+
+[org/gnome/settings-daemon/plugins/media-keys]
+screenshot-clip=''
+screenreader=''
+magnifier-zoom-out=''
+area-screenshot-clip='Print'
+screenshot=''
+volume-up='<Super>KP_Add'
+volume-down='<Super>KP_Subtract'
+window-screenshot-clip=''
+screencast=''
+window-screenshot=''
+magnifier-zoom-in=''
+area-screenshot='<Shift>Print'
+custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/']
+volume-mute='<Super>KP_Multiply'
+magnifier=''
+
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0]
+binding='<Super>Return'
+command='tilix --maximize'
+name='term'
+
+[org/gnome/settings-daemon/plugins/xsettings]
+antialiasing='rgba'
+hinting='slight'
+
+[org/gnome/settings-daemon/peripherals/keyboard]
+numlock-state='on'
+
+[org/gnome/nautilus/preferences]
+search-view='list-view'
+default-folder-viewer='list-view'
+
+[org/gnome/nautilus/list-view]
+default-visible-columns=['name', 'size', 'date_modified']
+default-column-order=['name', 'size', 'type', 'owner', 'group', 'permissions', 'mime_type', 'where', 'date_modified', 'date_modified_with_time', 'date_accessed', 'recency', 'starred']
+
+[org/gnome/desktop/interface]
+clock-show-date=true
+enable-animations=false
+show-battery-percentage=false
+
+[org/gnome/desktop/peripherals/touchpad]
+natural-scroll=false
+tap-to-click=true
+
+[org/gnome/desktop/peripherals/mouse]
+natural-scroll=false
+
+[org/gnome/desktop/calendar]
+show-weekdate=true
+
+[org/gnome/desktop/wm/keybindings]
+move-to-workspace-last=@as []
+switch-windows-backward=['<Shift><Alt>Tab']
+switch-windows=['<Alt>Tab']
+move-to-workspace-up=@as []
+move-to-workspace-1=@as []
+switch-applications=@as []
+begin-resize=@as []
+switch-to-workspace-down=@as []
+move-to-workspace-right=@as []
+switch-to-workspace-1=@as []
+switch-to-workspace-right=@as []
+switch-applications-backward=@as []
+switch-to-workspace-left=@as []
+move-to-workspace-left=@as []
+switch-group-backward=['<Shift><Super>Tab']
+begin-move=@as []
+switch-group=['<Super>Tab']
+move-to-workspace-down=@as []
+switch-to-workspace-up=@as []
+minimize=@as []
+
+[org/gnome/desktop/input-sources]
+sources=[('xkb', 'us'), ('xkb', 'de')]
+mru-sources=[('xkb', 'us'), ('xkb', 'de')]
+xkb-options=['terminate:ctrl_alt_bksp', 'caps:ctrl_modifier', 'compose:ralt']
+
+[org/gnome/GPaste]
+show-history='<Ctrl><Alt>P'
+launch-ui=''
+upload=''
+sync-primary-to-clipboard=''
+pop=''
+sync-clipboard-to-primary=''
+track-extension-state=false
+
+[com/gexperts/Tilix/profiles/2b7c4080-0ddd-46c5-8f23-563fd3ba789d]
+foreground-color='#F8F8F2'
+visible-name='Default'
+login-shell=true
+palette=['#272822', '#F92672', '#A6E22E', '#F4BF75', '#66D9EF', '#AE81FF', '#A1EFE4', '#F8F8F2', '#75715E', '#F92672', '#A6E22E', '#F4BF75', '#66D9EF', '#AE81FF', '#A1EFE4', '#F9F8F5']
+badge-color-set=false
+cursor-shape='block'
+cursor-colors-set=false
+highlight-colors-set=false
+use-theme-colors=false
+bold-color-set=false
+terminal-bell='icon-sound'
+notify-silence-threshold=60
+cursor-blink-mode='system'
+background-color='#272822'
+background-transparency-percent=0
+dim-transparency-percent=0
+scrollback-lines=20480
+
+[com/gexperts/Tilix/keybindings]
+session-close='disabled'
+session-switch-to-next-terminal='<Super>greater'
+nautilus-open='disabled'
+win-switch-to-next-session='<Shift><Super>Page_Up'
+win-switch-to-previous-session='<Shift><Super>Page_Down'
+session-add-right='<Super>bar'
+session-add-down='<Super>underscore'
+session-save='disabled'
+terminal-maximize='<Shift><Super>z'
+session-open='disabled'
+terminal-close='disabled'
+terminal-insert-number='disabled'
+terminal-select-all='disabled'
+terminal-select-bookmark='disabled'
+session-switch-to-previous-terminal='<Super>less'
+terminal-paste-primary='disabled'
+
+[com/gexperts/Tilix]
+use-overlay-scrollbar=true
+sidebar-on-right=false
+terminal-title-style='small'
+theme-variant='system'
+use-tabs=false
+enable-wide-handle=true
+terminal-title-show-when-single=true
+
