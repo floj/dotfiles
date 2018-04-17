@@ -175,27 +175,37 @@ autocmd InsertEnter * :set relativenumber
 
 let g:neomake_sh_shellcheck_args = ['-fgcc', '-x']
 
-" go stuff
-let g:go_fmt_command = "goimports"
+" vmi-go stuff
 
-let g:go_highlight_functions = 1
-let g:go_highlight_methods = 1
-let g:go_highlight_fields = 1
-let g:go_highlight_types = 1
+let g:go_test_show_name = 1
+let g:go_auto_type_info = 1
+let g:go_info_mode = 'guru' " gocode
+let g:go_auto_sameids = 1
+let g:go_fmt_command = 'goimports' " gofmt
+let g:go_bin_path = $HOME.'/.gotools/bin'
+" let g:go_metalinter_enabled = ['vet', 'golint', 'errcheck']
+" let g:go_metalinter_disabled = []
+let g:go_addtags_transform = 'camelcase'
+
+
 let g:go_highlight_extra_types = 1
 let g:go_highlight_operators = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_function_arguments = 1
+let g:go_highlight_function_calls = 1 
+let g:go_highlight_types = 1
+let g:go_highlight_fields = 1
 let g:go_highlight_build_constraints = 1
-let g:go_bin_path = expand("~/.gotools/bin")
-let g:go_auto_sameids = 1
+let g:go_highlight_variable_declarations = 1
+" let g:go_highlight_variable_assignments = 1
 
 " Use deoplete.
 let g:deoplete#enable_at_startup = 1
-let g:deoplete#sources#go#gocode_binary = expand("~/.gotools/bin/gocode")
+let g:deoplete#sources#go#gocode_binary = $HOME.'/.gotools/bin/gocode'
 let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
 set completeopt+=noselect
 
 let g:polyglot_disabled = ['go']
-
 
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
