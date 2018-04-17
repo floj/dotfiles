@@ -164,6 +164,9 @@ chmod 0440 /etc/sudoers.d/*
 info "Checking sudo conf"
 visudo -c -s
 
+info "Increasing inotify user watches limit"
+echo "fs.inotify.max_user_watches=524288" > /etc/sysctl.d/40-max-user-watches.conf
+
 #
 # more useful groups are:
 # uucp - access serial devices (/dev/tts/)
