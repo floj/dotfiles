@@ -182,7 +182,7 @@ let g:go_auto_type_info = 1
 let g:go_info_mode = 'guru' " gocode
 let g:go_auto_sameids = 1
 let g:go_fmt_command = 'goimports' " gofmt
-let g:go_bin_path = $HOME.'/.gotools/bin'
+let g:go_bin_path = expand('~/.gotools/bin')
 " let g:go_metalinter_enabled = ['vet', 'golint', 'errcheck']
 " let g:go_metalinter_disabled = []
 let g:go_addtags_transform = 'camelcase'
@@ -201,7 +201,7 @@ let g:go_highlight_variable_declarations = 1
 
 " Use deoplete.
 let g:deoplete#enable_at_startup = 1
-let g:deoplete#sources#go#gocode_binary = $HOME.'/.gotools/bin/gocode'
+let g:deoplete#sources#go#gocode_binary = expand('~/.gotools/bin/gocode')
 let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
 set completeopt+=noselect
 
