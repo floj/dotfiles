@@ -289,8 +289,9 @@ let g:lightline = {
 
 " endfunction
 
-if executable('json_pp')
-  autocmd FileType json setlocal equalprg=json_pp
+if executable('jq')
+  " autocmd FileType json setlocal equalprg=json_pp
+  autocmd FileType json setlocal equalprg=jq\ .
 endif
 
 if executable('xmllint')
