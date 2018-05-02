@@ -167,6 +167,13 @@ visudo -c -s
 info "Increasing inotify user watches limit"
 echo "fs.inotify.max_user_watches=524288" > /etc/sysctl.d/40-max-user-watches.conf
 
+info "Limiting journald to 512M"
+[[ -d /etc/systemd/journald.conf.d ]] || mkdir -p /etc/systemd/journald.conf.d
+cat>/etc/systemd/journald.conf.d/max_limit.conf <<EOF
+[Journal]
+SystemMaxUse=512M
+SystemMaxFileSize=128M
+EOF
 #
 # more useful groups are:
 # uucp - access serial devices (/dev/tts/)
