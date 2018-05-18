@@ -1,5 +1,0 @@
-#
-# directory changing like autojump
-#
-[[ -e $HOME/bin/gothere ]] && eval "$(gothere hook zsh)"
-
