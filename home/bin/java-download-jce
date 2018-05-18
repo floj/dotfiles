@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-
-curl -LO --fail --cookie "oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jce/8/jce_policy-8.zip"

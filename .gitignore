@@ -1,2 +1,3 @@
-config/nvim/plugged
-bundle/cache/*
+# zsh word code files
+*.zwc
+

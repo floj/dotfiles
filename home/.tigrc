@@ -1,7 +1,0 @@
-set line-graphics = utf-8
-
-set main-view = \
-  date:default \
-  author \
-  id:yes,color \
-  commit-title:graph=v2,refs=yes
