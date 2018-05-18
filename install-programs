@@ -3,37 +3,69 @@
 set -euo pipefail
 
 declare -A versions=()
-versions[java]=1.9.0-1
-versions[maven]=3.5.2
-baseDir=$HOME/programs-test
+versions[oracleJdk]=1.9.0-1
+versions[openjdk]=8u144-b01
+versions[apache-maven]=3.5.2
+versions[dbeaver]=5.0.5
+versions[sts]=3.9.2
+baseDir=$HOME/programs
 
-installMaven() {
-  local mvnDir=$baseDir/apache-maven
-  local url="https://www.apache.org/dist/maven/maven-3/${versions[maven]}/binaries/apache-maven-${versions[maven]}-bin.tar.gz"
-  local filename="$mvnDir/${url##*/}"
-  local expectedSHA1 actualSHA1
+#
+# $1 = key in versions array
+# $2 = download url
+# $3 = checksum url (empty/'skip' to skip checksum)
+# $4 = target dir name (default = $1)
+# $5 = num of components to strip when extracting (default = 1)
+#
+downloadExctractLink() {
+  local name=$1
+  local url="$2"
+  local urlChecksum="${3:-}"
+  local targetDir=$baseDir/${4:-$name}
+  local stripComponents=${5:-1}
+  local extractDir=$targetDir/$name-${versions[$name]}
+  local filename="$targetDir/${url##*/}"
+  local expectedChecksum actualChecksum
 
-  echo "Installing maven ${versions[maven]}"
+  echo "Installing $name ${versions[$name]}"
   echo "  from $url"
-  [[ -d "$mvnDir" ]] || mkdir -p "$mvnDir"
-  [[ -f "$filename" ]] || curl -L --fail -o "$filename" "$url" || return 2
-  expectedSHA1=$(curl -L --fail "$url.sha1" | sed -e 's/[ -]//g') || return 3
-  actualSHA1=$(sha1sum < "$filename" | sed -e 's/[ -]//g') || return 4
-  if [[ "$expectedSHA1" != "$actualSHA1" ]]; then
-    echo "Checksum mismatch"
-    echo "  expected $expectedSHA1"
-    echo "       got $actualSHA1"
-    return 5
+  [[ -d "$targetDir" ]] || mkdir -p "$targetDir"
+  [[ -f "$filename" ]] || curl -L --fail --progress-bar -o "$filename" "$url" || return 2
+  if [[ -n "${urlChecksum}" ]] && [[ "${urlChecksum}" != "skip" ]]; then
+    sumprog=${urlChecksum%%:*}
+    urlChecksum=${urlChecksum#*:}
+    expectedChecksum=$(curl -L --fail --silent "$urlChecksum" | cut -d' ' -f1) || return 3
+    actualChecksum=$($sumprog < "$filename" | sed -e 's/[ -]//g') || return 4
+    if [[ "$expectedChecksum" != "$actualChecksum" ]]; then
+      echo "Checksum mismatch ($sumprog)"
+      echo "  expected $expectedChecksum"
+      echo "       got $actualChecksum"
+      return 5
+    else
+      echo "Checksum OK ($sumprog: $actualChecksum)"
+    fi
+  else
+    echo "Skipping checksum..."
   fi
   
   echo "Extracting ${filename##*/}..."
-  tar xf "$filename" -C "$mvnDir"
+  [[ -d "$extractDir" ]] || mkdir -p "$extractDir"
+  tar xf "$filename" --strip-components "$stripComponents" -C "$extractDir"
   echo "Creating symlink..."
-  ln -sfT "apache-maven-${versions[maven]}" "$mvnDir/current"
+  ln -sfT "$name-${versions[$name]}" "$targetDir/current"
   echo "Done."
 }
 
-installJava() {
+
+installMaven() {
+  local name=apache-maven
+  downloadExctractLink \
+    "$name" \
+    "https://www.apache.org/dist/maven/maven-3/${versions[$name]}/binaries/apache-maven-${versions[$name]}-bin.tar.gz" \
+    "https://www.apache.org/dist/maven/maven-3/${versions[$name]}/binaries/apache-maven-${versions[$name]}-bin.tar.gz.sha1"
+}
+
+installJavaOracle() {
   local javaDir=$baseDir/java
   local jdkJson url jdkVersion jdkDir
 
@@ -42,13 +74,13 @@ installJava() {
   jdkJson=$(curl -L --fail "https://raw.githubusercontent.com/shyiko/jabba/master/index.json")
   echo "Downloadable JDK versions:"
   jq '.linux.amd64.jdk | keys' <<< "$jdkJson"
-  url=$(jq -r ".linux.amd64.jdk.\"${versions[java]}\"" <<< "$jdkJson")
-  [[ -n $url ]] || { echo "Don't know how to download version ${versions[java]}"; return 1; }
+  url=$(jq -r ".linux.amd64.jdk.\"${versions[java-oracle]}\"" <<< "$jdkJson")
+  [[ -n $url ]] || { echo "Don't know how to download version ${versions[java-oracle]}"; return 1; }
   url=${url//tgz\+/}
 
   local filename="$javaDir/${url##*/}"
 
-  echo "Downloading JDK ${versions[java]}"
+  echo "Downloading JDK ${versions[java-oracle]}"
   echo "  from $url"
   [[ -d "$javaDir" ]] || mkdir -p "$javaDir"
   [[ -f "$filename" ]] || curl -L --fail --cookie "oraclelicense=accept-securebackup-cookie" -o "$filename" "$url" || return 2
@@ -56,24 +88,39 @@ installJava() {
   echo "Extracting ${filename##*/}..."
   tar xf "$filename" -C "$javaDir"
   echo "Creating symlink..."
-  jdkVersion=$(awk -F '.' '{print $2}' <<< "${versions[java]}")
+  jdkVersion=$(awk -F '.' '{print $2}' <<< "${versions[java-oracle]}")
   jdkDir=$(tar -t --exclude='*/*/*' -f "$filename" | cut -d'/' -f1 | uniq)
   ln -sfT "$jdkDir" "$javaDir/java$jdkVersion"
   ln -sfT "java$jdkVersion" "$javaDir/current"
   echo "Done."
 }
 
-installSTS() {
-  local stsDir=$baseDir/sts
-  local url="http://download.springsource.com/release/STS/3.9.1.RELEASE/dist/e4.7/spring-tool-suite-3.9.1.RELEASE-e4.7.1a-linux-gtk-x86_64.tar.gz"
-  echo "Downloading STS"
-  local filename="$stsDir/${url##*/}"
-  
-  [[ -d "$stsDir" ]] || mkdir -p "$stsDir"
-  [[ -f "$filename" ]] || curl -L --fail -o "$filename" "$url" || return 2
+installDBeaver() {
+  local name=dbeaver ini=$baseDir/dbeaver/current/dbeaver.ini
+  downloadExctractLink \
+    "$name" \
+    "https://dbeaver.jkiss.org/files/${versions[$name]}/dbeaver-ce-${versions[$name]}-linux.gtk.x86_64.tar.gz" \
+    "sha1sum:https://dbeaver.jkiss.org/files/${versions[$name]}/checksum/dbeaver-ce-${versions[$name]}-linux.gtk.x86_64.tar.gz.sha1"
+  echo -e "-vm\n$baseDir/java/current/bin\n$(cat "$ini")" > "$ini"
+}
 
-  echo "Extracting ${filename##*/}..."
-  
+installSTS() {
+  local name=sts ini=$baseDir/sts/current/sts-${versions[$name]}.RELEASE/STS.ini
+  downloadExctractLink \
+    "$name" \
+    "http://download.springsource.com/release/STS/${versions[$name]}.RELEASE/dist/e4.7/spring-tool-suite-${versions[$name]}.RELEASE-e4.7.2-linux-gtk-x86_64.tar.gz" \
+    "skip"
+  echo -e "-vm\n$baseDir/java/current/bin\n$(cat "$ini")" > "$ini"
+}
+
+installOpenJDK() {
+  local name=openjdk
+  downloadExctractLink \
+    "$name" \
+    "https://github.com/AdoptOpenJDK/openjdk8-releases/releases/download/jdk8u144-b01/OpenJDK8_x64_Linux_jdk8u144-b01.tar.gz" \
+    "sha256sum:https://github.com/AdoptOpenJDK/openjdk8-releases/releases/download/jdk8u144-b01/OpenJDK8_x64_Linux_jdk8u144-b01.sha256.txt" \
+    "java" \
+    2
 }
 
 while [[ -n ${1:-} ]]; do
@@ -81,11 +128,19 @@ while [[ -n ${1:-} ]]; do
     maven)
       installMaven
       ;;
-    java)
-      installJava
+    oracleJDK)
+      installJavaOracle
+      ;;
+    openJDK)
+      installOpenJDK
       ;;
     sts)
       installSTS;;
+    dbeaver)
+      installDBeaver;;
+    *)
+      echo "Unknown program: $1"
+      ;;
   esac
   shift
 done
