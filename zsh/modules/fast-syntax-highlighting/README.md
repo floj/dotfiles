@@ -31,6 +31,50 @@ Performance differencies can be observed at Asciinema recording, where `10 kB` f
 [![asciicast](https://asciinema.org/a/112367.png)](https://asciinema.org/a/112367)
 
 # Updates (2018)
+**2018-05-27**
+
+Added support for 256-color themes. There are six themes shipped with FSH. The command to
+switch theme is `fast-theme {theme-name}`, it has a completion which lists available themes
+and options. Checkout [asciinema recording](https://asciinema.org/a/183814) that presents
+the themes.
+
+**2018-05-25**
+
+Hash holding paths that shouldn't be grepped (globbed) – blacklist for slow disks, mounts, etc.:
+
+```zsh
+typeset -gA FAST_BLIST_PATTERNS
+FAST_BLIST_PATTERNS[/mount/nfs1/*]=1
+FAST_BLIST_PATTERNS[/mount/disk2/*]=1
+```
+
+**2018-05-23**
+
+Assign colorizing now spans to variables defined by `typeset`, `export`, `local`, etc.:
+
+![sshot](https://raw.githubusercontent.com/zdharma/fast-syntax-highlighting/master/images/typeset.png)
+
+Also, `zcalc` has a separate math mode and specialized highlighting – no more light-red colors because of
+treating `zcalc` like a regular command-line:
+
+![sshot](https://raw.githubusercontent.com/zdharma/fast-syntax-highlighting/master/images/zcalc.png)
+
+**2018-05-22**
+
+Array assignments were still boring, so I throwed in bracked colorizing:
+
+![sshot](https://raw.githubusercontent.com/zdharma/fast-syntax-highlighting/master/images/array-assign.png)
+
+**2018-05-22**<a name="assign-update"></a>
+
+Assignments are no more one-colour default-white. When used in assignment, highlighted are:
+
+- variables (outside strings),
+- strings (double-quoted and single-quoted),
+- math-mode (`val=$(( ... ))`).
+
+![sshot](https://raw.githubusercontent.com/zdharma/fast-syntax-highlighting/master/images/assign.png)
+
 **2018-01-06**
 
 Math mode is highlighted – expressions `(( ... ))` and `$(( ... ))`. Empty variables are colorized as red.
