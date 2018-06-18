@@ -37,7 +37,7 @@ Plug 'tpope/vim-unimpaired'
 
 Plug 'sheerun/vim-polyglot'
 
-Plug 'fatih/vim-go', { 'for': 'go' }
+Plug 'fatih/vim-go', { 'for': 'go', 'tag': 'v1.17' }
 Plug 'zchee/deoplete-go', { 'do': 'make' }
 
 " Plug 'leafgarland/typescript-vim'
