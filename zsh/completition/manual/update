@@ -7,4 +7,3 @@ autoload -U compinit && compinit
 source <(kubectl completion zsh)
 __kubectl_convert_bash_to_zsh > _kubectl
 
-wget "https://raw.githubusercontent.com/hashicorp/packer/master/contrib/zsh-completion/_packer"
