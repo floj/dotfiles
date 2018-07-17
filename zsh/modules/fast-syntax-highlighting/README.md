@@ -1,4 +1,13 @@
-[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=D6XDCHDSBDSDG)
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=H4GZAACT2MQ3W)
+
+```
+ _____         _       ____              _                  _   _ _       _     _ _       _     _   _
+|  ___|_ _ ___| |_    / ___| _   _ _ __ | |_ __ ___  __    | | | (_) __ _| |__ | (_) __ _| |__ | |_(_)_ __   __ _
+| |_ / _` / __| __|___\___ \| | | | '_ \| __/ _` \ \/ /____| |_| | |/ _` | '_ \| | |/ _` | '_ \| __| | '_ \ / _` |
+|  _| (_| \__ \ ||_____|__) | |_| | | | | || (_| |>  <_____|  _  | | (_| | | | | | | (_| | | | | |_| | | | | (_| |
+|_|  \__,_|___/\__|   |____/ \__, |_| |_|\__\__,_/_/\_\    |_| |_|_|\__, |_| |_|_|_|\__, |_| |_|\__|_|_| |_|\__, |
+                             |___/                                  |___/           |___/                   |___/
+```
 
 # Zshell Fast Syntax Highlighting
 
@@ -26,11 +35,74 @@ functions with `zed`/`vared` (optimizations done in
 
 6. Paths from `$CDPATH` aren't colorized unless the command is `cd`
 
+7. Five 256-color themes, switched with `fast-theme {theme-name}` (also try `-t` option to obtain the below snippet):
+
+    ![image](https://raw.githubusercontent.com/zdharma/fast-syntax-highlighting/master/images/theme.png)
+
+8. Correct highlighting of descriptor-variables passed to `exec`:
+
+    ![image](https://raw.githubusercontent.com/zdharma/fast-syntax-highlighting/master/images/execfd_cmp.png)
+
+9. Recursive `eval` and `$( )` highlighting, with secondary theme (two themes active at the same time!):
+
+    ![image](https://raw.githubusercontent.com/zdharma/fast-syntax-highlighting/master/images/eval_cmp.png)
+
+10. New architecture – **chroma functions** – highlighting that is **specific** for given command. There
+    are two chromas currently, for `git` (verifies correct remote & branch, also see below)  and `grep`
+    (highlights regular expression):
+
+    ![image](https://raw.githubusercontent.com/zdharma/fast-syntax-highlighting/master/images/git_chroma.png)
+
 Performance differencies can be observed at Asciinema recording, where `10 kB` function is being edited:
 
 [![asciicast](https://asciinema.org/a/112367.png)](https://asciinema.org/a/112367)
 
 # Updates (2018)
+**2018-07-11**
+
+There were problems with Ctrl-C not working when using FSH. After many days I've found a fix
+for this, it's pushed to master.
+
+Second, asynchronous path checking (useful on e.g. slow network drives, or when there are many files in directory)
+is now optional. Set `FAST_HIGHLIGHT[use_async]=1` to enable it. This saves some users from Zshell crashes
+– there's an unknown bug in Zsh.
+
+**2018-06-09**
+
+New chroma functions: `awk`, `make`, `perl`, `vim`. Checkout the [video](https://asciinema.org/a/186234),
+it shows functionality of `awk` – compiling of code and NOT running it. Perl can do this too:
+[video](https://asciinema.org/a/186098).
+
+**2018-06-06**
+
+FSH gained a new architecture – "chroma functions". They are similar to "completion functions", i.e. they
+are defined **per-command**, but instead of completing that command, they colorize it. Two chroma exist,
+for `Git` ([video](https://asciinema.org/a/185707), [video](https://asciinema.org/a/185811)) and for `grep`
+([video](https://asciinema.org/a/185942)). Checkout
+[example chroma](https://github.com/zdharma/fast-syntax-highlighting/blob/master/chroma/-example.ch) if you
+would like to highlight a command.
+
+![sshot](https://raw.githubusercontent.com/zdharma/fast-syntax-highlighting/master/images/git_chroma.png)
+
+**2018-06-01**
+
+Highlighting of command substitution (i.e. `$(...)`) with alternate theme – two themes at once! It was just white before:
+
+![sshot](https://raw.githubusercontent.com/zdharma/fast-syntax-highlighting/master/images/cmdsubst.png)
+
+To select which theme to use for `$(...)` set the key `secondary=` in [theme ini file](https://github.com/zdharma/fast-syntax-highlighting/blob/master/themes/free.ini#L7).
+All shipped themes have this key set (only the `default` theme doesn't use second theme).
+
+Also added correct highlighting of descriptor-variables passed to `exec`:
+
+![sshot](https://raw.githubusercontent.com/zdharma/fast-syntax-highlighting/master/images/execfd.png)
+
+**2018-05-30**
+
+For-loop is highlighted, it has separate settings in [theme file](https://github.com/zdharma/fast-syntax-highlighting/blob/master/themes/free.ini).
+
+![sshot](https://raw.githubusercontent.com/zdharma/fast-syntax-highlighting/master/images/for-loop.png)
+
 **2018-05-27**
 
 Added support for 256-color themes. There are six themes shipped with FSH. The command to
