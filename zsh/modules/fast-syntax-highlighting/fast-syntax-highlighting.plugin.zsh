@@ -33,6 +33,10 @@
 typeset -g ZERO=${(%):-%N}
 typeset -g FAST_BASE_DIR="${ZERO:h}"
 
+if [[ -z "$ZPLG_CUR_PLUGIN" && "${fpath[(r)$FAST_BASE_DIR]}" != $FAST_BASE_DIR ]]; then
+    fpath+=( "$FAST_BASE_DIR" )
+fi
+
 # Invokes each highlighter that needs updating.
 # This function is supposed to be called whenever the ZLE state changes.
 _zsh_highlight()
@@ -62,7 +66,7 @@ _zsh_highlight()
   # may need to remove path_prefix highlighting when the line ends
   if [[ $WIDGET == zle-line-finish ]] || _zsh_highlight_buffer_modified; then
       -fast-highlight-init
-      -fast-highlight-process && region_highlight=( $reply ) || region_highlight=()
+      -fast-highlight-process "$PREBUFFER" "$BUFFER" 0 && region_highlight=( $reply ) || region_highlight=()
   fi
 
   {
@@ -267,8 +271,14 @@ ZSH_HIGHLIGHT_MAXLENGTH=10000
 
 # Load zsh/parameter module if available
 zmodload zsh/parameter 2>/dev/null
+zmodload zsh/system 2>/dev/null
 
-autoload -Uz is-at-least fast-theme fast-read-ini-file
+autoload -Uz -- is-at-least fast-theme fast-read-ini-file -fast-run-git-command -fast-make-targets \
+                -fast-run-command
+autoload -Uz -- chroma/-git.ch chroma/-example.ch chroma/-grep.ch chroma/-perl.ch chroma/-make.ch \
+                chroma/-awk.ch chroma/-vim.ch chroma/-source.ch chroma/-sh.ch chroma/-docker.ch \
+                chroma/-autoload.ch chroma/-ssh.ch chroma/-scp.ch chroma/-which.ch chroma/-printf.ch \
+                chroma/-ruby.ch
 source "${ZERO:h}/fast-highlight"
 
 local __fsyh_theme
