@@ -54,3 +54,16 @@ who-has-port() {
     echo "No process found"
   fi
 }
+
+gen-password(){
+  if command -v openssl &>/dev/null; then
+    openssl rand -base64 36
+    return $?
+  fi
+  dd if=/dev/urandom bs=1 count=36 2>/dev/null | base64
+}
+
+terraform(){
+  aws-refresh-token -if-expiry-less-than 20m
+  command terraform "$@"
+}
