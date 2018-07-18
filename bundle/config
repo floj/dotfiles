@@ -1,2 +1,2 @@
 ---
-BUNDLE_BUILD__NOKOGIRI: "--use-system-libraries"
+#BUNDLE_BUILD__NOKOGIRI: "--use-system-libraries"
