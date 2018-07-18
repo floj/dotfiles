@@ -38,6 +38,7 @@ Plug 'tpope/vim-unimpaired'
 Plug 'sheerun/vim-polyglot'
 
 Plug 'fatih/vim-go', { 'for': 'go', 'tag': 'v1.17' }
+" Plug 'fatih/vim-go', { 'for': 'go' }
 Plug 'zchee/deoplete-go', { 'do': 'make' }
 
 " Plug 'leafgarland/typescript-vim'
@@ -57,7 +58,7 @@ Plug 'morhetz/gruvbox'
 "Plug 'joshdick/onedark.vim'
 
 " Plug 'tweekmonster/startuptime.vim'
-" Plug 'hashivim/vim-terraform'
+Plug 'hashivim/vim-terraform', { 'for': 'terraform' }
 "
 
 call plug#end()
