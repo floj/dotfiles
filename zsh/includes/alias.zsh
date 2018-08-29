@@ -71,9 +71,6 @@ alias mcp='mvn clean package'
 #
 alias dri='docker run -ti --rm'
 
-# aws/terraform/packer
-command -v packer-io &> /dev/null && alias packer='packer-io'
-
 #
 # arch/pacman
 #
