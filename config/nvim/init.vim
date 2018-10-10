@@ -6,10 +6,15 @@ if 0 | endif
 
 call plug#begin('~/.config/nvim/plugged')
 
+Plug 'neomake/neomake'
+" be sure to include vim-go before vim-polyglot
+" see https://github.com/sheerun/vim-polyglot/issues/309
+Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'zchee/deoplete-go', { 'do': 'make' }
+
 Plug 'editorconfig/editorconfig-vim'
 
-Plug 'neomake/neomake'
 " Plug 'w0rp/ale'
 
 Plug 'scrooloose/nerdtree'
@@ -36,10 +41,6 @@ Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-unimpaired'
 
 Plug 'sheerun/vim-polyglot'
-
-Plug 'fatih/vim-go', { 'for': 'go', 'tag': 'v1.17' }
-" Plug 'fatih/vim-go', { 'for': 'go' }
-Plug 'zchee/deoplete-go', { 'do': 'make' }
 
 " Plug 'leafgarland/typescript-vim'
 " Plug 'elixir-lang/vim-elixir'
@@ -202,7 +203,7 @@ let g:go_highlight_variable_declarations = 1
 
 " Use deoplete.
 let g:deoplete#enable_at_startup = 1
-let g:deoplete#sources#go#gocode_binary = expand('~/.gotools/bin/gocode')
+" let g:deoplete#sources#go#gocode_binary = expand('~/.gotools/bin/gocode')
 let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
 set completeopt+=noselect
 
