@@ -29,7 +29,7 @@ function chjava_use()
   [[ -n "$JAVA_HOME" ]] && chjava_reset
   export JAVA_HOME="$1"
   export PATH="$JAVA_HOME/bin:$PATH"
-  export JAVA_VERSION="$($JAVA_HOME/bin/java -version 2>&1 | grep "^java version" | sed 's/java version "\(.*\)"/\1/')"
+  export JAVA_VERSION="$($JAVA_HOME/bin/java -version 2>&1 | grep -E '^[[:alnum:]]+ version' | sed -E 's/.*version\s+"(.*)"/\1/')"
   [[ -n "$2" ]] && export JAVA_OPTS="$2"
   hash -r
 }
