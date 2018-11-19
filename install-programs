@@ -8,6 +8,7 @@ versions[dbeaver]=5.2.4
 versions[sts]=3.9.2
 versions[openjdk8]=8u191-b12
 versions[openjdk9]="jdk-9+181"
+versions[openjdk11]="jdk-11.0.1+13"
 baseDir=$HOME/programs
 
 #
@@ -109,6 +110,17 @@ installOpenJDK9() {
     2
 }
 
+installOpenJDK11() {
+  local name=openjdk11
+  downloadExctractLink \
+    "$name" \
+    "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.1%2B13/OpenJDK11U-jdk_x64_linux_hotspot_11.0.1_13.tar.gz" \
+    "sha256sum:https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.1%2B13/OpenJDK11U-jdk_x64_linux_hotspot_11.0.1_13.tar.gz.sha256.txt" \
+    "java" \
+    1
+}
+
+
 while [[ -n ${1:-} ]]; do
   case $1 in
     maven)
@@ -122,6 +134,9 @@ while [[ -n ${1:-} ]]; do
       ;;
     openjdk9)
       installOpenJDK9
+      ;;
+    openjdk11)
+      installOpenJDK11
       ;;
     sts)
       installSTS;;
