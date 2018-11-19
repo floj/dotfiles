@@ -4,7 +4,7 @@ set -euo pipefail
 
 declare -A versions=()
 versions[apache-maven]=3.5.2
-versions[dbeaver]=5.2.4
+versions[dbeaver]=5.2.5
 versions[sts]=3.9.2
 versions[openjdk8]=8u191-b12
 versions[openjdk9]="jdk-9+181"
@@ -78,7 +78,6 @@ installDBeaver() {
     "$name" \
     "https://dbeaver.jkiss.org/files/${versions[$name]}/dbeaver-ce-${versions[$name]}-linux.gtk.x86_64.tar.gz" \
     "sha1sum:https://dbeaver.jkiss.org/files/${versions[$name]}/checksum/dbeaver-ce-${versions[$name]}-linux.gtk.x86_64.tar.gz.sha1"
-  echo -e "-vm\n$baseDir/java/current/bin\n$(cat "$ini")" > "$ini"
 }
 
 installSTS() {
