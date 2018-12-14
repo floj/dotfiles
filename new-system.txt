@@ -183,9 +183,16 @@ EOF
 # 
 if [[ -n ${conf[user]} ]] && ! getent passwd "${conf[user]}" >/dev/null; then
   info "Adding user ${conf[user]}"
-  useradd -m -G users,wheel -s /usr/bin/zsh "${conf[user]}"
+  useradd -m -U -G users,wheel -s /usr/bin/zsh "${conf[user]}"
   passwd "${conf[user]}"
 fi
+
+info "Fetching temp version of yay to install AUR packages"
+yayDir=$(mktemp -d)
+curl -sqL "https://github.com/Jguer/yay/releases/download/v9.0.1/yay_9.0.1_x86_64.tar.gz" | tar xz -C "$yayDir" --strip-components 1 --no-anchored 'yay'
+"$yayDir/yay" -S --answerclean a --answerdiff n --answeredit n \
+  yay pulseaudio-bluetooth-a2dp-gdm-fix
+[[ -n "$yayDir" ]] && rm -rf "$yayDir"
 
 if [[ -f "$(dirname "${BASH_SOURCE[0]}")/install-apps" ]]; then
   "$(dirname "${BASH_SOURCE[0]}")/install-apps" term gnome fonts browser media dev
@@ -193,6 +200,8 @@ else
   info "Clone dotfiles repo and run"
   info "  install-apps term gnome fonts browser media dev"
 fi
+
+
 
 # this is obsolete with kernel 4.15
 # See https://wiki.archlinux.org/index.php/TLP#Btrfs
