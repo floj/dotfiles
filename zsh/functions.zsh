@@ -63,7 +63,12 @@ gen-password(){
   dd if=/dev/urandom bs=1 count=36 2>/dev/null | base64
 }
 
-terraform(){
+_with-renew-aws-token(){
   aws-refresh-token -if-expiry-less-than 20m
-  command terraform "$@"
+  "$@"
 }
+
+for cmd in packer terraform aws; do
+  alias $cmd="_with-renew-aws-token $cmd"
+done
+
