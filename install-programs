@@ -4,7 +4,7 @@ set -euo pipefail
 
 declare -A versions=()
 versions[apache-maven]=3.5.2
-versions[dbeaver]=5.2.5
+versions[dbeaver]=5.3.1
 versions[sts]=3.9.2
 versions[openjdk8]=8u191-b12
 versions[openjdk9]="jdk-9+181"
@@ -31,7 +31,7 @@ downloadExctractLink() {
   echo "Installing $name ${versions[$name]}"
   echo "  from $url"
   [[ -d "$targetDir" ]] || mkdir -p "$targetDir"
-  [[ -f "$filename" ]] || curl -L --fail --progress-bar -o "$filename" "$url" || return 2
+  [[ -f "$filename" ]] || curl -L --fail -o "$filename" "$url" || return 2
   if [[ -n "${urlChecksum}" ]] && [[ "${urlChecksum}" != "skip" ]]; then
     sumprog=${urlChecksum%%:*}
     echo "sumprog: $sumprog"
