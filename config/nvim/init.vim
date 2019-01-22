@@ -60,7 +60,7 @@ Plug 'morhetz/gruvbox'
 
 " Plug 'tweekmonster/startuptime.vim'
 Plug 'hashivim/vim-terraform', { 'for': 'terraform' }
-"
+Plug 'ruby-formatter/rufo-vim', { 'for': 'ruby' }
 
 call plug#end()
 
@@ -151,9 +151,11 @@ autocmd BufReadPost *
 
 set viminfo^=%   " Remember info about open buffers on close
 
+call neomake#configure#automake('nw', 1000)
+"autocmd! BufWritePost * Neomake
+
 autocmd BufWritePre *.rb,*.js,*.haml,*.sass,*.htm,*.html,*.xml,*.gemspec,Gemfile :call <SID>StripTrailingWhitespaces()
 "autocmd VimEnter * call AirlineInit()
-autocmd! BufWritePost * Neomake
 
 " Highlight YAML frontmatter in Markdown files
 let g:vim_markdown_frontmatter = 1
@@ -176,6 +178,8 @@ autocmd InsertLeave * :set norelativenumber
 autocmd InsertEnter * :set relativenumber
 
 let g:neomake_sh_shellcheck_args = ['-fgcc', '-x']
+
+let g:rufo_auto_formatting = 1
 
 " vmi-go stuff
 
@@ -303,3 +307,4 @@ endif
 if executable('prettier')
   autocmd FileType javascript setlocal equalprg=prettier\ --stdin\ --trailing-comma\ es5
 endif
+
