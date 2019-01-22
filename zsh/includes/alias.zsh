@@ -1,6 +1,6 @@
 #!/bin/zsh
 if whence exa>/dev/null 2>&1; then
-  alias ll='exa -al --git --group-directories-first'
+  alias ll='exa -alg --git --group-directories-first'
 else
   alias ls='ls --color=auto --group-directories-first'
   alias ll='ls -AlhpN'
