@@ -90,7 +90,7 @@ declare -a enableUnits=()
 installPkgs+=(adwaita-icon-theme eog evince epiphany gdm gnome-backgrounds gnome-calculator gnome-control-center gnome-dictionary \
   gnome-disk-utility gnome-font-viewer gnome-keyring gnome-screenshot gnome-session gnome-settings-daemon gnome-shell \
   gnome-shell-extensions gnome-system-monitor gnome-terminal gnome-themes-standard gucharmap gvfs gvfs-mtp gvfs-smb \
-  mousetweaks mutter nautilus networkmanager tracker tracker-miners xdg-user-dirs-gtk file-roller unrar p7zip cups)
+  mousetweaks mutter nautilus networkmanager tracker tracker-miners xdg-user-dirs-gtk file-roller unrar p7zip cups pacman-contrib)
 enableUnits+=(gdm NetworkManager org.cups.cupsd.service)
 
 # install some additional packages
