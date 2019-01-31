@@ -30,6 +30,7 @@ groups[opt]="peco grv-git"
 groups[fonts]="ttf-google-fonts-opinionated-git"
 groups[browser]="vivaldi-snapshot vivaldi-snapshot-ffmpeg-codecs"
 groups[dev]="docker lxc nodejs npm go ruby-install meld"
+groups[aws]="aws-cli saw terraform"
 
 fromAur() {
   local tmpdir
