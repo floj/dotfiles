@@ -1,6 +1,7 @@
 {
-	"answerclean": "a",
-	"answerdiff": "n",
-	"answeredit": "n",
-  "combinedupgrade": true
+  "answerclean": "a",
+  "answerdiff": "n",
+  "answeredit": "n",
+  "combinedupgrade": true,
+  "removemake": "y"
 }
