@@ -30,6 +30,7 @@ if (( __first_call )); then
     FAST_HIGHLIGHT[chroma-git-got-subcommand]=0
     FAST_HIGHLIGHT[chroma-git-subcommand]=""
     FAST_HIGHLIGHT[chrome-git-got-msg1]=0
+    FAST_HIGHLIGHT[chrome-git-got-anymsg]=0
     FAST_HIGHLIGHT[chrome-git-occurred-double-hyphen]=0
     FAST_HIGHLIGHT[chroma-git-checkout-new]=0
     FAST_HIGHLIGHT[chroma-git-fetch-multiple]=0
@@ -49,9 +50,9 @@ else
     elif [[ "$__wrd" = -* && ${FAST_HIGHLIGHT[chroma-git-got-subcommand]} -eq 0 ]]; then
         # Options occuring before a subcommand
         if (( FAST_HIGHLIGHT[chroma-git-option-with-argument-active] == 0 )); then
-            if [[ "$__wrd" = -[^-]#C[^-]# ]]; then
+            if [[ "$__wrd" = -[^[:space:]-]#C ]]; then
                 FAST_HIGHLIGHT[chroma-git-option-with-argument-active]=2
-            elif [[ "$__wrd" = -[^-]#c[^-]# ]]; then
+            elif [[ "$__wrd" = -[^[:space:]-]#c ]]; then
                 FAST_HIGHLIGHT[chroma-git-option-with-argument-active]=1
             fi
         fi
@@ -77,7 +78,7 @@ else
 
             # Check if the command is an alias - we want to highlight the
             # aliased command just like the target command of the alias
-            -fast-run-command "git config --get-regexp 'alias.*'" chroma-git-alias-list "" $(( 5 * 60 ))
+            -fast-run-command "git config --get-regexp 'alias.*'" chroma-git-alias-list "" $(( 10 * 60 ))
             # Grep for line: alias.{user-entered-subcmd}[[:space:]], and remove alias. prefix
             __lines_list=( ${${(M)__lines_list[@]:#alias.${__wrd}[[:space:]]##*}#alias.} )
 
@@ -93,7 +94,7 @@ else
             fi
             if (( __start_pos >= 0 )); then
                 # if subcommand exists
-                LANG=C -fast-run-command "git help -a" chroma-git-subcmd-list "" $(( 5 * 60 ))
+                LANG=C -fast-run-command "git help -a" chroma-git-subcmd-list "" $(( 10 * 60 ))
                 # (s: :) will split on every space, but because the expression
                 # isn't double-quoted, the empty elements will be eradicated
                 # Some further knowledge-base: s-flag is special, it skips
@@ -179,9 +180,10 @@ else
                 match[1]=""
                 match[2]=""
                 # if previous argument is -m or current argument is --message=something
-                if (( FAST_HIGHLIGHT[chrome-git-got-msg1] == 1 )) \
+                if (( FAST_HIGHLIGHT[chrome-git-got-msg1] == 1 && ! FAST_HIGHLIGHT[chrome-git-got-anymsg] )) \
                     || [[ "$__wrd" = (#b)(--message=)(*) && "${FAST_HIGHLIGHT[chrome-git-occurred-double-hyphen]}" = 0 ]]; then
                     FAST_HIGHLIGHT[chrome-git-got-msg1]=0
+                    FAST_HIGHLIGHT[chrome-git-got-anymsg]=1
                     if [[ -n "${match[1]}" ]]; then
                         __wrd="${(Q)${match[2]//\`/x}}"
                         # highlight (--message=)something
@@ -194,9 +196,10 @@ else
                         (( __start=__start_pos-${#PREBUFFER}, __end=__end_pos-${#PREBUFFER}, __start >= 0 )) && \
                             reply+=("$__start $__end ${FAST_HIGHLIGHT_STYLES[${FAST_THEME_NAME}double-quoted-argument]}")
                     fi
-                    if (( ${#__wrd} > 50 )); then
+                    local __firstline=${__wrd%%$'\n'*}
+                    if (( ${#__firstline} > 50 )); then
                         for (( __idx1 = 1, __idx2 = 1; __idx1 <= 50; ++ __idx1, ++ __idx2 )); do
-                            while [[ "${__arg[__idx2]}" != "${__wrd[__idx1]}" ]]; do
+                            while [[ "${__arg[__idx2]}" != "${__firstline[__idx1]}" ]]; do
                                 (( ++ __idx2 ))
                                 (( __idx2 > __asize )) && { __idx2=-1; break; }
                             done
@@ -204,17 +207,17 @@ else
                         done
                         if (( __idx2 != -1 )); then
                             if [[ -n "${match[1]}" ]]; then
-                                (( __start=__start_pos-${#PREBUFFER}+__idx2, __end=__end_pos-${#PREBUFFER}, __start >= 0 )) && \
+                                (( __start=__start_pos-${#PREBUFFER}+__idx2, __end=__end_pos-${#PREBUFFER}-$#__wrd+$#__firstline-1, __start >= 0 )) && \
                                     reply+=("$__start $__end ${FAST_HIGHLIGHT_STYLES[${FAST_THEME_NAME}incorrect-subtle]}")
                             else
-                                (( __start=__start_pos-${#PREBUFFER}+__idx2-1, __end=__end_pos-${#PREBUFFER}, __start >= 0 )) && \
+                                (( __start=__start_pos-${#PREBUFFER}+__idx2-1, __end=__end_pos-${#PREBUFFER}-$#__wrd+$#__firstline-1, __start >= 0 )) && \
                                     reply+=("$__start $__end ${FAST_HIGHLIGHT_STYLES[${FAST_THEME_NAME}incorrect-subtle]}")
                             fi
                         fi
                     fi
                 # if before --
                 elif [[ "${FAST_HIGHLIGHT[chrome-git-occurred-double-hyphen]}" = 0 ]]; then
-                    if [[ "$__wrd" = -[^-]#m[^-]# ]]; then
+                    if [[ "$__wrd" = -[^[:space:]-]#m ]]; then
                         FAST_HIGHLIGHT[chrome-git-got-msg1]=1
                         __style=${FAST_THEME_NAME}single-hyphen-option
                     else
@@ -234,7 +237,7 @@ else
                 || [[ "${FAST_HIGHLIGHT[chroma-git-subcommand]}" = "rebase" ]]; then
 
                 # if doing `git checkout -b ...'
-                if [[ "$__wrd" = -[^-]#b[^-]# && "${FAST_HIGHLIGHT[chroma-git-subcommand]}" = "checkout" ]]; then
+                if [[ "$__wrd" = -[^[:space:]-]#b && "${FAST_HIGHLIGHT[chroma-git-subcommand]}" = "checkout" ]]; then
                     FAST_HIGHLIGHT[chroma-git-checkout-new]=1
                     __style=${FAST_THEME_NAME}single-hyphen-option
                 # if command is not checkout -b something
@@ -296,8 +299,8 @@ else
                     ||  "$__wrd" = --edit-description \
                     ||  "$__wrd" = --set-upstream-to=* \
                     ||  "$__wrd" = --unset-upstream \
-                    ||  "$__wrd" = -[^-]#d[^-]# \
-                    ||  "$__wrd" = -[^-]#D[^-]# ]]; then
+                    ||  "$__wrd" = -[^[:space:]-]#d \
+                    ||  "$__wrd" = -[^[:space:]-]#D ]]; then
                     FAST_HIGHLIGHT[chroma-git-branch-change]=1
                     return 1
                 elif [[ "$__wrd" != -* ]]; then
@@ -312,11 +315,11 @@ else
                 fi
             elif [[ "${FAST_HIGHLIGHT[chroma-git-subcommand]}" = "tag" ]]; then
                 if [[ "${FAST_HIGHLIGHT[chroma-git-option-with-argument-active]}" -le 0 ]]; then
-                    if [[ "$__wrd" =  -[^-]#(u|m)[^-]# ]]; then
+                    if [[ "$__wrd" =  -[^[:space:]-]#(u|m) ]]; then
                         FAST_HIGHLIGHT[chroma-git-option-with-argument-active]=1
-                    elif [[ "$__wrd" = -[^-]#F[^-]# ]]; then
+                    elif [[ "$__wrd" = -[^[:space:]-]#F ]]; then
                         FAST_HIGHLIGHT[chroma-git-option-with-argument-active]=2
-                    elif [[ "$__wrd" = -[^-]#d[^-]# ]]; then
+                    elif [[ "$__wrd" = -[^[:space:]-]#d ]]; then
                         FAST_HIGHLIGHT[chroma-git-option-with-argument-active]=3
                     elif [[ "$__wrd" = (--contains|--no-contains|--points-at|--merged|--no-merged) ]]; then
                         FAST_HIGHLIGHT[chroma-git-option-with-argument-active]=4
