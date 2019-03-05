@@ -154,7 +154,8 @@ set viminfo^=%   " Remember info about open buffers on close
 call neomake#configure#automake('nw', 1000)
 "autocmd! BufWritePost * Neomake
 
-autocmd BufWritePre *.rb,*.js,*.haml,*.sass,*.htm,*.html,*.xml,*.gemspec,Gemfile :call <SID>StripTrailingWhitespaces()
+autocmd BufWritePre *.tf,*.rb,*.js,*.haml,*.sass,*.htm,*.html,*.xml,*.gemspec,Gemfile :call <SID>StripTrailingWhitespaces()
+autocmd BufWritePre *.tf,*.tfvars :TerraformFmt
 "autocmd VimEnter * call AirlineInit()
 
 " Highlight YAML frontmatter in Markdown files
@@ -238,6 +239,8 @@ endif
 
 let mapleader=","
 
+" don't yank to register on paste in visual mode
+vnoremap p "_dP
 " copy to system clipboard
 set clipboard=unnamedplus
 nmap <leader>n :NERDTreeToggle<CR>
