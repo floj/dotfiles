@@ -31,8 +31,7 @@ alias -s .txt='less'
 
 alias meld='GTK_THEME=:light meld'
 
-whence pt >/dev/null 2>&1 && alias pt='pt -S' 
-whence rg >/dev/null 2>&1 && alias rg='rg -S -uu -L' 
+whence rg >/dev/null 2>&1 && alias rg='rg -S -L --hidden' 
 
 whence xsel >/dev/null 2>&1 && alias clipboard='xsel -b'
 
