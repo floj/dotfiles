@@ -30,10 +30,14 @@ alias -s .log='less'
 alias -s .txt='less'
 
 alias meld='GTK_THEME=:light meld'
+alias rg='rg -S -L --hidden' 
 
-whence rg >/dev/null 2>&1 && alias rg='rg -S -L --hidden' 
-
-whence xsel >/dev/null 2>&1 && alias clipboard='xsel -b'
+# terraform
+alias tf='terraform'
+alias tfi='terraform init'
+alias tfa='terraform apply -lock-timeout=2m'
+alias tfaa='terraform apply -lock-timeout=2m -auto-approve'
+alias tfp='terraform plan -lock-timeout=2m'
 
 #
 # ruby/rails
