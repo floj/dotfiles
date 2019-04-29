@@ -1,0 +1,58 @@
+autoload -U colors && colors
+autoload -U compinit && compinit
+
+zstyle ':completion::complete:*' use-cache on
+zstyle ':completion::complete:*' cache-path "$HOME/.zcompcache"
+
+HISTSIZE=1000
+SAVEHIST=1000
+HISTFILE=~/.history
+
+PROMPT="%F{blue}[%f%F{green}%n%f%F{blue}@%f%F{green}%m%f%F{blue}]%f %~ %F{green}>%f "
+PATH="$PATH:$HOME/bin"
+
+typeset -A keymap
+keymap[Insert]="^[[2~"
+keymap[Delete]="^[[3~"
+keymap[Home]="^[[H"
+keymap[End]="^[[F"
+keymap[PageUp]="^[[5~" 
+keymap[PageDown]="^[[6~"
+
+keymap[Up]="^[[A"
+keymap[Down]="^[[B"
+keymap[Left]="^[[D"
+keymap[Right]="^[[C"
+
+keymap[ShiftTab]="^[[Z"
+
+keymap[AltBackspace]="^[^?"
+keymap[AltLeft]="^[[1;3D"
+keymap[AltRight]="^[[1;3C"
+keymap[CtrlLeft]="^[[1;5D"
+keymap[CtrlRight]="^[[1;5C"
+
+
+bindkey "${keymap[Home]}"     beginning-of-line
+bindkey "${keymap[End]}"      end-of-line
+bindkey "${keymap[Insert]}"   overwrite-mode
+bindkey "${keymap[Delete]}"   delete-char
+bindkey "${keymap[Up]}"       history-search-forward
+bindkey "${keymap[Down]}"     history-search-backward
+bindkey "${keymap[Left]}"     backward-char
+bindkey "${keymap[Right]}"    forward-char
+bindkey "${keymap[ShiftTab]}" reverse-menu-complete
+
+bindkey "${keymap[AltBackspace]}"   backward-delete-word
+bindkey "${keymap[AltLeft]}"        backward-word
+bindkey "${keymap[AltRight]}"       forward-word
+bindkey "${keymap[CtrlLeft]}"       beginning-of-line
+bindkey "${keymap[CtrlRight]}"      end-of-line
+
+if [[ -f $HOME/.zsh/zsh-history-substring-search.zsh ]]; then
+	source "$HOME/.zsh/zsh-history-substring-search.zsh"
+	bindkey "${keymap[Up]}"       history-substring-search-up
+	bindkey "${keymap[Down]}"     history-substring-search-down
+fi
+
+unset keymap
