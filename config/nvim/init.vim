@@ -62,6 +62,10 @@ Plug 'morhetz/gruvbox'
 Plug 'hashivim/vim-terraform', { 'for': 'terraform' }
 Plug 'ruby-formatter/rufo-vim', { 'for': 'ruby' }
 
+Plug 'prettier/vim-prettier', {
+  \ 'do': 'yarn install',
+  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
+
 call plug#end()
 
 " background fix for vim in tmux
@@ -153,8 +157,9 @@ set viminfo^=%   " Remember info about open buffers on close
 
 call neomake#configure#automake('nw', 1000)
 "autocmd! BufWritePost * Neomake
-
-autocmd BufWritePre *.tf,*.rb,*.js,*.haml,*.sass,*.htm,*.html,*.xml,*.gemspec,Gemfile :call <SID>StripTrailingWhitespaces()
+let g:prettier#autoformat = 0
+autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.yaml,*.html,*.htm PrettierAsync
+autocmd BufWritePre *.tf,*.rb,*.haml,*.sass,*.xml,*.gemspec,Gemfile :call <SID>StripTrailingWhitespaces()
 autocmd BufWritePre *.tf,*.tfvars :TerraformFmt
 "autocmd VimEnter * call AirlineInit()
 
@@ -179,6 +184,8 @@ autocmd InsertLeave * :set norelativenumber
 autocmd InsertEnter * :set relativenumber
 
 let g:neomake_sh_shellcheck_args = ['-fgcc', '-x']
+" for js we use vim-prettier
+let g:neomake_javascript_enabled_makers = []
 
 let g:rufo_auto_formatting = 1
 
@@ -189,7 +196,6 @@ let g:go_auto_type_info = 1
 let g:go_info_mode = 'guru' " gocode
 let g:go_auto_sameids = 1
 let g:go_fmt_command = 'goimports' " gofmt
-let g:go_bin_path = expand('~/.gotools/bin')
 " let g:go_metalinter_enabled = ['vet', 'golint', 'errcheck']
 " let g:go_metalinter_disabled = []
 let g:go_addtags_transform = 'camelcase'
@@ -307,7 +313,4 @@ if executable('xmllint')
   autocmd FileType xml setlocal equalprg=xmllint\ --format\ --recover\ -
 endif
 
-if executable('prettier')
-  autocmd FileType javascript setlocal equalprg=prettier\ --stdin\ --trailing-comma\ es5
-endif
 
