@@ -35,9 +35,9 @@ alias rg='rg -S -L --hidden'
 # terraform
 alias tf='terraform'
 alias tfi='terraform init'
-alias tfa='terraform apply -lock-timeout=2m'
-alias tfaa='terraform apply -lock-timeout=2m -auto-approve'
-alias tfp='terraform plan -lock-timeout=2m'
+alias tfa='terraform apply'
+alias tfaa='terraform apply -auto-approve'
+alias tfp='terraform plan'
 
 #
 # ruby/rails
