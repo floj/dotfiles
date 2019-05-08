@@ -23,5 +23,3 @@
 
 source "$HOME/bin/chs/auto.sh"
 ch_auto_init "$HOME/bin/chs/hooks"
-
-command -v direnv &>/dev/null && eval "$(direnv hook zsh)"
