@@ -13,6 +13,10 @@ if command -v aws-vault &>/dev/null; then
 
     cat<<EOF>"$HOME/bin/$f"
 #!/usr/bin/env bash
+set -e
+if [[ -n \$AWS_VAULT ]]; then
+  exec "$targetBin" "\$@"
+fi
 if [[ -z \$AWS_VAULT_PROFILE ]]; then
   echo "AWS_VAULT_PROFILE not set"
   exit 1
