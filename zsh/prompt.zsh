@@ -36,8 +36,8 @@ function _prompt_left() {
   if [[ $(jobs -l | wc -l) -gt 0 ]]; then
     echo -n "%{%F{208}%}%j ⚙"
   fi
-  if [[ $AWS_PROFILE =~ .*prod$ ]]; then
-    echo -n "%{%F{red}%}$AWS_PROFILE "
+  if [[ -n $AWS_VAULT_PROFILE ]]; then
+    echo -n "%{%F{red}%}aws:$AWS_VAULT_PROFILE "
   fi
   echo -n "%{%b%k%F{$promptcolor}%}> "
 }
