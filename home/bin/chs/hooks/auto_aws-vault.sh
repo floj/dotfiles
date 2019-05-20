@@ -2,14 +2,14 @@
 unset AWS_VAULT_AUTO_VERSION
 
 function chawsvault_reset() {
-  [[ -z "$AWS_VAULT_PROFILE" ]] && return
-  unset AWS_VAULT_PROFILE 
+  [[ -z "$AWS_PROFILE" ]] && return
+  unset AWS_PROFILE 
 }
 
 function chawsvault_use() {
-  [[ -n "$AWS_VAULT_PROFILE" ]] && chawsvault_reset
-  echo "AWS_VAULT_PROFILE=$1"
-  export AWS_VAULT_PROFILE="$1"
+  [[ -n "$AWS_PROFILE" ]] && chawsvault_reset
+  echo "AWS_PROFILE=$1"
+  export AWS_PROFILE="$1"
 }
 
 function chawsvault_apply() {
@@ -26,5 +26,5 @@ function chawsvault_unapply() {
   fi
 }
 
-CH_AUTO_HOOKS[.aws-vault-profile]="chawsvault"
+CH_AUTO_HOOKS[.aws-profile]="chawsvault"
 # vi ft=zsh
