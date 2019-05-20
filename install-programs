@@ -4,7 +4,7 @@ set -euo pipefail
 
 declare -A versions=()
 versions[apache-maven]=3.5.2
-versions[dbeaver]=6.0.1
+# versions[dbeaver]=6.0.4
 versions[sts]=3.9.2
 versions[openjdk8]=8u191-b12
 versions[openjdk9]="jdk-9+181"
@@ -73,11 +73,7 @@ installMaven() {
 }
 
 installDBeaver() {
-  local name=dbeaver ini=$baseDir/dbeaver/current/dbeaver.ini
-  downloadExctractLink \
-    "$name" \
-    "https://dbeaver.jkiss.org/files/${versions[$name]}/dbeaver-ce-${versions[$name]}-linux.gtk.x86_64.tar.gz" \
-    "sha1sum:https://dbeaver.jkiss.org/files/${versions[$name]}/checksum/dbeaver-ce-${versions[$name]}-linux.gtk.x86_64.tar.gz.sha1"
+  flatpak install io.dbeaver.DBeaverCommunity
 }
 
 installSTS() {
