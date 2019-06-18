@@ -29,13 +29,14 @@ Plug 'jistr/vim-nerdtree-tabs'
 Plug 'itchyny/lightline.vim'
 
 Plug 'airblade/vim-gitgutter'
+" Plug 'mhinz/vim-signify'
 
-Plug 'tpope/vim-fugitive'
+" Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
-Plug 'tpope/vim-eunuch'
+" Plug 'tpope/vim-eunuch'
 " Plug 'tpope/vim-sleuth'
 
 Plug 'tpope/vim-unimpaired'
@@ -61,6 +62,7 @@ Plug 'morhetz/gruvbox'
 " Plug 'tweekmonster/startuptime.vim'
 Plug 'hashivim/vim-terraform', { 'for': 'terraform' }
 Plug 'ruby-formatter/rufo-vim', { 'for': 'ruby' }
+Plug 'ntpeters/vim-better-whitespace'
 
 Plug 'prettier/vim-prettier', {
   \ 'do': 'yarn install',
@@ -91,7 +93,7 @@ set cmdheight=2                " Height of the command bar
 set backspace=eol,start,indent " Configure backspace so it acts as it should act
 set whichwrap+=<,>,h,l
 set ignorecase                 " Ignore case when searching
-set smartcase                  " When searching try to be smart about cases 
+set smartcase                  " When searching try to be smart about cases
 set lazyredraw                 " Don't redraw while executing macros (good performance config)
 set hlsearch                   " Highlight search results
 set incsearch                  " Makes search act like search in modern browsers
@@ -129,14 +131,14 @@ set hidden   " allow to switch beetween unsaved buffers
 
 " Use the same symbols as TextMate for tabstops and EOLs
 set list
-set listchars=tab:▸\ 
+set listchars=tab:▸\
 " set listchars=tab:▸\ ,eol:¬
 
 
 " Save files which require root permission
 cmap w!! %!sudo tee > /dev/null %
 
-" let g:rehash256=1 
+" let g:rehash256=1
 set background=dark
 " colorscheme molokai
 " colorscheme zenburn
@@ -159,7 +161,6 @@ call neomake#configure#automake('nw', 1000)
 "autocmd! BufWritePost * Neomake
 let g:prettier#autoformat = 0
 autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.yaml,*.html,*.htm PrettierAsync
-autocmd BufWritePre *.tf,*.rb,*.haml,*.sass,*.xml,*.gemspec,Gemfile :call <SID>StripTrailingWhitespaces()
 autocmd BufWritePre *.tf,*.tfvars :TerraformFmt
 "autocmd VimEnter * call AirlineInit()
 
@@ -205,7 +206,7 @@ let g:go_highlight_extra_types = 1
 let g:go_highlight_operators = 1
 let g:go_highlight_functions = 1
 let g:go_highlight_function_arguments = 1
-let g:go_highlight_function_calls = 1 
+let g:go_highlight_function_calls = 1
 let g:go_highlight_types = 1
 let g:go_highlight_fields = 1
 let g:go_highlight_build_constraints = 1
@@ -258,21 +259,6 @@ nmap <C-p> :Files<CR>
 nmap ' :Files<CR>
 nmap ; :Buffers<CR>
 
-"
-" Functions
-"
-function! <SID>StripTrailingWhitespaces()
-  " Preparation: save last search, and cursor position.
-  let _s=@/
-  let l = line(".")
-  let c = col(".")
-  " Do the business:
-  %s/\s\+$//e
-  " Clean up: restore previous search history, and cursor position
-  let @/=_s
-  call cursor(l, c)
-endfunction
-
 let g:lightline = {
       \ 'colorscheme': 'one',
       \ 'active': {
@@ -283,26 +269,6 @@ let g:lightline = {
       \   'gitbranch': 'fugitive#head'
       \ },
       \ }
-
-" function! AirlineInit()
-  
-"   let g:airline#extensions#tabline#enabled = 1
-  
-"   if !exists('g:airline_symbols')
-"     let g:airline_symbols = {}
-"   endif
-
-"   " unicode symbols
-"   let g:airline_left_sep = '▶'
-"   let g:airline_right_sep = '◀'
-"   let g:airline_symbols.linenr = '¶'
-"   " " let g:airline_symbols.branch = '⎇'
-"   let g:airline_symbols.branch = ''
-"   let g:airline_symbols.paste = ''
-"   let g:airline_symbols.whitespace = 'Ξ'
-"   let g:airline_symbols.readonly = ''
-
-" endfunction
 
 if executable('jq')
   " autocmd FileType json setlocal equalprg=json_pp
