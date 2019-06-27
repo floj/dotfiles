@@ -6,9 +6,8 @@
 #   Sorin Ionescu <sorin.ionescu@gmail.com>
 #
 
-# Add zsh-completions to $fpath.
-fpath=("$ZSH_SOURCE_DIR/completitions" $fpath)
-
+# Add custom to $fpath.
+fpath+="$ZSH_SOURCE_DIR/completions"
 # Load and initialize the completion system ignoring insecure directories.
 autoload -U compinit && compinit
 
