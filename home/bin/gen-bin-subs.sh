@@ -7,7 +7,7 @@ PATH="${PATH#:}"
 PATH="${PATH%:}"
 
 # if command -v aws-vault &>/dev/null; then
-  for f in aws packer terraform cw saws saw; do
+  for f in aws packer terraform cw saws saw awless; do
     targetBin=$(command -v "$f")
     if [[ -z $targetBin ]]; then
       echo "$f not found in path, skipping"
@@ -25,7 +25,7 @@ aws_profile=\${AWS_PROFILE}
 if [[ -z \$aws_profile ]]; then
   exec "$targetBin" "\$@"
 fi
-exec aws-vault --prompt=automfa exec "\$aws_profile" -- "$targetBin" "\$@"
+exec aws-vault exec --prompt=automfa "\$aws_profile" -- "$targetBin" "\$@"
 EOF
   echo "$f" >> .gitignore
   chmod +x "$HOME/bin/$f"

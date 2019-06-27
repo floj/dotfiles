@@ -7,21 +7,21 @@
 #
 
 # Add zsh-completions to $fpath.
-fpath=("$ZSH_SOURCE_DIR/completition/active" $fpath)
+fpath=("$ZSH_SOURCE_DIR/completitions" $fpath)
 
 # Load and initialize the completion system ignoring insecure directories.
-autoload -U compinit && compinit 
+autoload -U compinit && compinit
 
 #
 # Options
 #
 setopt always_to_end       # Move cursor to the end of a completed word
-setopt auto_list           # Automatically list choices on ambiguous completion 
-setopt auto_menu           # Show completion menu on a succesive tab press 
-setopt auto_name_dirs 
-setopt auto_param_keys 
-setopt auto_param_slash    # If completed parameter is a directory, add a trailing slash 
-setopt auto_remove_slash 
+setopt auto_list           # Automatically list choices on ambiguous completion
+setopt auto_menu           # Show completion menu on a succesive tab press
+setopt auto_name_dirs
+setopt auto_param_keys
+setopt auto_param_slash    # If completed parameter is a directory, add a trailing slash
+setopt auto_remove_slash
 setopt complete_in_word    # Complete from both ends of a word
 setopt path_dirs           # Perform path search even on command names with slashes
 unsetopt menu_complete     # Do not autoselect the first completion entry.

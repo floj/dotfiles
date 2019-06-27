@@ -42,6 +42,7 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 
 Plug 'sheerun/vim-polyglot'
+Plug 'jparise/vim-graphql'
 
 " Plug 'leafgarland/typescript-vim'
 " Plug 'elixir-lang/vim-elixir'
