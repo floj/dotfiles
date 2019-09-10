@@ -7,7 +7,7 @@ PATH="${PATH#:}"
 PATH="${PATH%:}"
 
 # if command -v aws-vault &>/dev/null; then
-  for f in aws packer terraform cw saws saw awless; do
+  for f in aws packer terraform cw saws saw awless awslogs; do
     targetBin=$(command -v "$f")
     if [[ -z $targetBin ]]; then
       echo "$f not found in path, skipping"
@@ -25,7 +25,8 @@ aws_profile=\${AWS_PROFILE}
 if [[ -z \$aws_profile ]]; then
   exec "$targetBin" "\$@"
 fi
-exec aws-vault exec --prompt=automfa "\$aws_profile" -- "$targetBin" "\$@"
+assume_role_ttl=\${AWS_ASSUME_ROLE_TTL:-20}m
+exec aws-vault exec --assume-role-ttl "\$assume_role_ttl" --prompt=automfa "\$aws_profile" -- "$targetBin" "\$@"
 EOF
   echo "$f" >> .gitignore
   chmod +x "$HOME/bin/$f"
@@ -34,3 +35,5 @@ EOF
 #   echo "aws-vault not found"
 # fi
 
+uniqGitignore=$(sort -u .gitignore)
+echo "$uniqGitignore" > .gitignore
