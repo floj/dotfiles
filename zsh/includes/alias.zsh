@@ -1,9 +1,17 @@
 #!/bin/zsh
-if whence exa>/dev/null 2>&1; then
+#
+if command -v lsd &>/dev/null; then
+  alias ll='lsd -Alh --date relative --icon never --group-dirs first'
+  alias ls='lsd --icon never --group-dirs first'
+elif command -v exa &>/dev/null; then
   alias ll='exa -alg --git --group-directories-first'
 else
   alias ls='ls --color=auto --group-directories-first'
   alias ll='ls -AlhpN'
+fi
+
+if command -v bat &>/dev/null; then
+  alias cat='bat -p'
 fi
 
 alias cp='cp --reflink=auto'
@@ -30,7 +38,7 @@ alias -s .log='less'
 alias -s .txt='less'
 
 alias meld='GTK_THEME=:light meld'
-alias rg='rg -S -L --hidden' 
+alias rg='rg -S -L --hidden'
 
 # terraform
 alias tf='terraform'
