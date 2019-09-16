@@ -18,10 +18,10 @@ PATH="${PATH%:}"
     cat<<EOF>"$HOME/bin/$f"
 #!/usr/bin/env bash
 set -e
-if [[ -n \$AWS_VAULT ]]; then
+if [[ -n \$AWS_VAULT ]] || [[ -n \$VIMRUNTIME ]]; then
   exec "$targetBin" "\$@"
 fi
-aws_profile=\${AWS_PROFILE}
+aws_profile=\$AWS_PROFILE
 if [[ -z \$aws_profile ]]; then
   exec "$targetBin" "\$@"
 fi
