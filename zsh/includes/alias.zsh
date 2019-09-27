@@ -14,6 +14,10 @@ if command -v bat &>/dev/null; then
   alias cat='bat -p'
 fi
 
+if command -v xcp &>/dev/null; then
+  alias cp='xcp'
+fi
+
 alias cp='cp --reflink=auto'
 alias fr='file-roller'
 alias n='nautilus . &'
