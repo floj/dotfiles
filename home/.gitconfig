@@ -4,12 +4,12 @@
   # identities
   iwork = "!echo -n \"applying work profile ($GIT_IWORK_NAME | $GIT_IWORK_EMAIL)\" && git config user.name \"$GIT_IWORK_NAME\" && git config user.email \"$GIT_IWORK_EMAIL\" && echo ' done.'"
   ipriv = "!echo -n \"applying private profile ($GIT_IPRIV_NAME | $GIT_IPRIV_EMAIL)\" && git config user.name \"$GIT_IPRIV_NAME\" && git config user.email \"$GIT_IPRIV_EMAIL\" && echo ' done.'"
-  
+
   st = status
-  
+
   co = checkout
   com = checkout master
-  
+
   rb = rebase
   rbm = rebase master
   rbi = rabase --interactive
@@ -35,7 +35,7 @@
   keepBackup = false
 [mergetool "mymeld"]
   cmd = meld $LOCAL $BASE $REMOTE --output $MERGED
-  
+
 
 [core]
 	editor = nvim -c 'startinsert'
