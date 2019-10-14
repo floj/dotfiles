@@ -6,16 +6,15 @@ if 0 | endif
 
 call plug#begin('~/.config/nvim/plugged')
 
-Plug 'neomake/neomake'
+" Plug 'neomake/neomake'
+Plug 'w0rp/ale'
 " be sure to include vim-go before vim-polyglot
 " see https://github.com/sheerun/vim-polyglot/issues/309
-Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
+" Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'zchee/deoplete-go', { 'do': 'make' }
 
 Plug 'editorconfig/editorconfig-vim'
-
-" Plug 'w0rp/ale'
 
 Plug 'scrooloose/nerdtree'
 Plug 'jistr/vim-nerdtree-tabs'
@@ -158,7 +157,7 @@ autocmd BufReadPost *
 
 set viminfo^=%   " Remember info about open buffers on close
 
-call neomake#configure#automake('nw', 1000)
+" call neomake#configure#automake('nw', 1000)
 "autocmd! BufWritePost * Neomake
 let g:prettier#autoformat = 0
 autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.yaml,*.html,*.htm PrettierAsync
@@ -185,9 +184,9 @@ let g:vim_markdown_frontmatter = 1
 autocmd InsertLeave * :set norelativenumber
 autocmd InsertEnter * :set relativenumber
 
-let g:neomake_sh_shellcheck_args = ['-fgcc', '-x']
+" let g:neomake_sh_shellcheck_args = ['-fgcc', '-x']
 " for js we use vim-prettier
-let g:neomake_javascript_enabled_makers = []
+" let g:neomake_javascript_enabled_makers = []
 
 let g:rufo_auto_formatting = 1
 
