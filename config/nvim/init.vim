@@ -7,7 +7,7 @@ if 0 | endif
 call plug#begin('~/.config/nvim/plugged')
 
 " Plug 'neomake/neomake'
-Plug 'w0rp/ale'
+Plug 'dense-analysis/ale'
 " be sure to include vim-go before vim-polyglot
 " see https://github.com/sheerun/vim-polyglot/issues/309
 " Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
