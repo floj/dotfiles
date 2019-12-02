@@ -42,8 +42,8 @@ zsh-restart () {
 
 unpack-rar() {
  [[ -z "$1" ]] && { echo "usage: unpack-rar <glob-pattern>"; return 1; }
- for f in $1; do 
-   unrar x "$f" 
+ for f in $1; do
+   unrar x "$f"
  done
 }
 
@@ -56,10 +56,22 @@ who-has-port() {
 }
 
 gen-password(){
+  local s=""
   if command -v openssl &>/dev/null; then
-    openssl rand -base64 36
-    return $?
+    s=$(openssl rand -base64 36)
+  else
+    s=$(dd if=/dev/urandom bs=1 count=36 2>/dev/null | base64)
   fi
-  dd if=/dev/urandom bs=1 count=36 2>/dev/null | base64
+  case "${1:-}" in
+    -a)
+      s=$(tr '+' '-' <<<"$s" | tr '/' '_')
+      ;;
+    -n)
+      s=$(tr '+' '1' <<<"$s" | tr '/' '2')
+      ;;
+    *)
+      ;;
+  esac
+  echo "$s"
 }
 
