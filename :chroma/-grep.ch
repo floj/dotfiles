@@ -1,9 +1,6 @@
 # -*- mode: sh; sh-indentation: 4; indent-tabs-mode: nil; sh-basic-offset: 4; -*-
 # Copyright (c) 2018 Sebastian Gniazdowski
 #
-# Chroma for `source' builtin - verifies if file to be sourced compiles
-# correctly.
-#
 # $1 - 0 or 1, denoting if it's first call to the chroma, or following one
 #
 # $2 - the current token, also accessible by $__arg from the above scope -
@@ -19,16 +16,19 @@
 (( next_word = 2 | 8192 ))
 
 local __first_call="$1" __wrd="$2" __start_pos="$3" __end_pos="$4"
-local __style __chars __home=${XDG_CACHE_HOME:-$HOME/.cache}/fsh
+local __style __chars
 integer __idx1 __idx2
 
 # First call, i.e. command starts, i.e. "grep" token etc.
 (( __first_call )) && {
-    FAST_HIGHLIGHT[chroma-src-counter]=0
-    __style=${FAST_THEME_NAME}builtin
-
+    FAST_HIGHLIGHT[chroma-grep-counter]=0
+    return 1
 } || {
     # Following call, i.e. not the first one.
+
+    if (( in_redirection > 0 || this_word & 128 )) || [[ $__wrd == "<<<" ]]; then
+        return 1
+    fi
 
     # Check if chroma should end – test if token is of type
     # "starts new command", if so pass-through – chroma ends
@@ -40,14 +40,32 @@ integer __idx1 __idx2
                                 __style=${FAST_THEME_NAME}single-hyphen-option
     else
         # Count non-option tokens.
-        (( FAST_HIGHLIGHT[chroma-src-counter] += 1, __idx1 = FAST_HIGHLIGHT[chroma-src-counter] ))
+        (( FAST_HIGHLIGHT[chroma-grep-counter] += 1, __idx1 = FAST_HIGHLIGHT[chroma-grep-counter] ))
 
-        if (( FAST_HIGHLIGHT[chroma-src-counter] == 1 )); then
-            command mkdir -p "$__home"
-            command cp -f "${__wrd}" "$__home" 2>/dev/null && {
-                zcompile "$__home"/"${__wrd:t}" 2>/dev/null 1>&2 && __style=${FAST_THEME_NAME}correct-subtle || __style=${FAST_THEME_NAME}incorrect-subtle
-            }
-        elif (( FAST_HIGHLIGHT[chroma-src-counter] == 2 )); then
+        # First non-option token is the pattern (regex), we will
+        # highlight it.
+        if (( FAST_HIGHLIGHT[chroma-grep-counter] == 1 )); then
+            [[ "$__wrd" = \"* ]] && __style=${FAST_THEME_NAME}double-quoted-argument
+            [[ "$__wrd" = \'* ]] && __style=${FAST_THEME_NAME}single-quoted-argument
+            [[ "$__wrd" = \$\'* ]] && __style=${FAST_THEME_NAME}dollar-quoted-argument
+            [[ -n "$__style" ]] && (( __start=__start_pos-${#PREBUFFER}, __end=__end_pos-${#PREBUFFER}, __start >= 0 )) && reply+=("$__start $__end ${FAST_HIGHLIGHT_STYLES[$__style]}")
+            __style=""
+
+            __chars="*+\\)([]^\$"
+            __idx1=__start_pos
+            __idx2=__start_pos
+            while [[ "$__wrd" = (#b)[^$__chars]#([\\][\\])#((+|\*|\[|\]|\)|\(|\^|\$)|[\\](+|\*|\[|\]|\)|\(|\^|\$))(*) ]]; do
+                if [[ -n "${match[3]}" ]]; then
+                    __idx1+=${mbegin[3]}-1
+                    __idx2=__idx1+${mend[3]}-${mbegin[3]}+1
+                    (( __start=__idx1-${#PREBUFFER}, __end=__idx2-${#PREBUFFER}, __start >= 0 )) && reply+=("$__start $__end ${FAST_HIGHLIGHT_STYLES[${FAST_THEME_NAME}for-loop-operator]}")
+                    __idx1=__idx2
+                else
+                    __idx1+=${mbegin[5]}-1
+                fi
+                __wrd="${match[5]}"
+            done
+        elif (( FAST_HIGHLIGHT[chroma-grep-counter] == 2 )); then
             # Handle paths, etc. normally - just pass-through to the big
             # highlighter (the main FSH highlighter, used before chromas).
             return 1
