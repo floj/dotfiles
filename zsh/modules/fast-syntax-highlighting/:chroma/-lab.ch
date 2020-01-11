@@ -1,4 +1,8 @@
 # vim:ft=zsh:et:sw=4
+#
+# The `lab' tool after which this chroma is modeled after:
+# https://github.com/zaquestion/lab
+#
 (( next_word = 2 | 8192 ))
 local __first_call="$1" __wrd="$2" __start_pos="$3" __end_pos="$4"
 
@@ -7,6 +11,10 @@ if (( __first_call )); then
     return 1
 fi
 [[ "$__arg_type" = 3 ]] && return 2
+
+if (( in_redirection > 0 || this_word & 128 )) || [[ $__wrd == "<<<" ]]; then
+    return 1
+fi
 
 if [[ "$__wrd" != -* ]] && (( FAST_HIGHLIGHT[chroma-git-got-subcommand] == 0 )); then
     -fast-run-command "git config --get-regexp 'alias.*'" chroma-git-alias-list "" $(( 5 * 60 ))
@@ -24,6 +32,10 @@ if [[ "$__wrd" != -* ]] && (( FAST_HIGHLIGHT[chroma-git-got-subcommand] == 0 ));
         FAST_HIGHLIGHT[chroma-git-subcommand]="$__wrd"
     fi
     if [[ "${FAST_HIGHLIGHT[chroma-git-subcommand]}" = "browse" \
+        || "${FAST_HIGHLIGHT[chroma-git-subcommand]}" = "ci" \
+        || "${FAST_HIGHLIGHT[chroma-git-subcommand]}" = "mr" \
+        || "${FAST_HIGHLIGHT[chroma-git-subcommand]}" = "project" \
+        || "${FAST_HIGHLIGHT[chroma-git-subcommand]}" = "snippet" \
         || "${FAST_HIGHLIGHT[chroma-git-subcommand]}" = "ci-status" \
         || "${FAST_HIGHLIGHT[chroma-git-subcommand]}" = "compare" \
         || "${FAST_HIGHLIGHT[chroma-git-subcommand]}" = "create" \
