@@ -48,8 +48,9 @@ typeset -g FAST_WORK_DIR
 : ${FAST_WORK_DIR:=$FAST_BASE_DIR}
 FAST_WORK_DIR=${~FAST_WORK_DIR}
 
-if [[ -z "$ZPLG_CUR_PLUGIN" && "${fpath[(r)$FAST_BASE_DIR]}" != $FAST_BASE_DIR ]]; then
-    fpath+=( "$FAST_BASE_DIR" )
+if [[ ${zsh_loaded_plugins[-1]} != */fast-syntax-highlighting && -z ${fpath[(r)${0:h}]} ]]
+then
+    fpath+=( "${0:h}" )
 fi
 
 if [[ "$FAST_WORK_DIR" = /usr/* || ( "$FAST_WORK_DIR" = /opt/* && ! -w "$FAST_WORK_DIR" ) ]]; then
@@ -318,8 +319,8 @@ ZSH_HIGHLIGHT_MAXLENGTH=10000
 zmodload zsh/parameter 2>/dev/null
 zmodload zsh/system 2>/dev/null
 
-autoload -Uz -- is-at-least fast-theme fast-read-ini-file -fast-run-git-command -fast-make-targets \
-                -fast-run-command -fast-zts-read-all
+autoload -Uz -- is-at-least fast-theme .fast-read-ini-file .fast-run-git-command \
+                .fast-make-targets .fast-run-command .fast-zts-read-all
 autoload -Uz -- :chroma/-git.ch :chroma/-hub.ch :chroma/-lab.ch :chroma/-example.ch \
                 :chroma/-grep.ch :chroma/-perl.ch :chroma/-make.ch :chroma/-awk.ch \
                 :chroma/-vim.ch :chroma/-source.ch :chroma/-sh.ch :chroma/-docker.ch \
@@ -328,7 +329,7 @@ autoload -Uz -- :chroma/-git.ch :chroma/-hub.ch :chroma/-lab.ch :chroma/-example
                 :chroma/-subcommand.ch :chroma/-autorandr.ch :chroma/-nmcli.ch \
                 :chroma/-fast-theme.ch :chroma/-node.ch :chroma/-fpath_peq.ch \
                 :chroma/-precommand.ch :chroma/-subversion.ch :chroma/-ionice.ch \
-                :chroma/-nice.ch :chroma/main-chroma.ch :chroma/-ogit.ch :chroma/-zplugin.ch
+                :chroma/-nice.ch :chroma/main-chroma.ch :chroma/-ogit.ch :chroma/-zinit.ch
 
 source "${0:h}/fast-highlight"
 source "${0:h}/fast-string-highlight"
