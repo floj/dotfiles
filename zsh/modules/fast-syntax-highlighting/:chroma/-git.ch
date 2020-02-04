@@ -559,7 +559,7 @@ fsh__git__chroma__def=(
              || -l:del
                             <<>> TAG_0_opt // TAG_NEW_1_arg // COMMIT_2_arg"
 
-    "TAG_L_0_opt" "
+    TAG_L_0_opt "
                 (-n|--contains|--no-contains|--points-at|--column=|--sort=|--format=|
                  --color=)
                             <<>> NO-OP // :::chroma/main-chroma-std-aopt-action
@@ -577,7 +577,7 @@ fsh__git__chroma__def=(
              || -v:del
                             <<>> TAG_0_opt // TAG_NEW_1_arg // COMMIT_2_arg"
 
-    "TAG_V_0_opt" "
+    TAG_V_0_opt "
                 --format=
                             <<>> NO-OP // :::chroma/main-chroma-std-aopt-action
                             <<>> NO-OP // :::chroma/main-chroma-std-aopt-ARG-action"
@@ -630,7 +630,7 @@ fsh__git__chroma__def=(
 :chroma/-git-get-subcommands() {
     local __svalue
     integer __ivalue
-    LANG=C -fast-run-command "git help -a" chroma-${FAST_HIGHLIGHT[chroma-current]}-subcmd-list "" $(( 15 * 60 ))
+    LANG=C .fast-run-command "git help -a" chroma-${FAST_HIGHLIGHT[chroma-current]}-subcmd-list "" $(( 15 * 60 ))
     if [[ "${__lines_list[1]}" = See* ]]; then
         # (**)
         # git >= v2.20, the aliases in the `git help -a' command
@@ -646,7 +646,7 @@ fsh__git__chroma__def=(
         # This allows to check if the command is an alias - we want to
         # highlight the aliased command just like the target command of
         # the alias
-        -fast-run-command "+git config --get-regexp 'alias.*'" chroma-${FAST_HIGHLIGHT[chroma-current]}-alias-list "[[:space:]]#alias." $(( 15 * 60 ))
+        .fast-run-command "+git config --get-regexp 'alias.*'" chroma-${FAST_HIGHLIGHT[chroma-current]}-alias-list "[[:space:]]#alias." $(( 15 * 60 ))
     fi
 
     __tmp=${#__lines_list}
@@ -660,7 +660,7 @@ fsh__git__chroma__def=(
 # A generic handler
 :chroma/-git-verify-remote() {
     local _wrd="$4"
-    -fast-run-git-command "git remote" "chroma-git-remotes-$PWD" "" $(( 2 * 60 ))
+    .fast-run-git-command "git remote" "chroma-git-remotes-$PWD" "" 10
     [[ -n ${__lines_list[(r)$_wrd]} ]] && {
         __style=${FAST_THEME_NAME}correct-subtle; return 0
     } || {
@@ -672,7 +672,7 @@ fsh__git__chroma__def=(
 :chroma/-git-verify-ref() {
     local _wrd="$4"
     _wrd="${_wrd%%:*}"
-    -fast-run-git-command "git for-each-ref --format='%(refname:short)' refs/heads" "chroma-git-refs-$PWD" "refs/heads" $(( 2 * 60 ))
+    .fast-run-git-command "git for-each-ref --format='%(refname:short)' refs/heads" "chroma-git-refs-$PWD" "refs/heads" 10
     [[ -n ${__lines_list[(r)$_wrd]} ]] && \
         { __style=${FAST_THEME_NAME}correct-subtle; return 0; } || \
         { __style=${FAST_THEME_NAME}incorrect-subtle; return 1; }
@@ -759,20 +759,24 @@ fsh__git__chroma__def=(
 
 :chroma/-git-verify-branch() {
     local _wrd="$4"
-    -fast-run-git-command "git for-each-ref --format='%(refname:short)' refs/heads" "chroma-git-branches-$PWD" "refs/heads" $(( 2 * 60 ))
-    [[ -n ${__lines_list[(r)$_wrd]} ]] && \
-        { __style=${FAST_THEME_NAME}correct-subtle; return 0; } || \
-        { __style=${FAST_THEME_NAME}incorrect-subtle; return 1; }
+    .fast-run-git-command "git for-each-ref --format='%(refname:short)'" "chroma-git-branches-$PWD" "refs/heads" 10
+    if [[ -n ${__lines_list[(r)$_wrd]} ]] {
+        __style=${FAST_THEME_NAME}correct-subtle; return 0
+    } elif [[ -n ${__lines_list[(r)origin/$_wrd]} ]] {
+        __style=${FAST_THEME_NAME}correct-subtle; return 0
+    } else {
+        __style=${FAST_THEME_NAME}incorrect-subtle; return 1
+    }
 }
 
 :chroma/-git-verify-also-unfetched-ref() {
     local _wrd="$4"
-    -fast-run-git-command "git config --get checkout.defaultRemote" \
-                            "chroma-git-defaultRemote-$PWD" "" $(( 2 * 60 ))
+    .fast-run-git-command "git config --get checkout.defaultRemote" \
+                            "chroma-git-defaultRemote-$PWD" "" 10
     local remote="${__lines_list[1]:-origin}"
-    -fast-run-git-command "git rev-list --count --no-walk
+    .fast-run-git-command "git rev-list --count --no-walk
                             --glob=\"refs/remotes/$remote/$_wrd\"" \
-                                "chroma-git-unfetched-ref-$PWD" "" $(( 2 * 60 ))
+                                "chroma-git-unfetched-ref-$PWD" "" 10
 
     (( __lines_list[1] )) && { __style=${FAST_THEME_NAME}correct-subtle; return 0; } || \
         { __style=${FAST_THEME_NAME}incorrect-subtle; return 1; }
@@ -782,6 +786,7 @@ fsh__git__chroma__def=(
 :chroma/-git-file-or-ubranch-or-commit-verify() {
     :chroma/-git-verify-commit "$@" && return
     :chroma/-git-verify-file "$@" && return
+    :chroma/-git-verify-branch "$@" && return
     :chroma/-git-verify-also-unfetched-ref "$@"
 }
 
@@ -789,6 +794,7 @@ fsh__git__chroma__def=(
 :chroma/-git-file-or-dir-or-ubranch-or-commit-verify() {
     :chroma/-git-verify-commit "$@" && return
     :chroma/-git-verify-file-or-dir "$@" && return
+    :chroma/-git-verify-branch "$@" && return
     :chroma/-git-verify-also-unfetched-ref "$@"
 }
 
@@ -811,7 +817,7 @@ fsh__git__chroma__def=(
 :chroma/-git-verify-commit() {
     local _wrd="$4"
     __lines_list=()
-    -fast-run-git-command "git rev-parse --verify --quiet \"$_wrd\"" "chroma-git-commits-$PWD-$_wrd" "" $(( 1.5 * 60 ))
+    .fast-run-git-command "git rev-parse --verify --quiet \"$_wrd\"" "chroma-git-commits-$PWD-$_wrd" "" $(( 1.5 * 60 ))
     if (( ${#__lines_list} )); then
         __style=${FAST_THEME_NAME}correct-subtle
         return 0
@@ -861,7 +867,7 @@ fsh__git__chroma__def=(
 
 :chroma/-git-verify-tag-name() {
     local _wrd="$4"
-    -fast-run-git-command "git tag" "chroma-git-tags-$PWD" "" $(( 2*60 ))
+    .fast-run-git-command "git tag" "chroma-git-tags-$PWD" "" $(( 2*60 ))
     [[ -n ${__lines_list[(r)$_wrd]} ]] && \
         __style=${FAST_THEME_NAME}correct-subtle || \
         __style=${FAST_THEME_NAME}incorrect-subtle
