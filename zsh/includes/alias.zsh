@@ -21,6 +21,8 @@ alias less='less -S'
 alias v='nvim'
 alias vi='v'
 
+alias awssh='ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -l ec2-user'
+
 alias ...='cd ../..'
 alias ....='cd ../../..'
 
@@ -81,6 +83,7 @@ alias mcp='mvn clean package'
 # docker
 #
 alias dri='docker run -ti --rm'
+alias d-c='docker-compose'
 
 #
 # arch/pacman
