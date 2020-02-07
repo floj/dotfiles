@@ -31,13 +31,15 @@ function _prompt_right() {
 }
 
 function _prompt_left() {
-  local promptcolor
+  local promptcolor awsRegion
   [[ $RETVAL -gt 0 ]] && promptcolor=9 || promptcolor=10
   if [[ $(jobs -l | wc -l) -gt 0 ]]; then
     echo -n "%{%F{208}%}%j ⚙"
   fi
   if [[ -n $AWS_PROFILE ]]; then
+    awsRegion=${AWS_REGION:-$AWS_DEFAULT_REGION}
     echo -n "%{%F{red}%}aws:$AWS_PROFILE "
+    [[ -n $awsRegion ]] && [[ "$awsRegion" != "eu-central-1" ]]  && echo -n "%{%F{red}%}($awsRegion) "
   fi
   echo -n "%{%b%k%F{$promptcolor}%}> "
 }
