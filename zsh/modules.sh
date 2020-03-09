@@ -11,5 +11,6 @@ subtrees["z"]="ericbn/z"
 export subtrees
 
 typeset -a moduleOrder
-moduleOrder=(zsh-completions z zsh-history-substring-search fast-syntax-highlighting)
+#moduleOrder=(zsh-completions z zsh-history-substring-search fast-syntax-highlighting)
+moduleOrder=(zsh-completions zoxide zsh-history-substring-search fast-syntax-highlighting)
 export moduleOrder
