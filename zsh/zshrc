@@ -16,17 +16,17 @@ source "$ZSH_SOURCE_DIR/kbd.zsh"
 
 if [[ -f  "$ZSH_SOURCE_DIR/modules.sh" ]]; then
   source "$ZSH_SOURCE_DIR/modules.sh"
-  for mdir in "${moduleOrder[@]}"; do
-    module="$ZSH_SOURCE_DIR/modules/$mdir"
+  for mname in "${moduleOrder[@]}"; do
+    mdir="$ZSH_SOURCE_DIR/modules/$mname"
     typeset -i mloaded=0
-    for f in "init.zsh" "$mdir.zsh" "$mdir.plugin.zsh" "../$mdir.init.zsh"; do
-      if [[ -f "$module/$f" ]]; then
-        source "$module/$f"
+    for f in "$mdir/init.zsh" "$mdir/$mname.zsh" "$mdir/$mname.plugin.zsh" "$ZSH_SOURCE_DIR/modules/$mname.init.zsh"; do
+      if [[ -f "$f" ]]; then
+        source "$f"
         mloaded=1
         break
       fi
     done
-    (( mloaded == 0 )) && echo "Don't know how to load module '$module'"
+    (( mloaded == 0 )) && echo "Don't know how to load module '$mname'"
   done
   unset subtrees
   unset mloaded
@@ -36,4 +36,4 @@ fi
 FAST_HIGHLIGHT_STYLES[path]="fg=green"
 [[ -f "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"
 source "$ZSH_SOURCE_DIR/prompt.zsh"
-
+[[ -f "$HOME/.config/broot/launcher/bash/br" ]] && source "$HOME/.config/broot/launcher/bash/br"
