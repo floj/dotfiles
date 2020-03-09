@@ -1,7 +1,7 @@
 # vim:ft=zsh
 
-setopt prompt_cr 
-setopt prompt_sp 
+setopt prompt_cr
+setopt prompt_sp
 setopt prompt_subst
 unsetopt transient_rprompt
 
@@ -85,18 +85,18 @@ function prompt_setup() {
   autoload -U colors && colors
   autoload -U vcs_info
   autoload -U add-zsh-hook
-  
+
   add-zsh-hook precmd prompt_flo_precmd
 
   # Set vcs_info parameters.
-  zstyle ':vcs_info:*' enable git 
+  zstyle ':vcs_info:*' enable git
   zstyle ':vcs_info:*' check-for-changes true
   zstyle ':vcs_info:*' actionformats '%F{5}(%f%s%F{5})%F{3}-%F{5}[%F{2}%b%F{3}|%F{1}%a%F{5}]%f'
   zstyle ':vcs_info:*' stagedstr "%F{blue}${PROMPT_GIT_STAGED}%f"
   zstyle ':vcs_info:*' unstagedstr "%F{white}${PROMPT_GIT_UNSTAGED}%f"
   zstyle ':vcs_info:*' formats '%F{5}%s[%F{2}%b%F{white} %F{red}%m%u%c%F{5}]%f'
   zstyle ':vcs_info:git*+set-message:*' hooks git-stash git-ahead-behind
-  
+
   PROMPT='%{%f%b%k%}$(_prompt_left)%{%f%b%k%}'
   RPROMPT='%{%f%b%k%}$(_prompt_right)%{%f%b%k%}'
 }
