@@ -1,20 +1,9 @@
 #
 # from https://github.com/junegunn/fzf/wiki/examples
 #
-if whence fzf > /dev/null 2>&1; then
+if command -v fzf &> /dev/null; then
 
-  if whence rg > /dev/null; then
-    export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
-  fi
-
-  zz() {
-    local matches=$(_z -e -l "$*" 2>&1)
-    if [[ $matches == common:* ]]; then
-      _z "$*"
-    else
-      local line=$(echo "$matches" | fzf --height 40% --reverse --tac --select-1 --query "$*") && cd "${line##* }"
-    fi
-  }
+  command -v rg &> /dev/null && export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
 
   # fdr - cd to selected parent directory
   ffr() {
@@ -32,7 +21,7 @@ if whence fzf > /dev/null 2>&1; then
   }
 
   # fd - cd to selected sub directory
-  if whence fd >/dev/null; then
+  if command -v fd &>/dev/null; then
     ff() {
       local dir
       dir=$(fd -d "${1:-3}" -t d -I -H 2> /dev/null | fzf --height 40%) && cd "$dir"
@@ -72,10 +61,10 @@ if whence fzf > /dev/null 2>&1; then
     git checkout $(echo "$target" | awk '{print $2}')
   }
 
-  if whence tmux >/dev/null 2>&1; then
+  if command -v tmux &>/dev/null; then
     ftm() {
       [[ -n "$TMUX" ]] && change="switch-client" || change="attach-session"
-      if [[ "$1" ]]; then 
+      if [[ "$1" ]]; then
         tmux "$change" -t "$1" 2>/dev/null || (tmux new-session -d -s "$1" && tmux "$change" -t "$1"); return
       fi
       session=$(tmux list-sessions -F "#{session_name}" 2>/dev/null | fzf --exit-0) && tmux "$change" -t "$session" || echo "No sessions found."
