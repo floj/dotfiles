@@ -40,6 +40,7 @@ Plug 'tpope/vim-surround'
 
 Plug 'tpope/vim-unimpaired'
 
+Plug 'google/vim-jsonnet'
 Plug 'sheerun/vim-polyglot'
 Plug 'jparise/vim-graphql'
 
@@ -58,6 +59,7 @@ Plug 'bogado/file-line'
 " Plug 'liuchengxu/space-vim-dark'
 Plug 'morhetz/gruvbox'
 "Plug 'joshdick/onedark.vim'
+Plug 'danilamihailov/beacon.nvim'
 
 " Plug 'tweekmonster/startuptime.vim'
 Plug 'hashivim/vim-terraform', { 'for': 'terraform' }
