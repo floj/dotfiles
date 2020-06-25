@@ -21,7 +21,7 @@ alias less='less -S'
 alias v='nvim'
 alias vi='v'
 
-alias awssh='ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -l ec2-user'
+alias awssh='ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -l ec2-user -i ec2_amazon-ebs.pem'
 
 alias ...='cd ../..'
 alias ....='cd ../../..'
@@ -40,7 +40,8 @@ alias -s .log='less'
 alias -s .txt='less'
 
 alias meld='GTK_THEME=:light meld'
-alias rg='rg -S -L --hidden'
+alias rg='rg --smart-case --follow -uu'
+alias fd='fd -uu'
 
 # terraform
 alias tf='terraform'
@@ -84,6 +85,7 @@ alias mcp='mvn clean package'
 #
 alias dri='docker run -ti --rm'
 alias d-c='docker-compose'
+
 
 #
 # arch/pacman

@@ -25,3 +25,7 @@ function tunnel() {
   echo "creating ssh tunnel from local port ${localport} via ${server} to ${remotehost}:${remoteport}"
   ssh -v -L ${localport}:${remotehost}:${remoteport} ${server} -N
 }
+
+function urlenc() {
+  jq -nr --arg v "$1" '$v|@uri'
+}
