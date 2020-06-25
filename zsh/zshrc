@@ -36,4 +36,4 @@ fi
 FAST_HIGHLIGHT_STYLES[path]="fg=green"
 [[ -f "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"
 source "$ZSH_SOURCE_DIR/prompt.zsh"
-[[ -f "$HOME/.config/broot/launcher/bash/br" ]] && source "$HOME/.config/broot/launcher/bash/br"
+#[[ -f "$HOME/.config/broot/launcher/bash/br" ]] && source "$HOME/.config/broot/launcher/bash/br"

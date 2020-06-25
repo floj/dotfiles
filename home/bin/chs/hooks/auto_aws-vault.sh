@@ -3,7 +3,7 @@ unset AWS_VAULT_AUTO_VERSION
 
 function chawsvault_reset() {
   [[ -z "$AWS_PROFILE" ]] && return
-  unset AWS_PROFILE 
+  unset AWS_PROFILE
 }
 
 function chawsvault_use() {
