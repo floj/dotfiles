@@ -17,7 +17,7 @@ Plug 'zchee/deoplete-go', { 'do': 'make' }
 Plug 'editorconfig/editorconfig-vim'
 
 Plug 'scrooloose/nerdtree'
-Plug 'jistr/vim-nerdtree-tabs'
+" Plug 'jistr/vim-nerdtree-tabs'
 
 " Plug 'godlygeek/tabular'
 " Plug 'chrisbra/csv.vim'
@@ -281,4 +281,5 @@ if executable('xmllint')
   autocmd FileType xml setlocal equalprg=xmllint\ --format\ --recover\ -
 endif
 
+let NERDTreeAutoDeleteBuffer = 1
 
