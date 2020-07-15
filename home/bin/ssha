@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+#vim: ft=sh
+
+appName=$1
+appEnv=$2
+
+declare -a awsFilters=()
+jqBin=$(command -v jq)
+jq() {
+  "$jqBin" -r "$@"
+}
+
+if [[ -n ${appName:-} ]]; then
+  awsFilters+=("Name=tag:Application,Values=$appName")
+fi
+
+if [[ -n ${appEnv:-} ]]; then
+  awsFilters+=("Name=tag:Environment,Values=$appEnv")
+fi
+
+if [[ ${#awsFilters[@]} -gt 0 ]]; then
+  awsFilters=(--filters "${awsFilters[@]}")
+fi
+
+if ! resp=$(timeout 10 aws ec2 describe-instances "${awsFilters[@]}"); then
+  echo "Could not fetch instances"
+  exit 1
+fi
+jqFilter='.Reservations | map(.Instances[]) | map(select(.State.Name == "running")) | map({PrivateDnsName, LaunchTime, Tags: .Tags | map(select(.Key == "Environment" or .Key == "Application")) | map({key:.Key,value:.Value}) | from_entries }) | sort_by(.Tags.Environment,.Tags.Application,.LaunchTime,.PrivateDnsName)'
+instances=$(jq "$jqFilter" <<< "$resp")
+numInstances=$(jq 'length' <<< "$instances")
+if [[ $numInstances -eq 0 ]]; then
+  echo "No matching instances found"
+  exit 1
+fi
+
+if [[ $numInstances -eq 1 ]]; then
+  instanceName=$(jq ".[0].PrivateDnsName" <<< "$instances")
+  exec ssh "$instanceName"
+fi
+
+for i in $(seq 1 "$numInstances" ); do
+  j=$((i-1))
+  instanceName=$(jq ".[$j].PrivateDnsName" <<< "$instances")
+  instanceApp=$(jq ".[$j].Tags.Application" <<< "$instances")
+  instanceEnv=$(jq ".[$j].Tags.Environment" <<< "$instances")
+  instanceLaunch=$(jq ".[$j].LaunchTime" <<< "$instances")
+  instanceLaunch=$(date -d "$instanceLaunch" '+%F %T')
+  printf "%3s) %-40s %-7s %s %-50s\n" "$i" "$instanceApp" "$instanceEnv" "$instanceLaunch" "$instanceName"
+done
+
+declare -i selection
+printf "Select an instance: "
+read -r selection
+if [[ $selection -gt $numInstances ]]; then
+  echo "invalid selection"
+  exit 1
+fi
+
+instanceName=$(jq ".[$((selection-1))].PrivateDnsName" <<< "$instances")
+exec ssh "$instanceName"
