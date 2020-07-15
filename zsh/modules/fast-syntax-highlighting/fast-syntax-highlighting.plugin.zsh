@@ -53,7 +53,7 @@ then
     fpath+=( "${0:h}" )
 fi
 
-if [[ "$FAST_WORK_DIR" = /usr/* || ( "$FAST_WORK_DIR" = /opt/* && ! -w "$FAST_WORK_DIR" ) ]]; then
+if [[ ! -w $FAST_WORK_DIR ]]; then
     FAST_WORK_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/fsh"
     command mkdir -p "$FAST_WORK_DIR"
 fi
@@ -72,7 +72,9 @@ _zsh_highlight()
     return $ret
   fi
 
-  setopt localoptions warncreateglobal noksharrays noshwordsplit extendedglob typesetsilent nokshglob
+  emulate -LR zsh
+  setopt extendedglob warncreateglobal typesetsilent noshortloops
+
   local REPLY # don't leak $REPLY into global scope
   local -a reply
 
@@ -234,7 +236,7 @@ _zsh_highlight_bind_widgets()
 
   # Override ZLE widgets to make them invoke _zsh_highlight.
   local -U widgets_to_bind
-  widgets_to_bind=(${${(k)widgets}:#(.*|run-help|which-command|beep|set-local-history|yank)})
+  widgets_to_bind=(${${(k)widgets}:#(.*|run-help|which-command|beep|set-local-history|yank|zle-line-pre-redraw)})
 
   # Always wrap special zle-line-finish widget. This is needed to decide if the
   # current line ends and special highlighting logic needs to be applied.
@@ -321,15 +323,15 @@ zmodload zsh/system 2>/dev/null
 
 autoload -Uz -- is-at-least fast-theme .fast-read-ini-file .fast-run-git-command \
                 .fast-make-targets .fast-run-command .fast-zts-read-all
-autoload -Uz -- :chroma/-git.ch :chroma/-hub.ch :chroma/-lab.ch :chroma/-example.ch \
-                :chroma/-grep.ch :chroma/-perl.ch :chroma/-make.ch :chroma/-awk.ch \
-                :chroma/-vim.ch :chroma/-source.ch :chroma/-sh.ch :chroma/-docker.ch \
-                :chroma/-autoload.ch :chroma/-ssh.ch :chroma/-scp.ch :chroma/-which.ch \
-                :chroma/-printf.ch :chroma/-ruby.ch :chroma/-whatis.ch :chroma/-alias.ch \
-                :chroma/-subcommand.ch :chroma/-autorandr.ch :chroma/-nmcli.ch \
-                :chroma/-fast-theme.ch :chroma/-node.ch :chroma/-fpath_peq.ch \
-                :chroma/-precommand.ch :chroma/-subversion.ch :chroma/-ionice.ch \
-                :chroma/-nice.ch :chroma/main-chroma.ch :chroma/-ogit.ch :chroma/-zinit.ch
+autoload -Uz -- →chroma/-git.ch →chroma/-hub.ch →chroma/-lab.ch →chroma/-example.ch \
+                →chroma/-grep.ch →chroma/-perl.ch →chroma/-make.ch →chroma/-awk.ch \
+                →chroma/-vim.ch →chroma/-source.ch →chroma/-sh.ch →chroma/-docker.ch \
+                →chroma/-autoload.ch →chroma/-ssh.ch →chroma/-scp.ch →chroma/-which.ch \
+                →chroma/-printf.ch →chroma/-ruby.ch →chroma/-whatis.ch →chroma/-alias.ch \
+                →chroma/-subcommand.ch →chroma/-autorandr.ch →chroma/-nmcli.ch \
+                →chroma/-fast-theme.ch →chroma/-node.ch →chroma/-fpath_peq.ch \
+                →chroma/-precommand.ch →chroma/-subversion.ch →chroma/-ionice.ch \
+                →chroma/-nice.ch →chroma/main-chroma.ch →chroma/-ogit.ch →chroma/-zinit.ch
 
 source "${0:h}/fast-highlight"
 source "${0:h}/fast-string-highlight"
@@ -357,3 +359,23 @@ unset __fsyh_theme
 alias fsh-alias=fast-theme
 
 -fast-highlight-fill-option-variables
+
+if [[ ! -e $FAST_WORK_DIR/secondary_theme.zsh ]] {
+    if { type curl &>/dev/null } {
+        curl -fsSL -o "$FAST_WORK_DIR/secondary_theme.zsh" \
+            https://raw.githubusercontent.com/zdharma/fast-syntax-highlighting/master/share/free_theme.zsh \
+            &>/dev/null
+    } elif { type wget &>/dev/null } {
+        wget -O "$FAST_WORK_DIR/secondary_theme.zsh" \
+            https://raw.githubusercontent.com/zdharma/fast-syntax-highlighting/master/share/free_theme.zsh \
+            &>/dev/null
+    }
+    touch "$FAST_WORK_DIR/secondary_theme.zsh"
+}
+
+if [[ $(uname -a) = (#i)*darwin* ]] {
+    typeset -gA FAST_HIGHLIGHT
+    FAST_HIGHLIGHT[chroma-man]=
+}
+
+[[ $COLORTERM == (24bit|truecolor) || ${terminfo[colors]} -eq 16777216 ]] || zmodload zsh/nearcolor &>/dev/null
