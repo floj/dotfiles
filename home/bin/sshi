@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+set -eo pipefail
+
+eae() {
+  echo "> $*"
+  exec "$@"
+}
+
+declare name instanceId=$1
+shift
+for p in dev prod; do
+  echo "Checking account $p"
+  name=$(AWS_PROFILE="$p" aws ec2 describe-instances --instance-ids "$instanceId" --query 'Reservations[0].Instances[0].PrivateDnsName' --output text 2>/dev/null)
+  [[ -z $name ]] || break
+done
+if [[ -z $name ]]; then
+  echo "Could not look up name for $1"
+  return 1
+fi
+eae ssh "$@" "$name"
