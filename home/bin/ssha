@@ -10,6 +10,11 @@ jq() {
   "$jqBin" -r "$@"
 }
 
+eae(){
+  echo "> $*"
+  exec "$@"
+}
+
 if ! resp=$(timeout 10 aws ec2 describe-instances "${awsFilters[@]}"); then
   echo "Could not fetch instances"
   exit 1
@@ -49,4 +54,4 @@ if [[ $selection -gt $numInstances ]]; then
 fi
 
 instanceName=$(jq ".[$((selection-1))].PrivateDnsName" <<< "$instances")
-exec ssh "$instanceName"
+eae ssh "$instanceName"
