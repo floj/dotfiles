@@ -4,6 +4,8 @@
 appName=$1
 appEnv=$2
 
+[[ -n $AWS_PROFILE ]] || export AWS_PROFILE=dev
+
 declare -a awsFilters=()
 jqBin=$(command -v jq)
 jq() {
