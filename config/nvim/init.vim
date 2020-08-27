@@ -11,8 +11,8 @@ Plug 'dense-analysis/ale'
 " be sure to include vim-go before vim-polyglot
 " see https://github.com/sheerun/vim-polyglot/issues/309
 " Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'zchee/deoplete-go', { 'do': 'make' }
+" Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+" Plug 'zchee/deoplete-go', { 'do': 'make' }
 
 Plug 'editorconfig/editorconfig-vim'
 
@@ -40,9 +40,9 @@ Plug 'tpope/vim-surround'
 
 Plug 'tpope/vim-unimpaired'
 
-Plug 'google/vim-jsonnet'
+" Plug 'google/vim-jsonnet'
 Plug 'sheerun/vim-polyglot'
-Plug 'jparise/vim-graphql'
+" Plug 'jparise/vim-graphql'
 
 " Plug 'leafgarland/typescript-vim'
 " Plug 'elixir-lang/vim-elixir'
@@ -62,13 +62,19 @@ Plug 'morhetz/gruvbox'
 Plug 'danilamihailov/beacon.nvim'
 
 " Plug 'tweekmonster/startuptime.vim'
-Plug 'hashivim/vim-terraform', { 'for': 'terraform' }
+" Plug 'hashivim/vim-terraform', { 'for': 'terraform' }
 Plug 'ruby-formatter/rufo-vim', { 'for': 'ruby' }
 Plug 'ntpeters/vim-better-whitespace'
 
 Plug 'prettier/vim-prettier', {
   \ 'do': 'yarn install',
   \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
+
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'neoclide/coc-tsserver', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc-html', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc-css', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc-json', {'do': 'yarn install --frozen-lockfile'}
 
 call plug#end()
 
@@ -233,6 +239,7 @@ let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
 let g:nerdtree_tabs_open_on_console_startup=1
 let g:nerdtree_tabs_autoclose=1
+let NERDTreeAutoDeleteBuffer = 1
 
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
@@ -281,5 +288,4 @@ if executable('xmllint')
   autocmd FileType xml setlocal equalprg=xmllint\ --format\ --recover\ -
 endif
 
-let NERDTreeAutoDeleteBuffer = 1
 
