@@ -6,7 +6,6 @@ appEnv=$2
 
 [[ -n $AWS_PROFILE ]] || export AWS_PROFILE=dev
 
-declare -a awsFilters=()
 jqBin=$(command -v jq)
 jq() {
   "$jqBin" -r "$@"
@@ -17,7 +16,7 @@ eae(){
   exec "$@"
 }
 
-if ! resp=$(timeout 10 aws ec2 describe-instances "${awsFilters[@]}"); then
+if ! resp=$(timeout 10 aws ec2 describe-instances); then
   echo "Could not fetch instances"
   exit 1
 fi
