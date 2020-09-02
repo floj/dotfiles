@@ -1,0 +1,4 @@
+--restrict-filenames
+--retries 1
+--no-playlist
+--no-mtime
