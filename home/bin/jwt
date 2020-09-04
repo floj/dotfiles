@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -eu
+
+function jwtDec() {
+  local -a parts
+  mapfile -t parts <<< "$(tr '.' '\n' <<< "$1")"
+  for i in 0 1; do
+    jq --arg v "${parts[i]}" '$v | @base64d | fromjson' <<< "{}"
+  done
+}
+jwtDec "$@"
