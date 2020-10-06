@@ -16,20 +16,33 @@ eae(){
   exec "$@"
 }
 
+debug() {
+  [[ -n "${DEBUG:-}" ]] && echo "$*"
+}
+
+echo "Fetching instances"
 if ! resp=$(timeout 10 aws ec2 describe-instances); then
   echo "Could not fetch instances"
   exit 1
 fi
+
+debug "$resp"
+
 declare -a jqFilter=(
-'.Reservations | map(.Instances[]) | map(select(.State.Name == "running")) | map({PrivateDnsName, LaunchTime: (.LaunchTime | sub("\\.\\d\\d\\dZ"; "Z") | fromdate | strflocaltime("%F %T") )} * (.Tags | map(select(.Key == "Environment" or .Key == "Application")) | map({key:.Key,value:.Value}) | from_entries )) | sort_by(.Environment,.Application,.LaunchTime,.PrivateDnsName)'
+'.Reservations | map(.Instances[]) | map(select(.State.Name == "running")) | map({PrivateDnsName, LaunchTime: (.LaunchTime | sub("\\.\\d\\d\\dZ"; "Z") | fromdate | strflocaltime("%F %T") )} * (.Tags | map(select(.Key == "Environment" or .Key == "Application")) | map({key:.Key,value:.Value}) | from_entries )) | sort_by(.Environment,.Application,.LaunchTime,.PrivateDnsName) | map(select(.Application != null and .Environment != null))'
 )
 
 if [[ -n ${appName:-} ]]; then
+  debug "addig appname filter"
   jqFilter+=(" | map(select(.Application | test(\"${appName// /.*}\") ))")
 fi
 if [[ -n ${appEnv:-} ]]; then
+  debug "adding env filter"
   jqFilter+=(" | map(select(.Environment | test(\"${appEnv// /.*}\") ))")
 fi
+
+echo "Filtering instances"
+debug "jq \"${jqFilter[*]}\""
 
 instances=$(jq "${jqFilter[*]}" <<< "$resp")
 numInstances=$(jq 'length' <<< "$instances")
@@ -40,7 +53,7 @@ fi
 
 if [[ $numInstances -eq 1 ]]; then
   instanceName=$(jq ".[0].PrivateDnsName" <<< "$instances")
-  exec ssh "$instanceName"
+  eae ssh "$instanceName"
 fi
 
 tableData=$(jq 'to_entries | map({AAA: (.key+1)} * .value) | .[] | to_entries | sort_by(.key) | map(.value) | join("|")' <<< "$instances")
