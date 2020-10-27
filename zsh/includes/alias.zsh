@@ -11,7 +11,9 @@ else
 fi
 
 if command -v bat &>/dev/null; then
-  alias cat='bat -p'
+  cat() {
+    bat -p "$@"
+  }
 fi
 
 alias cp='cp --reflink=auto'
@@ -72,13 +74,14 @@ alias gpr='git pull --rebase'
 #
 # maven
 #
-alias mi='mvn install'
-alias mp='mvn package'
-alias mt='mvn test'
-alias mct='mvn clean test'
+alias mvnNoLogs="JUNIT_LOG_LEVEL_STDOUT=OFF mvn"
 alias mc='mvn compile'
-alias mci='mvn clean install'
-alias mcp='mvn clean package'
+alias mi='mvnNoLogs install'
+alias mp='mvnNoLogs package'
+alias mt='mvnNoLogs test'
+alias mct='mvnNoLogs clean test'
+alias mci='mvnNoLogs clean install'
+alias mcp='mvnNoLogs clean package'
 
 #
 # docker
