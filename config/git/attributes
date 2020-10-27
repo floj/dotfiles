@@ -1,0 +1,13 @@
+*.java diff=java
+
+*.rb diff=ruby
+*.rake diff=ruby
+
+*.go diff=golang
+
+*.htm diff=html
+*.html diff=html
+*.css diff=css
+
+*.md diff=markdown
+
