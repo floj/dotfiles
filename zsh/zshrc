@@ -8,6 +8,10 @@ fi
 [[ -n "$TMUX" ]] && export TERM='screen-256color' 
 [[ -f /etc/profile.d/vte.sh ]] && source /etc/profile.d/vte.sh
 
+# include users local bin dir in path first
+[[ -d $HOME/.local/bin ]] && path=($HOME/.local/bin $path)
+[[ -d $HOME/bin ]] && path=($HOME/bin $path)
+
 ZSH_SOURCE_DIR="$HOME/dotfiles/zsh"
 source "$ZSH_SOURCE_DIR/functions.zsh" && sourceIncludeFiles "$ZSH_SOURCE_DIR"
 
