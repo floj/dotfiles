@@ -8,6 +8,19 @@ sourceIncludeFiles() {
   fi
 }
 
+wg-up() {
+  while [[ -n $1 ]]; do
+    wg-quick up "wg-$1"
+    shift
+  done
+}
+wg-down() {
+  while [[ -n $1 ]]; do
+    wg-quick down "wg-$1"
+    shift
+  done
+}
+
 xopen() {
   for f in "$@"; do
     xdg-open "$f"
