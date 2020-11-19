@@ -4,9 +4,10 @@ set nocompatible
 " Note: Skip initialization for vim-tiny or vim-small.
 if 0 | endif
 
+let g:polyglot_disabled = ['go']
+
 call plug#begin('~/.config/nvim/plugged')
 
-" Plug 'neomake/neomake'
 Plug 'dense-analysis/ale'
 " be sure to include vim-go before vim-polyglot
 " see https://github.com/sheerun/vim-polyglot/issues/309
@@ -227,7 +228,6 @@ let g:deoplete#enable_at_startup = 1
 let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
 set completeopt+=noselect
 
-let g:polyglot_disabled = ['go']
 
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
