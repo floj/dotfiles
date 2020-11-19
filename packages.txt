@@ -12,7 +12,7 @@ wireguard-tools
 networkmanager-openconnect
 gpaste xsel
 htop dstat lsof
-lsd ripgrep fzf fd
+lsd ripgrep fzf fd bat
 nextcloud-client
 tmux
 nodejs npm
