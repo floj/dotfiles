@@ -1,0 +1,31 @@
+base-devel
+git
+chrome-gnome-shell
+shellcheck youtube-dl mpv tig ruby-install vscodium
+terraform packer aws-cli go
+neovim python-pynvim
+v4l2loopback-dkms
+linux-lts
+jq curl bind-tools
+prettier eslint
+wireguard-tools
+networkmanager-openconnect
+gpaste xsel
+htop dstat lsof
+lsd ripgrep fzf fd
+nextcloud-client
+tmux
+nodejs npm
+ttf-fira-code
+meld
+docker
+
+
+# From AUR
+zoxide-bin vscodium-bin ttf-google sublime-text-3
+coredns-bin
+passwordsafe
+slack-desktop
+teams
+tflint-bin
+
