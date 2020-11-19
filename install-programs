@@ -54,7 +54,7 @@ downloadExctractLink() {
   else
     echo "Skipping checksum..."
   fi
-  
+
   echo "Extracting ${filename##*/}..."
   [[ -d "$extractDir" ]] || mkdir -p "$extractDir"
   tar xf "$filename" --strip-components "$stripComponents" -C "$extractDir"
@@ -95,16 +95,6 @@ installOpenJDK8() {
     2
 }
 
-installOpenJDK9() {
-  local name=openjdk9
-  downloadExctractLink \
-    "$name" \
-    "https://github.com/AdoptOpenJDK/openjdk9-binaries/releases/download/jdk-9%2B181/OpenJDK9U-jdk_x64_linux_hotspot_9_181.tar.gz" \
-    "sha256sum:https://github.com/AdoptOpenJDK/openjdk9-binaries/releases/download/jdk-9%2B181/OpenJDK9U-jdk_x64_linux_hotspot_9_181.tar.gz.sha256.txt" \
-    "java" \
-    2
-}
-
 installOpenJDK11() {
   local name=openjdk11
   downloadExctractLink \
@@ -121,20 +111,15 @@ while [[ -n ${1:-} ]]; do
     maven)
       installMaven
       ;;
-    oracleJDK)
-      installJavaOracle
-      ;;
     openjdk8)
       installOpenJDK8
-      ;;
-    openjdk9)
-      installOpenJDK9
       ;;
     openjdk11)
       installOpenJDK11
       ;;
     sts)
-      installSTS;;
+      installSTS
+      ;;
     dbeaver)
       installDBeaver;;
     *)
