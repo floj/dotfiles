@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+errLog() {
+  echo "$*" 1>&2
+}
+
+fail() {
+  errLog "$*"
+  exit 1
+}
+
+if ! origin=$(git config --get remote.origin.url); then
+  fail "Could not determine remote url, probably not inside a repository?"
+fi
+
+declare schema=https host project
+case "$origin" in
+  git@* )
+    # strip off git@
+    origin=${origin:4}
+    host=$(cut -d: -f1 <<< "$origin")
+    project=$(cut -d: -f2- <<< "$origin")
+    project=${project%.git}
+    ;;
+  *)
+    fail "Not able to handle origin $origin"
+esac
+
+declare baseUrl gitRoot cwd branch
+branch=$(git branch --show-current) || fail "Could not get current branch"
+baseUrl="$schema://$host/$project/-/tree/$branch"
+
+gitRoot=$(git rev-parse --show-toplevel) || fail "Could not detect root path of the git repo"
+cwd=$(pwd)
+repoPath=${cwd#$gitRoot}
+[[ -z "${1:-}" ]] || repoPath="$repoPath/$1"
+
+echo "$baseUrl$repoPath"
