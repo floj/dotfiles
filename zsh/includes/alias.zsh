@@ -51,6 +51,9 @@ alias tfi='terraform init'
 alias tfa='terraform apply'
 alias tfaa='terraform apply -auto-approve'
 alias tfp='terraform plan'
+if command -v tfrs &> /dev/null; then
+  alias tfp='tfrs plan -out state.out'
+fi
 
 #
 # ruby/rails
