@@ -15,6 +15,7 @@ htop dstat lsof
 lsd ripgrep fzf fd bat
 nextcloud-client
 tmux
+rsync
 nodejs npm
 ttf-fira-code
 meld
@@ -28,4 +29,5 @@ passwordsafe
 slack-desktop
 teams
 tflint-bin
-
+blackbox-vcs
+insomnia-bin
