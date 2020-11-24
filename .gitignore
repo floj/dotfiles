@@ -1,4 +1,6 @@
 config/nvim/plugged
 bundle/cache/*
 home/.fonts/.uuid
-home/bin/aws-refresh-token
+home/bin/tfrs
+home/bin/aws-vault
+home/bin/caddy
