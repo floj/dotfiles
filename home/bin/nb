@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -euo pipefail
+script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+nbBin=$script_dir/.nbbin/nb
+if [[ ! -x "$nbBin" ]]; then
+  [[ -d "$(dirname "$nbBin")" ]] || mkdir -p "$(dirname "$nbBin")"
+  echo "nb not found, fetching from GitHub"
+  curl -fL -o "$nbBin" https://raw.github.com/xwmx/nb/master/nb
+  chmod +x "$nbBin"
+fi
+exec "$nbBin" "$@"
