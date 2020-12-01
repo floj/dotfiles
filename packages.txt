@@ -20,7 +20,9 @@ nodejs npm
 ttf-fira-code
 meld
 docker
-
+flameshot
+hyperfine
+renameutils
 
 # From AUR
 zoxide-bin vscodium-bin ttf-google sublime-text-3
@@ -31,3 +33,6 @@ teams
 tflint-bin
 blackbox-vcs
 insomnia-bin
+overmind-bin
+
+
