@@ -1,6 +1,8 @@
 config/nvim/plugged
 bundle/cache/*
-home/.fonts/.uuid
+home/.fonts
 home/bin/tfrs
 home/bin/aws-vault
 home/bin/caddy
+home/bin/.nbbin
+home/bin/caddy*
