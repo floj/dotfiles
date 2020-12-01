@@ -1,16 +1,22 @@
 #!/usr/bin/env bash
+set -eu
 
 function downloadFontsTo(){
   local tempdir
   tempdir="$(mktemp -d)"
   echo "using tempdir $tempdir"
-  git clone git@github.com:gabrielelana/awesome-terminal-fonts.git "$tempdir"
-  cp $tempdir/build/*.ttf "$1"
-  rm -rf "$tempdir"
+  git clone --depth=1 "https://github.com/gabrielelana/awesome-terminal-fonts.git" "$tempdir"
+  cp "$tempdir"/build/*.ttf "$1"
+  [[ -n "$tempdir" ]] && rm -rf "$tempdir"
 }
 
 [[ -d $HOME/.fonts ]] || mkdir "$HOME/.fonts" || { echo "faild to create ~/.fonts"; exit 1; }
-curl -L https://github.com/googlei18n/noto-emoji/raw/master/fonts/NotoColorEmoji.ttf > home/.fonts/NotoColorEmoji.ttf
+curl -L "https://github.com/googlei18n/noto-emoji/raw/master/fonts/NotoColorEmoji.ttf" > home/.fonts/NotoColorEmoji.ttf
+
+# tmpdir=$(mktemp -d)
+# curl -Lfo "$tmpdir/hack.zip" "https://github.com/source-foundry/Hack/releases/download/v3.003/Hack-v3.003-ttf.zip"
+# ( ( cd "$tmpdir" && unzip hack.zip ) )
+# mv "$tmpdir/ttf/"*.ttf "$HOME/.fonts"
 
 downloadFontsTo "home/.fonts"
 fc-cache -fv "$HOME/.fonts"
