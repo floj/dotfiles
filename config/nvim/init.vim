@@ -12,41 +12,23 @@ Plug 'dense-analysis/ale'
 " be sure to include vim-go before vim-polyglot
 " see https://github.com/sheerun/vim-polyglot/issues/309
 " Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
-" Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-" Plug 'zchee/deoplete-go', { 'do': 'make' }
 
 Plug 'editorconfig/editorconfig-vim'
 
 Plug 'scrooloose/nerdtree'
-" Plug 'jistr/vim-nerdtree-tabs'
-
-" Plug 'godlygeek/tabular'
-" Plug 'chrisbra/csv.vim'
-
-"Plug 'vim-airline/vim-airline'
-"Plug 'vim-airline/vim-airline-themes'
-
 Plug 'itchyny/lightline.vim'
 
 Plug 'airblade/vim-gitgutter'
-" Plug 'mhinz/vim-signify'
 
-" Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
-" Plug 'tpope/vim-eunuch'
-" Plug 'tpope/vim-sleuth'
 
 Plug 'tpope/vim-unimpaired'
 
 " Plug 'google/vim-jsonnet'
 Plug 'sheerun/vim-polyglot'
-" Plug 'jparise/vim-graphql'
-
-" Plug 'leafgarland/typescript-vim'
-" Plug 'elixir-lang/vim-elixir'
 
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
@@ -60,6 +42,7 @@ Plug 'bogado/file-line'
 " Plug 'liuchengxu/space-vim-dark'
 Plug 'morhetz/gruvbox'
 "Plug 'joshdick/onedark.vim'
+
 Plug 'danilamihailov/beacon.nvim'
 
 " Plug 'tweekmonster/startuptime.vim'
@@ -72,11 +55,10 @@ Plug 'prettier/vim-prettier', {
   \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'neoclide/coc-tsserver', {'do': 'yarn install --frozen-lockfile'}
-Plug 'neoclide/coc-html', {'do': 'yarn install --frozen-lockfile'}
-Plug 'neoclide/coc-css', {'do': 'yarn install --frozen-lockfile'}
-Plug 'neoclide/coc-json', {'do': 'yarn install --frozen-lockfile'}
-
+" Plug 'neoclide/coc-tsserver', {'do': 'yarn install --frozen-lockfile'}
+" Plug 'neoclide/coc-html', {'do': 'yarn install --frozen-lockfile'}
+" Plug 'neoclide/coc-css', {'do': 'yarn install --frozen-lockfile'}
+" Plug 'neoclide/coc-json', {'do': 'yarn install --frozen-lockfile'}
 call plug#end()
 
 " background fix for vim in tmux
