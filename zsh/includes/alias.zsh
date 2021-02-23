@@ -3,6 +3,7 @@
 if command -v lsd &>/dev/null; then
   alias ll='lsd -Alh --date relative --icon never --group-dirs first'
   alias ls='lsd --icon never --group-dirs first'
+  alias tree='lsd --icon never --group-dirs first --tree'
 elif command -v exa &>/dev/null; then
   alias ll='exa -alg --git --group-directories-first'
 else
@@ -42,17 +43,22 @@ alias -s .log='less'
 alias -s .txt='less'
 
 alias meld='GTK_THEME=:light meld'
-alias rg='rg --smart-case --follow -uu'
+alias rg='rg --smart-case --follow'
 alias fd='fd -uu'
 
 # terraform
+#alias terraform='terraform'
 alias tf='terraform'
 alias tfi='terraform init'
 alias tfa='terraform apply'
 alias tfaa='terraform apply -auto-approve'
 alias tfp='terraform plan'
 if command -v tfrs &> /dev/null; then
-  alias tfp='tfrs plan -out state.out'
+  alias tfp='tfrs plan -out state.out -compact-warnings'
+fi
+
+if command -v codium &> /dev/null; then
+  alias code='codium'
 fi
 
 #
@@ -77,7 +83,7 @@ alias gpr='git pull --rebase'
 #
 # maven
 #
-alias mvnNoLogs="JUNIT_LOG_LEVEL_STDOUT=OFF mvn"
+alias mvnNoLogs="JUNIT_LOG_LEVEL_STDOUT=OFF mvn -nsu"
 alias mc='mvn compile'
 alias mi='mvnNoLogs install'
 alias mp='mvnNoLogs package'

@@ -16,7 +16,7 @@ lsd ripgrep fzf fd bat
 nextcloud-client
 tmux
 rsync
-nodejs npm
+nodejs npm yarn
 ttf-fira-code
 meld
 docker
