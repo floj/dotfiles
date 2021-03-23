@@ -6,7 +6,7 @@ if 0 | endif
 
 let g:polyglot_disabled = ['go']
 
-call plug#begin('~/.config/nvim/plugged')
+call plug#begin('~/dotfiles/config/nvim/plugged')
 
 Plug 'dense-analysis/ale'
 " be sure to include vim-go before vim-polyglot
@@ -212,7 +212,7 @@ set completeopt+=noselect
 
 
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
-let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+let g:ultiSnipsJumpBackwardTrigger="<c-z>"
 
 " Force eslint for javascript
 " let g:syntastic_javascript_checkers = ['eslint']
