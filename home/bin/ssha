@@ -21,7 +21,7 @@ debug() {
 }
 
 echo "Fetching instances"
-if ! resp=$(timeout 10 aws ec2 describe-instances); then
+if ! resp=$(timeout 30 aws ec2 describe-instances); then
   echo "Could not fetch instances"
   exit 1
 fi
