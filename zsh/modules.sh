@@ -3,12 +3,11 @@
 #
 
 typeset -A subtrees
-subtrees["zsh-completions"]="zsh-users/zsh-completions"
 subtrees["zsh-history-substring-search"]="zsh-users/zsh-history-substring-search"
 subtrees["fast-syntax-highlighting"]="zdharma/fast-syntax-highlighting"
 export subtrees
 
 typeset -a moduleOrder
 #moduleOrder=(zsh-completions z zsh-history-substring-search fast-syntax-highlighting)
-moduleOrder=(zsh-completions zoxide zsh-history-substring-search fast-syntax-highlighting)
+moduleOrder=(zoxide zsh-history-substring-search fast-syntax-highlighting)
 export moduleOrder
