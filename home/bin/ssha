@@ -29,7 +29,7 @@ fi
 debug "$resp"
 
 declare -a jqFilter=(
-'.Reservations | map(.Instances[]) | map(select(.State.Name == "running")) | map({PrivateDnsName, LaunchTime: (.LaunchTime | sub("\\.\\d\\d\\dZ"; "Z") | fromdate | strflocaltime("%F %T") )} * (.Tags | map(select(.Key == "Environment" or .Key == "Application")) | map({key:.Key,value:.Value}) | from_entries )) | sort_by(.Environment,.Application,.LaunchTime,.PrivateDnsName) | map(select(.Application != null and .Environment != null))'
+'.Reservations | map(.Instances[]) | map(select(.State.Name == "running")) | map({InstanceId, PrivateDnsName, LaunchTime: (.LaunchTime | sub("\\.\\d\\d\\dZ"; "Z") | fromdate | strflocaltime("%F %T") )} * (.Tags | map(select(.Key == "Environment" or .Key == "Application")) | map({key:.Key,value:.Value}) | from_entries )) | sort_by(.Environment,.Application,.LaunchTime,.PrivateDnsName) | map(select(.Application != null and .Environment != null))'
 )
 
 if [[ -n ${appName:-} ]]; then
@@ -57,7 +57,7 @@ if [[ $numInstances -eq 1 ]]; then
 fi
 
 tableData=$(jq 'to_entries | map({AAA: (.key+1)} * .value) | .[] | to_entries | sort_by(.key) | map(.value) | join("|")' <<< "$instances")
-column --table -s '|' --table-columns "Num,Application,Environment,LaunchTime,Host" <<< "$tableData"
+column --table -s '|' --table-columns "Num,Application,Environment,InstanceId,LaunchTime,Host" <<< "$tableData"
 
 declare -i selection
 printf "Select an instance: "
