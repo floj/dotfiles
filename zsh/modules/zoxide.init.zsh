@@ -1,47 +1,92 @@
-if command -v zoxide &>/dev/null; then
-  autoload -U add-zsh-hook
+# =============================================================================
+#
+# Utility functions for zoxide.
+#
 
-_z_cd() {
-    cd "$@" || return "$?"
-
-    if [ -n "$_ZO_ECHO" ]; then
-        echo "$PWD"
-    fi
+# pwd based on the value of _ZO_RESOLVE_SYMLINKS.
+function __zoxide_pwd() {
+    \builtin pwd -L
 }
 
-z() {
+# cd + custom logic based on the value of _ZO_ECHO.
+function __zoxide_cd() {
+    # shellcheck disable=SC2164
+    \builtin cd "$@"
+}
+
+# =============================================================================
+#
+# Hook configuration for zoxide.
+#
+
+# Hook to add new entries to the database.
+function __zoxide_hook() {
+    zoxide add -- "$(__zoxide_pwd)"
+}
+
+# Initialize hook.
+if [ "${__zoxide_hooked}" != '1' ]; then
+    __zoxide_hooked='1'
+    chpwd_functions=("${chpwd_functions[@]}" "__zoxide_hook")
+fi
+
+# =============================================================================
+#
+# When using zoxide with --no-aliases, alias these internal functions as
+# desired.
+#
+
+# Jump to a directory using only keywords.
+function __zoxide_z() {
     if [ "$#" -eq 0 ]; then
-        _z_cd ~ || return "$?"
+        __zoxide_cd ~
     elif [ "$#" -eq 1 ] && [ "$1" = '-' ]; then
-        if [ -n "$OLDPWD" ]; then
-            _z_cd "$OLDPWD" || return "$?"
+        if [ -n "${OLDPWD}" ]; then
+            __zoxide_cd "${OLDPWD}"
         else
-            echo 'zoxide: $OLDPWD is not set'
+            # shellcheck disable=SC2016
+            \builtin printf 'zoxide: $OLDPWD is not set'
             return 1
         fi
+    elif [ "$#" -eq 1 ] &&  [ -d "$1" ]; then
+        __zoxide_cd "$1"
     else
-        result="$(zoxide query "$@")" || return "$?"
-        if [ -d "$result" ]; then
-            _z_cd "$result" || return "$?"
-        elif [ -n "$result" ]; then
-            echo "$result"
-        fi
+        \builtin local __zoxide_result
+        __zoxide_result="$(zoxide query --exclude "$(__zoxide_pwd)" -- "$@")" \
+            && __zoxide_cd "${__zoxide_result}"
     fi
 }
 
-
-alias zi='z -i'
-alias za='zoxide add'
-alias zq='zoxide query'
-alias zr='zoxide remove'
-
-
-_zoxide_hook() {
-    zoxide add
+# Jump to a directory using interactive search.
+function __zoxide_zi() {
+    \builtin local __zoxide_result
+    __zoxide_result="$(zoxide query -i -- "$@")" && __zoxide_cd "${__zoxide_result}"
 }
 
-[[ -n "${precmd_functions[(r)_zoxide_hook]}" ]] || {
-    precmd_functions+=(_zoxide_hook)
+# =============================================================================
+#
+# Convenient aliases for zoxide. Disable these using --no-aliases.
+#
+
+# Remove definitions.
+function __zoxide_unset() {
+    \builtin unalias "$@" &>/dev/null
+    \builtin unfunction "$@" &>/dev/null
+    \builtin unset "$@" &>/dev/null
 }
 
-fi
+__zoxide_unset 'z'
+function z() {
+    __zoxide_z "$@"
+}
+
+__zoxide_unset 'zi'
+function zi() {
+    __zoxide_zi "$@"
+}
+
+# =============================================================================
+#
+# To initialize zoxide, add this to your configuration (usually ~/.zshrc):
+#
+# eval "$(zoxide init zsh)"
