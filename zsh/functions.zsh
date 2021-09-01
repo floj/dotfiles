@@ -8,18 +8,41 @@ sourceIncludeFiles() {
   fi
 }
 
-wg-up() {
-  while [[ -n $1 ]]; do
-    wg-quick up "wg-$1"
-    shift
+ead() {
+  printf "> %s\n" "$*"
+  "$@"
+}
+wgc() {
+  local ifc cmd
+  for f in "$@"; do
+    ifc="$f"
+    cmd=up
+    case ${f:0:1} in
+      +)
+        cmd=up
+        ifc=${f:1}
+        ;;
+      -)
+        cmd=down
+        ifc=${f:1}
+        ;;
+    esac
+    ead wg-quick "$cmd" "wg-$ifc"
   done
 }
-wg-down() {
-  while [[ -n $1 ]]; do
-    wg-quick down "wg-$1"
-    shift
-  done
-}
+
+# wg-up() {
+#   while [[ -n $1 ]]; do
+#     wg-quick up "wg-$1"
+#     shift
+#   done
+# }
+# wg-down() {
+#   while [[ -n $1 ]]; do
+#     wg-quick down "wg-$1"
+#     shift
+#   done
+# }
 
 xopen() {
   for f in "$@"; do
