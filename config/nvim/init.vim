@@ -47,7 +47,7 @@ Plug 'danilamihailov/beacon.nvim'
 
 " Plug 'tweekmonster/startuptime.vim'
 " Plug 'hashivim/vim-terraform', { 'for': 'terraform' }
-Plug 'ruby-formatter/rufo-vim', { 'for': 'ruby' }
+" Plug 'ruby-formatter/rufo-vim', { 'for': 'ruby' }
 Plug 'ntpeters/vim-better-whitespace'
 
 Plug 'prettier/vim-prettier', {
@@ -158,19 +158,6 @@ autocmd BufWritePre *.tf,*.tfvars :TerraformFmt
 " Highlight YAML frontmatter in Markdown files
 let g:vim_markdown_frontmatter = 1
 " let &runtimepath.=','.'~/.gotools/bin'
-
-
-" ALE
-" let g:ale_lint_on_text_changed = 'never'
-" let g:ale_sign_warning = '▲'
-" let g:ale_sign_error = '✗'
-" let g:ale_linters = {
-"      \ 'go': 'all',
-"      \ }
-
-" highlight link ALEWarningSign String
-" highlight link ALEErrorSign Title
-
 
 autocmd InsertLeave * :set norelativenumber
 autocmd InsertEnter * :set relativenumber
