@@ -7,8 +7,11 @@ PATH="${PATH#:}"
 PATH="${PATH%:}"
 
 # if command -v aws-vault &>/dev/null; then
-  for f in aws packer terraform saw; do
+  for f in aws packer terraform saw cw awslogs; do
     targetBin=$(command -v "$f")
+    if [[ -z $targetBin ]]; then
+      [[ -x $HOME/bin/$f-bin ]] && targetBin=$HOME/bin/$f-bin
+    fi
     if [[ -z $targetBin ]]; then
       echo "$f not found in path, skipping"
       continue
