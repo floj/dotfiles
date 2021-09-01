@@ -43,3 +43,5 @@
 	editor = nvim -c 'startinsert'
 [http "https://gopkg.in"]
 	followRedirects = true
+[init]
+	defaultBranch = main
