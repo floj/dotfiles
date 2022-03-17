@@ -29,11 +29,16 @@ esac
 
 declare baseUrl gitRoot cwd branch
 branch=$(git branch --show-current) || fail "Could not get current branch"
-baseUrl="$schema://$host/$project/-/tree/$branch"
 
 gitRoot=$(git rev-parse --show-toplevel) || fail "Could not detect root path of the git repo"
 cwd=$(pwd)
-repoPath=${cwd#$gitRoot}
-[[ -z "${1:-}" ]] || repoPath="$repoPath/$1"
+repoPath=${cwd#"$gitRoot"}
+objType=tree
+if [[ -n "${1:-}" ]]; then
+  repoPath="$repoPath/$1"
+  [[ ! -f "$1" ]] || objType=blob
+fi
+
+baseUrl="$schema://$host/$project/-/$objType/$branch"
 
 echo "$baseUrl$repoPath"
