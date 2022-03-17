@@ -54,7 +54,7 @@ alias tfa='terraform apply'
 alias tfaa='terraform apply -auto-approve'
 alias tfp='terraform plan'
 if command -v tfrs &> /dev/null; then
-  alias tfp='tfrs plan -out state.out -compact-warnings'
+  alias tfp='tfrs --exec terraform --prefix=-target= -- plan -out state.out -compact-warnings'
 fi
 
 if command -v codium &> /dev/null; then
@@ -105,3 +105,5 @@ alias d-c='docker-compose'
 alias update-mirrors='sudo reflector --verbose -c Germany -p https --age 12 --sort score -f 5 --save /etc/pacman.d/mirrorlist'
 
 alias whatismyip='curl ifconfig.me'
+
+alias nightfm='mpv --shuffle https://soundcloud.com/v-erse/sets/night'
