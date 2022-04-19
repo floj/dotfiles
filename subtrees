@@ -28,7 +28,7 @@ function eachSubtree() {
     repo="git@github.com:${subtrees[$module]}.git"
     remote="${subtrees[$module]/\//_}"
     echo "${cYellow}$cmd subtree for $repo (-> $moduledir)${cReset}"
-    $cmd "$remote" "$repo" "$moduledir"
+    $cmd "$remote" "$repo" "$moduledir" "${subtreeBranche[$module]}"
   done
 }
 
@@ -36,6 +36,7 @@ function eachSubtree() {
 # 1: remote name
 # 2: repo url
 # 3: module dir
+# 4: branch
 function init() {
   if ! git remote | grep "$1" &>/dev/null ; then
     echo "  ${cGreen}adding repo $2 with name $1${cReset}"
@@ -46,7 +47,7 @@ function init() {
   fi
   if [[ ! -d "$3" ]]; then
     echo "  ${cGreen}adding subtree from $1 to $3${cReset}"
-    git subtree add --prefix "$3" "$1" master --squash
+    git subtree add --prefix "$3" "$1" "$4" --squash
   else
     echo "  ${cRed}$3 already exists, use 'subtree update' to update${cReset}"
   fi
@@ -56,9 +57,10 @@ function init() {
 # 1: remote name
 # 2: repo url
 # 3: module dir
+# 4: branch
 function update() {
-  git fetch "$1" master
-  git subtree pull --prefix "$3" "$1" master --squash
+  git fetch "$1" "$4"
+  git subtree pull --prefix "$3" "$1" "$4" --squash
 }
 
 case "$1" in
