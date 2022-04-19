@@ -31,6 +31,7 @@ alias ....='cd ../../..'
 
 # knowing my typos
 alias dc='cd'
+
 alias grep='grep --color=auto'
 alias _='sudo'
 
@@ -96,7 +97,7 @@ alias mcp='mvnNoLogs clean package'
 # docker
 #
 alias dri='docker run -ti --rm'
-alias d-c='docker-compose'
+alias dcp='docker-compose'
 
 
 #
