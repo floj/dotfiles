@@ -104,23 +104,23 @@ who-has-port() {
   fi
 }
 
-gen-password(){
-  local s=""
-  if command -v openssl &>/dev/null; then
-    s=$(openssl rand -base64 36)
-  else
-    s=$(dd if=/dev/urandom bs=1 count=36 2>/dev/null | base64)
-  fi
-  case "${1:-}" in
-    -a)
-      s=$(tr '+' '-' <<<"$s" | tr '/' '_')
-      ;;
-    -n)
-      s=$(tr '+' '1' <<<"$s" | tr '/' '2')
-      ;;
-    *)
-      ;;
-  esac
-  echo "$s"
-}
+# gen-password(){
+#   local s=""
+#   if command -v openssl &>/dev/null; then
+#     s=$(openssl rand -base64 36)
+#   else
+#     s=$(dd if=/dev/urandom bs=1 count=36 2>/dev/null | base64)
+#   fi
+#   case "${1:-}" in
+#     -a)
+#       s=$(tr '+' '-' <<<"$s" | tr '/' '_')
+#       ;;
+#     -n)
+#       s=$(tr '+' '1' <<<"$s" | tr '/' '2')
+#       ;;
+#     *)
+#       ;;
+#   esac
+#   echo "$s"
+# }
 
