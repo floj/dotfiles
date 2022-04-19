@@ -8,8 +8,8 @@ subtrees["fast-syntax-highlighting"]="zdharma/fast-syntax-highlighting"
 export subtrees
 
 typeset -A subtreeBranches
-subtrees["zsh-history-substring-search"]="master"
-subtrees["fast-syntax-highlighting"]="main"
+subtreeBranches["zsh-history-substring-search"]="master"
+subtreeBranches["fast-syntax-highlighting"]="main"
 export subtreeBranches
 
 typeset -a moduleOrder

@@ -28,7 +28,7 @@ function eachSubtree() {
     repo="git@github.com:${subtrees[$module]}.git"
     remote="${subtrees[$module]/\//_}"
     echo "${cYellow}$cmd subtree for $repo (-> $moduledir)${cReset}"
-    $cmd "$remote" "$repo" "$moduledir" "${subtreeBranche[$module]}"
+    "$cmd" "$remote" "$repo" "$moduledir" "${subtreeBranches[$module]}"
   done
 }
 
