@@ -6,6 +6,8 @@ if docker inspect athens-proxy &>/dev/null; then
   docker rm athens-proxy
 fi
 
+docker pull gomods/athens:latest
+
 docker run -d -v "athens:/var/lib/athens" \
    -e ATHENS_DISK_STORAGE_ROOT=/var/lib/athens \
    -e ATHENS_GO_BINARY_ENV_VARS='GOPROXY=proxy.golang.org,direct' \
