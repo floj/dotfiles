@@ -5,7 +5,7 @@ local keybind = {
   { key="a"         , mods="LEADER|CTRL"  , action=wezterm.action{SendString="\x01"}},
   { key="-"         , mods="LEADER"       , action=wezterm.action{SplitVertical={domain="CurrentPaneDomain"}}},
   { key="z"         , mods="LEADER"       , action="TogglePaneZoomState" },
-  { key="n"         , mods="LEADER"       , action=wezterm.action{SpawnTab="CurrentPaneDomain"}},
+  { key="c"         , mods="LEADER"       , action=wezterm.action{SpawnTab="CurrentPaneDomain"}},
   { key="]"         , mods="LEADER"       , action=wezterm.action{ActivateTabRelative=1}},
   { key="["         , mods="LEADER"       , action=wezterm.action{ActivateTabRelative=-1}},
   { key="/"         , mods="LEADER"       , action=wezterm.action{Search={CaseSensitiveString=""}}},
