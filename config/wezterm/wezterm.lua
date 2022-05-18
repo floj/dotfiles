@@ -26,13 +26,15 @@ local keybind = {
 for i = 1, 9 do
   -- ctrl+a; <number> to activate that tab
   table.insert(keybind, {
-    key=tostring(i), mods="LEADER", action=wezterm.action{ActivateTab=i-1}
-  })
+      key=tostring(i), mods="LEADER", action=wezterm.action{ActivateTab=i-1}
+    })
 end
 
 return {
   harfbuzz_features = {"calt=0", "clig=0", "liga=0"},
   font = wezterm.font("Fira Code"),
+
+  scrollback_lines = 50000,
 
   exit_behavior = "Close",
   check_for_updates = false,
@@ -69,6 +71,6 @@ return {
 
   disable_default_key_bindings = true,
 
-  keys = keybind
+  keys = keybind,
 }
 
