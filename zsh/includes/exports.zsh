@@ -4,5 +4,5 @@
 export EDITOR=nvim
 export SYSTEMD_EDITOR=$EDITOR
 
-export GREP_COLOR='37;45'
+export GREP_COLORS='mt=37;45'
 
