@@ -30,6 +30,12 @@ for i = 1, 9 do
     })
 end
 
+
+wezterm.on('gui-startup', function(cmd)
+  local tab, pane, window = wezterm.mux.spawn_window(cmd or {})
+  window:gui_window():maximize()
+end)
+
 return {
   harfbuzz_features = {"calt=0", "clig=0", "liga=0"},
   font = wezterm.font("Fira Code"),
