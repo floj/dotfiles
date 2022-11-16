@@ -5,10 +5,10 @@ return require('packer').startup(function(use)
   -- use 'lewis6991/impatient.nvim'
   use 'folke/tokyonight.nvim'
 
-  --  use {
-  --    'lewis6991/gitsigns.nvim',
-  --    tag = 'release' -- To use the latest release (do not use this if you run Neovim nightly or dev builds!)
-  --  }
+  use {
+    'lewis6991/gitsigns.nvim',
+    tag = 'release',
+  }
 
   use 'nvim-treesitter/nvim-treesitter'
   use 'windwp/nvim-autopairs'
@@ -44,7 +44,8 @@ return require('packer').startup(function(use)
   use 'jose-elias-alvarez/null-ls.nvim'
   use 'williamboman/mason.nvim'
   use 'williamboman/mason-lspconfig.nvim'
-  use { 'L3MON4D3/LuaSnip',
+  use { 
+    'L3MON4D3/LuaSnip',
     tag = 'v1.1.0',
   }
   use 'rafamadriz/friendly-snippets'
