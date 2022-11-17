@@ -15,6 +15,11 @@ require("luasnip/loaders/from_vscode").lazy_load()
 -- 	return col == 0 or vim.fn.getline("."):sub(col, col):match("%s")
 -- end
 
+local check_backspace = function()
+	local col = vim.fn.col(".") - 1
+	return col == 0 or vim.fn.getline("."):sub(col, col):match("%s")
+end
+
 cmp.setup({
 	snippet = {
 		expand = function(args)
@@ -39,4 +44,11 @@ cmp.setup({
 	experimental = {
 		ghost_text = true,
 	},
+	mapping = cmp.mapping.preset.insert({
+		["<C-b>"] = cmp.mapping.scroll_docs(-4),
+		["<C-f>"] = cmp.mapping.scroll_docs(4),
+		["<C-Space>"] = cmp.mapping.complete(),
+		["<C-e>"] = cmp.mapping.abort(),
+		["<CR>"] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+	}),
 })
