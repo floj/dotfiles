@@ -63,6 +63,14 @@ source <(curl -sSL git.io/forgit)
 source (curl -sSL git.io/forgit-fish | psub)
 ```
 
+### Fig
+
+[Fig](https://fig.io) adds apps, shortcuts, and autocomplete to your existing terminal.
+
+Install `forgit` in just one click.
+
+<a href="https://fig.io/plugins/other/forgit" target="_blank"><img src="https://fig.io/badges/install-with-fig.svg" /></a>
+
 ### 📝 Features
 
 - **Interactive `git add` selector** (`ga`)
@@ -103,6 +111,8 @@ source (curl -sSL git.io/forgit-fish | psub)
 
 - **Interactive `git rebase -i` selector** (`grb`)
 
+- **Interactive `git blame` selector** (`gbl`)
+
 - **Interactive `git commit --fixup && git rebase -i --autosquash` selector** (`gfu`)
 
 ### ⌨  Keybinds
@@ -142,7 +152,7 @@ forgit_reset_head=grh
 forgit_ignore=gi
 forgit_checkout_file=gcf
 forgit_checkout_branch=gcb
-forgit_branch_delet=gbd
+forgit_branch_delete=gbd
 forgit_checkout_tag=gct
 forgit_checkout_commit=gco
 forgit_revert_commit=grc
@@ -150,6 +160,7 @@ forgit_clean=gclean
 forgit_stash_show=gss
 forgit_cherry_pick=gcp
 forgit_rebase=grb
+forgit_blame=gbl
 forgit_fixup=gfu
 ```
 
@@ -190,13 +201,14 @@ Forgit will use the default configured pager from git (`core.pager`,
 `pager.show`, `pager.diff`) but can be altered with the following environment
 variables:
 
-| Use case             | Option                | Fallbacks to                                 |
-| ------------         | -------------------   | -------------------------------------------- |
-| common pager         | `FORGIT_PAGER`        | `git config core.pager` _or_ `cat`           |
-| pager on `git show`  | `FORGIT_SHOW_PAGER`   | `git config pager.show` _or_ `$FORGIT_PAGER` |
-| pager on `git diff`  | `FORGIT_DIFF_PAGER`   | `git config pager.diff` _or_ `$FORGIT_PAGER` |
-| pager on `gitignore` | `FORGIT_IGNORE_PAGER` | `bat -l gitignore --color always` _or_ `cat` |
-| git log format       | `FORGIT_GLO_FORMAT`   | `%C(auto)%h%d %s %C(black)%C(bold)%cr%reset` |
+| Use case             | Option                | Fallbacks to                                  |
+| ------------         | -------------------   | --------------------------------------------- |
+| common pager         | `FORGIT_PAGER`        | `git config core.pager` _or_ `cat`            |
+| pager on `git show`  | `FORGIT_SHOW_PAGER`   | `git config pager.show` _or_ `$FORGIT_PAGER`  |
+| pager on `git diff`  | `FORGIT_DIFF_PAGER`   | `git config pager.diff` _or_ `$FORGIT_PAGER`  |
+| pager on `git blame` | `FORGIT_BLAME_PAGER`  | `git config pager.blame` _or_ `$FORGIT_PAGER` |
+| pager on `gitignore` | `FORGIT_IGNORE_PAGER` | `bat -l gitignore --color always` _or_ `cat`  |
+| git log format       | `FORGIT_GLO_FORMAT`   | `%C(auto)%h%d %s %C(black)%C(bold)%cr%reset`  |
 
 #### fzf options
 
@@ -231,7 +243,9 @@ Customizing fzf options for each command individually is also supported:
 | `gss`    | `FORGIT_STASH_FZF_OPTS`           |
 | `gclean` | `FORGIT_CLEAN_FZF_OPTS`           |
 | `grb`    | `FORGIT_REBASE_FZF_OPTS`          |
+| `gbl`    | `FORGIT_BLAME_FZF_OPTS`           |
 | `gfu`    | `FORGIT_FIXUP_FZF_OPTS`           |
+| `gcp`    | `FORGIT_CHERRY_PICK_FZF_OPTS`     |
 
 Complete loading order of fzf options is:
 
@@ -256,9 +270,11 @@ FORGIT_LOG_FZF_OPTS='
 ```
 #### other options
 
-| Option              | Description    | Default                                      |
-|---------------------|----------------|----------------------------------------------|
-| `FORGIT_LOG_FORMAT` | git log format | `%C(auto)%h%d %s %C(black)%C(bold)%cr%Creset` |
+| Option                      | Description                              | Default                                       |
+|-----------------------------|------------------------------------------|-----------------------------------------------|
+| `FORGIT_LOG_FORMAT`         | git log format                           | `%C(auto)%h%d %s %C(black)%C(bold)%cr%Creset` |
+| `FORGIT_PREVIEW_CONTEXT`    | lines of diff context in preview mode    | 3                                             |
+| `FORGIT_FULLSCREEN_CONTEXT` | lines of diff context in fullscreen mode | 10                                            |
 
 ### 📦 Optional dependencies
 
