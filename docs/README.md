@@ -1,366 +1,407 @@
-<table style="width:100%;height:auto">
- <tr align="justify" margin-left="auto" margin-right="auto"><td align="center">
-  <h1>
-   <a title="❮ ZW ❯" target="_self" href="https://github.com/z-shell/zw">
-  <img style="width:60;height:60px"
-    src="https://raw.githubusercontent.com/z-shell/zi/main/docs/images/favicon.svg"
-    alt="Logo" /></a>❮ ZI ❯ - F-Sy-H
-  </h1>
-  <h2>
-    Feature-rich Syntax Highlighting for Zsh
-  </h2>
-<h3>
+<h1 align="center"><p>
+  <a title="❮ Zi ❯" target="_self" href="https://github.com/z-shell/zi">
+  <img style="width: 60px; height: 60px" src="https://raw.githubusercontent.com/z-shell/zi/main/docs/images/logo.svg" malt="Logo" /></a>
+    ❮ Zi ❯ - F-Sy-H
+</p></h1>
+<h2 align="center">Feature-rich Syntax Highlighting for Zsh</h2>
+<p align="center">
   <a href="https://github.com/orgs/z-shell/discussions/">《❔》Ask a Question </a>
   <a href="https://z.digitalclouds.dev/search/">《💡》Search Wiki </a>
-  <a href="https://github.com/z-shell/community/issues/new?assignees=&labels=%F0%9F%91%A5+member&template=membership.yml&title=team%3A+">《💜》Join </a>
-  <a href="https://digitalclouds.crowdin.com/z-shell/">《🌐》Localize </a>
-</h3>
-  </td></tr>
-<tr>
-<td align="center">
-  <a title="Crowdin" target="_self" href="https://crowdin.digitalclouds.dev/z-shell">
-    <img align="center" src="https://badges.crowdin.net/e/f108c12713ee8526ac878d5671ad6e29/localized.svg" />
-  </a>
+<a
+  href="https://github.com/z-shell/community/issues/new?assignees=&labels=%F0%9F%91%A5+member&template=membership.yml&title=team%3A+">《💜》Join</a>
+<a href="https://digitalclouds.crowdin.com/z-shell/">《🌐》Localize </a></p>
+<p align="center">
+<a target="_self" href="https://crowdin.digitalclouds.dev/z-shell">
+<img align="center" src="https://badges.crowdin.net/e/f108c12713ee8526ac878d5671ad6e29/localized.svg" /></a>
   <a href="https://github.com/z-shell/f-sy-h/actions/workflows/zunit.yml">
-    <img align="center" src="https://github.com/z-shell/f-sy-h/actions/workflows/zunit.yml/badge.svg">
-  </a>
-  <a title="VIM" target="_self" href="https://github.com/z-shell/zi-vim-syntax/">
-    <img align="center" src="https://img.shields.io/badge/--019733?logo=vim" alt="VIM" />
-  </a>
-  <a title="ZW" target="_self" href="https://open.vscode.dev/z-shell/f-sy-h/">
+<img
+  align="center"
+  src="https://github.com/z-shell/f-sy-h/actions/workflows/zunit.yml/badge.svg" />
+</a>
+<a title="VIM" target="_self"
+href="https://github.com/z-shell/zi-vim-syntax/">
+<img align="center" src="https://img.shields.io/badge/--019733?logo=vim" alt="VIM" />
+</a>
+<a title="ZW" target="_self" href="https://open.vscode.dev/z-shell/f-sy-h/">
+<img align="center" src="https://img.shields.io/badge/--007ACC?logo=visual%20studio%20code&logoColor=ffffff" alt="Visual Studio Code" /></a></p><hr />
+<p align="center">
+<img align="center" style="width: 80%; height: auto" src="https://raw.githubusercontent.com/z-shell/.github/main/metrics/plugin/followup/f-sy-h_followup.svg" />
+  <img align="center" style="width: 80%; height: auto"
+src="https://raw.githubusercontent.com/z-shell/.github/main/metrics/metrics.svg" />
+<hr /><h2 align="left">Related</h2>
+<ul>
+  <li><a href="../LICENSE">License</a></li>
+  <li><a href="CHANGELOG.md">Changelog</a></li>
+  <li><a href="THEME_GUIDE.md">Theme Guide</a></li>
+  <li><a href="CHROMA_GUIDE.adoc">Chroma Guide</a></li>
+</ul>
+<hr /> <h2 align="left">Installation</h2>
+
+  <hr /><h3 align="left">Manual</h3>
+
+  <p>Clone the Repository.</p>
+
+<pre><code class="lang-zsh">git clone https://github.<span class="hljs-keyword">com</span>/<span class="hljs-keyword">z</span>-<span class="hljs-keyword">shell</span>/F-Sy-H ~/path/<span class="hljs-keyword">to</span>/fsh</code></pre>
+
+  <p>And add the following to your `zshrc` file.</p>
+
+<pre><code class="lang-zsh"><span class="hljs-keyword">source</span> ~<span class="hljs-regexp">/path/</span>to<span class="hljs-regexp">/fsh/</span>F-Sy-H.plugin.zsh</code></pre>
+
+<hr /><h3 align="left">Zi</h3>
+
+  <p>Add the following to your `zshrc` file.</p>
+
+<pre><code class="lang-zsh">zi light z-<span class="hljs-keyword">shell</span>/F-Sy-H</code></pre>
+
+<p> Here's an example of how to load the plugin together with a few other popular ones with the use of
+ <a href="https://z.digitalclouds.dev/docs/getting_started/overview#turbo-mode-zsh--53">turbo mode</a></p>
+<p>i.e.: speeding up the Zsh startup by loading the plugin right after the first prompt, in background: </p>
+
+  <pre><code class="lang-zsh">zi wait lucid <span class="hljs-keyword">for</span> <span class="hljs-string">\</span>
+  atinit<span class="hljs-string">"ZI[COMPINIT_OPTS]=-C; zicompinit; zicdreplay"</span> <span class="hljs-string">\</span>
+     z-shell/F-Sy-H <span class="hljs-string">\</span>
+  blockf <span class="hljs-string">\</span>
+     zsh-users/zsh-completions <span class="hljs-string">\</span>
+  atload<span class="hljs-string">"!_zsh_autosuggest_start"</span> <span class="hljs-string">\</span>
+     zsh-users/zsh-autosuggestions
+ </code></pre>
+
+  <hr /><h3 align="left">Zinit</h3>
+
+  <p>Add the following to your `zshrc` file.</p>
+
+<pre><code class="lang-zsh">zinit light z-<span class="hljs-keyword">shell</span>/F-Sy-H</code></pre>
+
+  <hr /><h3 align="left">Antigen</h3>
+
+  <p>Add the following to your `zshrc` file.</p>
+
+<pre><code class="lang-zsh">antigen bundle z-<span class="hljs-keyword">shell</span>/F-Sy-H --branch=main</code></pre>
+
+  <hr /><h3 align="left">Zgen</h3>
+
+<p>Add the following to your <code>.zshrc</code> file in the same place you&#39;re doing your other <code>zgen load</code> calls in.</p>
+
+  <pre><code class="lang-zsh">zgen <span class="hljs-keyword">load</span> z-<span class="hljs-keyword">shell</span>/F-Sy-H . main</code></pre>
+
+  <hr /><h3 align="left">Oh-My-Zsh</h3>
+
+  <p>Clone the Repository.</p>
+
+<pre><code class="lang-zsh">git clone <span class="hljs-string">https:</span>//github.com/z-shell/F-Sy-H.git \
+  ${<span class="hljs-string">ZSH_CUSTOM:</span>-$HOME<span class="hljs-regexp">/.oh-my-zsh/</span>custom}<span class="hljs-regexp">/plugins/</span>F-Sy-H</code></pre>
+
+<p>And add <code>F-Sy-H</code> to your plugin list.</p>
+
+<hr /><h2 align="left">Features</h2>
+
+  <hr /><h3 align="left">Themes</h3>
+
+  <p>Switch themes via <code>fast-theme {theme-name}</code>.</p>
+
+<div
+style="
+  width: 100%;
+  background-color: black;
+  border: 3px solid black;
+  border-radius: 6px;
+  margin: 5px 0;
+  padding: 2px 5px;
+"
+>
+<img src="https://raw.githubusercontent.com/z-shell/F-Sy-H/main/docs/images/theme.png"
+alt="image could not be loaded"
+style="color: red; background-color: black; font-weight: bold"
+/></div>
+
+<p>Run <code>fast-theme -t {theme-name}</code> option to obtain the snippet above.</p><p>
+Run <code>fast-theme -l</code> to list available themes.</p>
+
+  <hr /><h3 align="left">Variables</h3>
+
+<p>Compared to the project <code>zsh-users/zsh-syntax-highlighting</code> (the
+upper line):</p>
+
+  <div
+    style="
+      width: 100%;
+      background-color: black;
+      border: 3px solid black;
+      border-radius: 6px;
+      margin: 5px 0;
+      padding: 2px 5px;
+    "
+  >
     <img
-      align="center"
-      src="https://img.shields.io/badge/--007ACC?logo=visual%20studio%20code&logoColor=ffffff"
-      alt="Visual Studio Code"
+      src="https://raw.githubusercontent.com/z-shell/F-Sy-H/main/docs/images/parameter.png"
+      alt="image could not be loaded"
+      style="color: red; background-color: black; font-weight: bold"
     />
-  </a>
-</td>
-</tr>
-<tr>
-  <td align="center">
-  <img
-    align="center" style="width:80%;height:auto"
-    src="https://raw.githubusercontent.com/z-shell/.github/main/metrics/plugin/followup/f-sy-h_followup.svg"
-  />
-  <img
-    align="center" style="width:80%;height:auto"
-    src="https://raw.githubusercontent.com/z-shell/.github/main/metrics/metrics.svg"
-  />
-  <img
-    align="center" style="width:80%;height:auto"
-    src="https://raw.githubusercontent.com/z-shell/.github/main/metrics/plugin/projects/projects.svg"
-  />
-  </td>
-</tr><tr><td>
-  
-<details open="open">
-<summary>Table of Contents</summary>
+  </div>
 
-- <a href="#related">Related</a>
-- <a href="#news">News</a>
- - <a href="#installation">Installation</a>
-   - <a href="#manual">Manual</a>
-   - <a href="#zi">ZI</a>
-   - <a href="#zinit">Zinit</a>
-   - <a href="#antigen">Antigen</a>
-   - <a href="#zgen">Zgen</a>
-   - <a href="#oh-my-zsh">Oh-My-Zsh</a>
-- <a href="#features">Features</a>
-  - <a href="#themes">Themes</a>
-  - <a href="#variables">Variables</a>
-  - <a href="#brackets">Brackets</a>
-  - <a href="#conditions">Conditions</a>
-  - <a href="#strings">Strings</a>
-  - <a href="#here-strings">Here Strings</a>
-  - <a href="#exec-descriptor-variables">`exec` descriptor variables</a>
-  - <a href="#for-loops-and-alternate-syntax-brace--blocks">for-loops and alternate syntax (brace `{`/`}` blocks)</a>
-  - <a href="#function-definitions">Function definitions</a>
-  - <a href="#recursive-eval-and---highlighting">Recursive `eval` and `$( )` highlighting</a>
-  - <a href="#chroma-functions">Chroma functions</a>
-  - <a href="#math-mode-highlighting">Math mode highlighting</a>
-  - <a href="#zcalc-highlighting">Zcalc highlighting</a>
-- <a href="#performance">Performance</a>
+  <div
+    style="
+      width: 100%;
+      background-color: black;
+      border: 3px solid black;
+      border-radius: 6px;
+      margin: 5px 0;
+      padding: 2px 5px;
+    "
+  >
+    <img
+      src="https://raw.githubusercontent.com/z-shell/F-Sy-H/main/docs/images/in_string.png"
+      alt="image could not be loaded"
+      style="color: red; background-color: black; font-weight: bold"
+    />
+  </div>
 
-</details>
-</td></tr><tr><td>
-  
-## Related
+  <hr /><h3 align="left">Brackets</h3>
 
-- [License](../LICENSE)
-- [Changelog](CHANGELOG.md)
-- [Theme Guide](THEME_GUIDE.md)
-- [Chroma Guide](CHROMA_GUIDE.adoc)
+  <div
+    style="
+      width: 100%;
+      background-color: black;
+      border: 3px solid black;
+      border-radius: 6px;
+      margin: 5px 0;
+      padding: 2px 5px;
+    "
+  >
+    <img
+      src="https://raw.githubusercontent.com/z-shell/F-Sy-H/main/docs/images/brackets.gif"
+      alt="image could not be loaded"
+      style="color: red; background-color: black; font-weight: bold"
+    />
+  </div>
 
-## News
+  <hr /><h3 align="left">Conditions</h3>
 
-- 15-06-2019
-  - A new architecture for defining the highlighting for **specific commands**: it now
-    uses **abstract definitions** instead of **top-down, regular code**. The first effect
-    is the highlighting for the `git` command it is now **maximally faithful**, it
-    follows the `git` command almost completely.
-    [Screencast](https://asciinema.org/a/253411)
+  <p>
+    Comparing to the project <code>zsh-users/zsh-syntax-highlighting</code> (the
+    upper line):
+  </p>
 
-## Installation
+  <div
+    style="
+      width: 100%;
+      background-color: black;
+      border: 3px solid black;
+      border-radius: 6px;
+      margin: 5px 0;
+      padding: 2px 5px;
+    "
+  >
+    <img
+      src="https://raw.githubusercontent.com/z-shell/F-Sy-H/main/docs/images/cplx_cond.png"
+      alt="image could not be loaded"
+      style="color: red; background-color: black; font-weight: bold"
+    />
+  </div>
 
-### Manual
+  <hr /><h3 align="left">Strings</h3>
 
-Clone the Repository.
+  <p>Exact highlighting that recognizes quotes.</p>
 
-```zsh
-git clone https://github.com/z-shell/fast-syntax-highlighting ~/path/to/fsh
-```
+  <div
+    style="
+      width: 100%;
+      background-color: black;
+      border: 3px solid black;
+      border-radius: 6px;
+      margin: 5px 0;
+      padding: 2px 5px;
+    "
+  >
+    <img
+      src="https://raw.githubusercontent.com/z-shell/F-Sy-H/main/docs/images/ideal-string.png"
+      alt="image could not be loaded"
+      style="color: red; background-color: black; font-weight: bold"
+    />
+  </div>
 
-And add the following to your `zshrc` file.
+  <hr /><h3 align="left">here-strings</h3>
 
-```zsh
-source ~/path/to/fsh/fast-syntax-highlighting.plugin.zsh
-```
-
-### ZI
-
-Add the following to your `zshrc` file.
-
-```zsh
-zi light z-shell/fast-syntax-highlighting
-```
-
-Here's an example of how to load the plugin together with a few other popular
-ones with the use of
-[Turbo](https://z.digitalclouds.dev/docs/getting_started/overview#turbo-mode-zsh--53),
-i.e.: speeding up the Zsh startup by loading the plugin right after the first
-prompt, in background:
-
-```zsh
-zi wait lucid for \
- atinit"ZI[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
-    z-shell/fast-syntax-highlighting \
- blockf \
-    zsh-users/zsh-completions \
- atload"!_zsh_autosuggest_start" \
-    zsh-users/zsh-autosuggestions
-```
-
-### Zinit
-
-Add the following to your `zshrc` file.
-
-```zsh
-zinit light z-shell/fast-syntax-highlighting
-```
-
-### Antigen
-
-Add the following to your `zshrc` file.
-
-```zsh
-antigen bundle z-shell/fast-syntax-highlighting
-```
-
-### Zgen
-
-Add the following to your `.zshrc` file in the same place you're doing
-your other `zgen load` calls in.
-
-```zsh
-zgen load z-shell/fast-syntax-highlighting
-```
-
-### Oh-My-Zsh
-
-Clone the Repository.
-
-```zsh
-git clone https://github.com/z-shell/fast-syntax-highlighting.git \
-  ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/fast-syntax-highlighting
-```
-
-And add `fast-syntax-highlighting` to your plugin list.
-
-## Features
-
-### Themes
-
-Switch themes via `fast-theme {theme-name}`.
-
-<div style="width:100%;background-color:black;border:3px solid black;border-radius:6px;margin:5px 0;padding:2px 5px">
-  <img
-    src="https://raw.githubusercontent.com/z-shell/fast-syntax-highlighting/main/images/theme.png"
-    alt="image could not be loaded"
-    style="color:red;background-color:black;font-weight:bold"
-  />
+<div
+style="
+  width: 100%;
+  background-color: black;
+  border: 3px solid black;
+  border-radius: 6px;
+  margin: 5px 0;
+  padding: 2px 5px;
+"
+>
+<img src="https://raw.githubusercontent.com/z-shell/F-Sy-H/main/docs/images/herestring.png" alt="image could not be loaded"
+style="color: red; background-color: black; font-weight: bold" />
 </div>
 
-Run `fast-theme -t {theme-name}` option to obtain the snippet above.
+  <hr /><h3 align="left"><code>exec</code> descriptor-variables</h3>
 
-Run `fast-theme -l` to list available themes.
+  <p>
+    Comparing to the project
+    upper line):
+  </p>
 
-### Variables
-
-Comparing to the project `zsh-users/zsh-syntax-highlighting` (the upper line):
-
-<div style="width:100%;background-color:black;border:3px solid black;border-radius:6px;margin:5px 0;padding:2px 5px">
-  <img
-    src="https://raw.githubusercontent.com/z-shell/fast-syntax-highlighting/main/images/parameter.png"
-    alt="image could not be loaded"
-    style="color:red;background-color:black;font-weight:bold"
-  />
+<div
+style="
+  width: 100%;
+  background-color: black;
+  border: 3px solid black;
+  border-radius: 6px;
+  margin: 5px 0;
+  padding: 2px 5px;
+"
+><img src="https://raw.githubusercontent.com/z-shell/F-Sy-H/main/docs/images/execfd_cmp.png" alt="image could not be loaded" style="color: red; background-color: black; font-weight: bold" />
 </div>
 
-<div style="width:100%;background-color:black;border:3px solid black;border-radius:6px;margin:5px 0;padding:2px 5px">
-  <img
-    src="https://raw.githubusercontent.com/z-shell/fast-syntax-highlighting/main/images/in_string.png"
-    alt="image could not be loaded"
-    style="color:red;background-color:black;font-weight:bold"
-  />
+  <hr /><h3 align="left">
+    for-loops and alternate syntax (brace <code>{`/`}</code> blocks)
+  </h3>
+
+  <div
+    style="
+      width: 100%;
+      background-color: black;
+      border: 3px solid black;
+      border-radius: 6px;
+      margin: 5px 0;
+      padding: 2px 5px;
+    "
+  >
+    <img
+      src="https://raw.githubusercontent.com/z-shell/F-Sy-H/main/docs/images/for-loop-cmp.png"
+      alt="image could not be loaded"
+      style="color: red; background-color: black; font-weight: bold"
+    />
+  </div>
+
+  <hr /><h3 align="left">Function definitions</h3>
+
+  <p>
+    Comparing to the project <code>zsh-users/zsh-syntax-highlighting</code> (the
+    upper 2 lines):
+  </p>
+
+<div
+style="
+  width: 100%;
+  background-color: black;
+  border: 3px solid black;
+  border-radius: 6px;
+  margin: 5px 0;
+  padding: 2px 5px;
+"
+><img src="https://raw.githubusercontent.com/z-shell/F-Sy-H/main/docs/images/function.png"
+alt="image could not be loaded" style="color: red; background-color: black; font-weight: bold" /></div>
+
+  <hr /><h3 align="left">
+    Recursive <code>eval</code> and <code>$( )</code> highlighting
+  </h3>
+
+  <p>
+    Comparing to the project <code>zsh-users/zsh-syntax-highlighting</code> (the
+    upper line):
+  </p>
+
+  <div
+    style="
+      width: 100%;
+      background-color: black;
+      border: 3px solid black;
+      border-radius: 6px;
+      margin: 5px 0;
+      padding: 2px 5px;
+    "
+  >
+    <img
+      src="https://raw.githubusercontent.com/z-shell/F-Sy-H/main/docs/images/eval_cmp.png"
+      alt="image could not be loaded"
+      style="color: red; background-color: black; font-weight: bold"
+    />
+  </div>
+
+  <hr /><h3 align="left">Chroma functions</h3>
+
+  <p>Highlighting that is specific for a given command.</p>
+
+<div
+  style="
+    width: 100%;
+    background-color: black;
+    border: 3px solid black;
+    border-radius: 6px;
+    margin: 5px 0;
+    padding: 2px 5px;
+  "
+  >
+<img src="https://raw.githubusercontent.com/z-shell/F-Sy-H/main/docs/images/git_chroma.png"
+alt="image could not be loaded"
+style="color: red; background-color: black; font-weight: bold" />
 </div>
 
-### Brackets
+<p>The <a href="https://github.com/z-shell/F-Sy-H/tree/main/%E2%86%92chroma">chromas</a> that are enabled by default can be found <a href="https://github.com/z-shell/F-Sy-H/blob/main/fast-highlight#L166">here</a>.</p>
 
-<div style="width:100%;background-color:black;border:3px solid black;border-radius:6px;margin:5px 0;padding:2px 5px">
-  <img
-    src="https://raw.githubusercontent.com/z-shell/fast-syntax-highlighting/main/images/brackets.gif"
-    alt="image could not be loaded"
-    style="color:red;background-color:black;font-weight:bold"
-  />
-</div>
+  <hr /><h3 align="left">Math-mode highlighting</h3>
 
-### Conditions
+  <div
+    style="
+      width: 100%;
+      background-color: black;
+      border: 3px solid black;
+      border-radius: 6px;
+      margin: 5px 0;
+      padding: 2px 5px;
+    "
+  >
+    <img
+      src="https://raw.githubusercontent.com/z-shell/F-Sy-H/main/docs/images/math.gif"
+      alt="image could not be loaded"
+      style="color: red; background-color: black; font-weight: bold"
+    />
+  </div>
 
-Comparing to the project `zsh-users/zsh-syntax-highlighting` (the upper line):
+  <hr /><h3 align="left">Zcalc highlighting</h3>
 
-<div style="width:100%;background-color:black;border:3px solid black;border-radius:6px;margin:5px 0;padding:2px 5px">
-  <img
-    src="https://raw.githubusercontent.com/z-shell/fast-syntax-highlighting/main/images/cplx_cond.png"
-    alt="image could not be loaded"
-    style="color:red;background-color:black;font-weight:bold"
-  />
-</div>
+  <div
+    style="
+      width: 100%;
+      background-color: black;
+      border: 3px solid black;
+      border-radius: 6px;
+      margin: 5px 0;
+      padding: 2px 5px;
+    "
+  >
+    <img
+      src="https://raw.githubusercontent.com/z-shell/F-Sy-H/main/docs/images/zcalc.png"
+      alt="image could not be loaded"
+      style="color: red; background-color: black; font-weight: bold"
+    />
+  </div>
+  <h2 align="left">Performance</h2>
 
-### Strings
-
-Exact highlighting that recognizes quotings.
-
-<div style="width:100%;background-color:black;border:3px solid black;border-radius:6px;margin:5px 0;padding:2px 5px">
-  <img
-    src="https://raw.githubusercontent.com/z-shell/fast-syntax-highlighting/main/images/ideal-string.png"
-    alt="image could not be loaded"
-    style="color:red;background-color:black;font-weight:bold"
-  />
-</div>
-
-### here-strings
-
-<div style="width:100%;background-color:black;border:3px solid black;border-radius:6px;margin:5px 0;padding:2px 5px">
-  <img
-    src="https://raw.githubusercontent.com/z-shell/fast-syntax-highlighting/main/images/herestring.png"
-    alt="image could not be loaded"
-    style="color:red;background-color:black;font-weight:bold"
-  />
-</div>
-
-### `exec` descriptor-variables
-
-Comparing to the project `zsh-users/zsh-syntax-highlighting` (the upper line):
-
-<div style="width:100%;background-color:black;border:3px solid black;border-radius:6px;margin:5px 0;padding:2px 5px">
-  <img
-    src="https://raw.githubusercontent.com/z-shell/fast-syntax-highlighting/main/images/execfd_cmp.png"
-    alt="image could not be loaded"
-    style="color:red;background-color:black;font-weight:bold"
-  />
-</div>
-
-### for-loops and alternate syntax (brace `{`/`}` blocks)
-
-<div style="width:100%;background-color:black;border:3px solid black;border-radius:6px;margin:5px 0;padding:2px 5px">
-  <img
-    src="https://raw.githubusercontent.com/z-shell/fast-syntax-highlighting/main/images/for-loop-cmp.png"
-    alt="image could not be loaded"
-    style="color:red;background-color:black;font-weight:bold"
-  />
-</div>
-
-### Function definitions
-
-Comparing to the project `zsh-users/zsh-syntax-highlighting` (the upper 2 lines):
-
-<div style="width:100%;background-color:black;border:3px solid black;border-radius:6px;margin:5px 0;padding:2px 5px">
-  <img
-    src="https://raw.githubusercontent.com/z-shell/fast-syntax-highlighting/main/images/function.png"
-    alt="image could not be loaded"
-    style="color:red;background-color:black;font-weight:bold"
-  />
-</div>
-
-### Recursive `eval` and `$( )` highlighting
-
-Comparing to the project `zsh-users/zsh-syntax-highlighting` (the upper line):
-
-<div style="width:100%;background-color:black;border:3px solid black;border-radius:6px;margin:5px 0;padding:2px 5px">
-  <img
-    src="https://raw.githubusercontent.com/z-shell/fast-syntax-highlighting/main/images/eval_cmp.png"
-    alt="image could not be loaded"
-    style="color:red;background-color:black;font-weight:bold"
-  />
-</div>
-
-### Chroma functions
-
-Highlighting that is specific for a given command.
-
-<div style="width:100%;background-color:black;border:3px solid black;border-radius:6px;margin:5px 0;padding:2px 5px">
-  <img
-    src="https://raw.githubusercontent.com/z-shell/fast-syntax-highlighting/main/images/git_chroma.png"
-    alt="image could not be loaded"
-    style="color:red;background-color:black;font-weight:bold"
-  />
-</div>
-
-The [chromas](https://github.com/z-shell/fast-syntax-highlighting/tree/main/chroma)
-that are enabled by default can be found
-[here](https://github.com/z-shell/fast-syntax-highlighting/blob/main/fast-highlight#L166).
-
-### Math-mode highlighting
-
-<div style="width:100%;background-color:black;border:3px solid black;border-radius:6px;margin:5px 0;padding:2px 5px">
-  <img
-    src="https://raw.githubusercontent.com/z-shell/fast-syntax-highlighting/main/images/math.gif"
-    alt="image could not be loaded"
-    style="color:red;background-color:black;font-weight:bold"
-  />
-</div>
-
-### Zcalc highlighting
-
-<div style="width:100%;background-color:black;border:3px solid black;border-radius:6px;margin:5px 0;padding:2px 5px">
-  <img
-    src="https://raw.githubusercontent.com/z-shell/fast-syntax-highlighting/main/images/zcalc.png"
-    alt="image could not be loaded"
-    style="color:red;background-color:black;font-weight:bold"
-  />
-</div>
-
-## Performance
-
-Performance differences can be observed in this Asciinema recording, where a `10 kB` function is being edited.
-
-<div style="width:100%;background-color:#121314;border:3px solid #121314;border-radius:6px;margin:5px 0;padding:2px 5px">
-  <a href="https://asciinema.org/a/112367">
-    <img src="https://asciinema.org/a/112367.png" alt="asciicast">
-  </a>
-</div>
-  
-  </td>
-</tr>
-<tr><td align="center"><h2 align="left">Credits</h2>
- <a href="https://cloudflare.com" rel="nofollow">
-  <img style="width:140;height:40px" src="https://space.ss-o.workers.dev/img/brand/cloudflare/cf-logo-v-rgb.png" alt="Cloudflare" />
- </a>
- <a href="https://crowdin.com/?utm_source=badge&utm_medium=referral&utm_campaign=badge-add-on" rel="nofollow">
-  <img style="width:140;height:40px" src="https://space.ss-o.workers.dev/img/brand/crowdin/localization-at-dark-rounded@2x.png" alt="Crowdin | Agile localization for tech companies" />
- </a>
- <a href="https://www.digitalocean.com/?refcode=090bdb63f800&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge" rel="nofollow">
-  <img style="width:140;height:40px" src="https://web-platforms.sfo2.digitaloceanspaces.com/WWW/Badge%203.svg" alt="DigitalOcean Referral Badge" />
- </a>
- </td></tr>
-</table>
+  <p>
+    Performance differences can be observed in this Asciinema recording,where a
+    `10 kB` function is being edited.
+  </p>
+  <p>
+    <a href="https://asciinema.org/a/112367">
+      <img src="https://asciinema.org/a/112367.png" alt="asciicast" />
+    </a>
+  </p>
+<hr /><h2 align="left">Credits</h2>
+<p align="center">
+<a href="https://trunk.io" rel="nofollow"><img align="center" style="width: 140px; height: 40px"
+src="https://storage.googleapis.com/digital-space/img/brand/trunk/trunk-white.svg" alt="Trunk" />
+</a>
+<a href="https://crowdin.com/?utm_source=badge&utm_medium=referral&utm_campaign=badge-add-on" rel="nofollow">
+<img align="center" style="width: 140px; height: 40px"
+src="https://storage.googleapis.com/digital-space/img/brand/crowdin/localization-at-dark-rounded%402x.png"
+alt="Crowdin | Agile localization for tech companies"/></a>
+<a href="https://www.digitalocean.com/?refcode=090bdb63f800&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge" rel="nofollow">
+<img align="center" style="width: 140px; height: 40px"
+src="https://web-platforms.sfo2.digitaloceanspaces.com/WWW/Badge%203.svg" alt="DigitalOcean Referral Badge" /></a>
+<a href="https://cloudflare.com" rel="nofollow">
+<img align="center" style="width: 140px; height: 40px" src="https://storage.googleapis.com/digital-space/img/brand/cloudflare/cf-logo-v-rgb.png" alt="Cloudflare" /></a>
+<p>
