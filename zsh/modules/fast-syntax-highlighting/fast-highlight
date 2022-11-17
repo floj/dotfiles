@@ -1,7 +1,10 @@
-# -*- mode: sh; sh-indentation: 2; indent-tabs-mode: nil; sh-basic-offset: 2; -*-
+# -------------------------------------------------------------------------------------------------
+# -*- mode: zsh; sh-indentation: 2; indent-tabs-mode: nil; sh-basic-offset: 2; -*-
+# vim: ft=zsh sw=2 ts=2 et
 # -------------------------------------------------------------------------------------------------
 # Copyright (c) 2010-2016 zsh-syntax-highlighting contributors
 # Copyright (c) 2016-2019 Sebastian Gniazdowski (modifications)
+# Copyright (c) 2021-present Salvydas Lukosius (modifications)
 # All rights reserved.
 #
 # The only licensing for this file follows.
@@ -166,7 +169,6 @@ typeset -gA FAST_HIGHLIGHT
 
 # Brackets highlighter active by default
 : ${FAST_HIGHLIGHT[use_brackets]:=1}
-# TODO: #13 map-outdates e.g: pnpm
 FAST_HIGHLIGHT+=(
   chroma-fast-theme    →chroma/-fast-theme.ch
   chroma-alias         →chroma/-alias.ch

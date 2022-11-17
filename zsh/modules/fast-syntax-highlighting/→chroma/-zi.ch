@@ -1,8 +1,6 @@
-# -*- mode: sh; sh-indentation: 4; indent-tabs-mode: nil; sh-basic-offset: 4; -*-
-# Copyright (c) 2018-2019 Sebastian Gniazdowski
+# -*- mode: zsh; sh-indentation: 2; indent-tabs-mode: nil; sh-basic-offset: 2; -*-
 #
-# Chroma function for command `git'. It colorizes the part of command
-# line that holds `git' invocation.
+# Chroma function for command `zi'. It colorizes the part of command line that holds `zi' invocation.
 
 (( FAST_HIGHLIGHT[-zi.ch-chroma-def] )) && return 1
 
@@ -18,8 +16,7 @@ fsh__zi__chroma__def=(
     subcmd:NULL "NULL_0_opt"
     NULL_0_opt "(-help|--help|-h)
                    <<>> NO-OP // ::→chroma/main-chroma-std-aopt-action"
-
-    "subcommands" "(help|man|self-update|cd|times|zstatus|load|light|unload|snippet|ls|ice|<ice|specification>|update|status|report|analytics|control|delete|loaded|list|cd|create|edit|glance|stress|changes|recently|clist|completions|cdisable|cname|cenable|cname|creinstall|cuninstall|csearch|compinit|dtrace|dstart|dstop|dunload|dreport|dclear|compile|uncompile|compiled|cdlist|cdreplay|cdclear|cclear|srv|recall|env-whitelist|add-fpath|bindkeys|module)"
+    "subcommands" "(help|subcmds|icemods|analytics|man|self-update|times|zstatus|load|light|unload|snippet|ls|ice|<ice|specification>|update|status|report|delete|loaded|list|cd|create|edit|glance|stress|changes|recently|clist|completions|cclear|cdisable|cenable|creinstall|cuninstall|csearch|compinit|dtrace|dstart|dstop|dunload|dreport|dclear|compile|uncompile|compiled|cdlist|cdreplay|cdclear|srv|recall|env-whitelist|bindkeys|module|add-fpath|run)"
 
     ## }}}
 
@@ -37,17 +34,14 @@ fsh__zi__chroma__def=(
 
     "ICE_#_arg" "NO-OP // ::→chroma/-zi-check-ice-mod"
 
-    ## }}}
-
     ##
     ## `snippet'
     ##
     ## {{{
 
-    subcmd:snippet "SNIPPET_0_opt // SNIPPET_1_arg // NO_MATCH_#_opt //
-                    NO_MATCH_#_arg"
+    subcmd:snippet "SNIPPET_0_opt // SNIPPET_1_arg // NO_MATCH_#_opt // NO_MATCH_#_arg"
 
-    SNIPPET_0_opt "(-f|--command)
+    SNIPPET_0_opt "(-h|--help|-f|--force|--command|-x)
                         <<>> NO-OP // ::→chroma/main-chroma-std-aopt-action"
 
     SNIPPET_1_arg "NO-OP // ::→chroma/-zi-verify-snippet"
@@ -59,8 +53,7 @@ fsh__zi__chroma__def=(
     ##
     ## {{{
 
-    "subcmd:load"
-        "LOAD_1_arg // LOAD_2_arg // NO_MATCH_#_opt // NO_MATCH_#_arg"
+    "subcmd:load" "LOAD_1_arg // LOAD_2_arg // NO_MATCH_#_opt // NO_MATCH_#_arg"
 
     LOAD_1_arg "NO-OP // ::→chroma/-zi-verify-plugin"
 
@@ -87,11 +80,10 @@ fsh__zi__chroma__def=(
     ##
     ## {{{
 
-    subcmd:update "UPDATE_0_opt // PLGSNP_1_arg // PLGSNP_2_arg //
-                   NO_MATCH_#_opt // NO_MATCH_#_arg"
+    subcmd:update "UPDATE_0_opt // PLGSNP_1_arg // PLGSNP_2_arg // NO_MATCH_#_opt // NO_MATCH_#_arg"
 
     UPDATE_0_opt "
-            (--all|-r|--reset|-q|--quiet|-p|--parallel)
+            (-L|--plugins|-s|--snippets|-p|--parallel|-a|--all|-q|--quiet|-r|--reset|-u|--urge|-n|--no-pager|-v|--verbose|-h|--help)
                     <<>> NO-OP // ::→chroma/main-chroma-std-aopt-action"
 
     ## }}}
@@ -101,10 +93,9 @@ fsh__zi__chroma__def=(
     ##
     ## {{{
 
-    subcmd:light "LIGHT_0_opt // LOAD_1_arg // LOAD_2_arg // NO_MATCH_#_opt //
-                  NO_MATCH_#_arg"
+    subcmd:light "LIGHT_0_opt // LOAD_1_arg // LOAD_2_arg // NO_MATCH_#_opt // NO_MATCH_#_arg"
 
-    LIGHT_0_opt "-b
+    LIGHT_0_opt "-h|--help|-b
                     <<>> NO-OP // ::→chroma/main-chroma-std-aopt-action"
 
     ## }}}
@@ -114,10 +105,9 @@ fsh__zi__chroma__def=(
     ##
     ## {{{
 
-    subcmd:unload "UNLOAD_0_opt // UNLOAD_1_arg // UNLOAD_2_arg // NO_MATCH_#_opt //
-                  NO_MATCH_#_arg"
+    subcmd:unload "UNLOAD_0_opt // UNLOAD_1_arg // UNLOAD_2_arg // NO_MATCH_#_opt // NO_MATCH_#_arg"
 
-    UNLOAD_0_opt "-q
+    UNLOAD_0_opt "-h|--help|-q|--quiet
                     <<>> NO-OP // ::→chroma/main-chroma-std-aopt-action"
 
     UNLOAD_1_arg "NO-OP // ::→chroma/-zi-verify-loaded-plugin"
@@ -148,7 +138,7 @@ fsh__zi__chroma__def=(
         "DELETE_0_opt // PLGSNP_1_arg // PLGSNP_2_arg // NO_MATCH_#_opt // NO_MATCH_#_arg"
 
     DELETE_0_opt "
-            (--all|--clean|-y|--yes|-q|--quiet)
+            (-a|--all|-c|--clean|-y|--yes|-q|--quiet|-h|--help)
                     <<>> NO-OP // ::→chroma/main-chroma-std-aopt-action"
 
     ## }}}
@@ -177,7 +167,7 @@ fsh__zi__chroma__def=(
 
 
     ##
-    ## `light'
+    ## `uncompile'
     ##
     ## {{{
 
@@ -206,8 +196,7 @@ fsh__zi__chroma__def=(
 →chroma/-zi-verify-plugin() {
     local _scmd="$1" _wrd="$4"
 
-    [[ -d "$_wrd" ]] && \
-        { __style=${FAST_THEME_NAME}correct-subtle; return 0; }
+    [[ -d "$_wrd" ]] && { __style=${FAST_THEME_NAME}correct-subtle; return 0; }
 
     typeset -a plugins
     plugins=( "${ZI[PLUGINS_DIR]}"/*(N:t) )
@@ -215,16 +204,13 @@ fsh__zi__chroma__def=(
     plugins=( "${plugins[@]:#_local/zi}" )
     plugins=( "${plugins[@]:#custom}" )
 
-    [[ -n "${plugins[(r)$_wrd]}" ]] && \
-        __style=${FAST_THEME_NAME}correct-subtle || \
-        return 1
+    [[ -n "${plugins[(r)$_wrd]}" ]] && __style=${FAST_THEME_NAME}correct-subtle || return 1
         #__style=${FAST_THEME_NAME}incorrect-subtle
     return 0
 }
 
 →chroma/-zi-verify-plugin-or-snippet() {
-    →chroma/-zi-verify-plugin "$1" "" "" "$4" || \
-        →chroma/-zi-verify-snippet "$1" "" "" "$4"
+    →chroma/-zi-verify-plugin "$1" "" "" "$4" || →chroma/-zi-verify-snippet "$1" "" "" "$4"
     return $?
 }
 
@@ -322,41 +308,27 @@ fsh__zi__chroma__def=(
 }
 
 →chroma/-zi-check-ice-mod() {
-    local _scmd="$1" _wrd="$4"
-    [[ "$_wrd" = (svn(\'|\")*|svn) ]] && \
-        FAST_HIGHLIGHT[chroma-zi-ice-elements-svn]=1
-    [[ "$_wrd" = (#b)(id-as(:|)(\'|\")(*)(\'|\")|id-as:(*)|id-as(*)) ]] && \
-        FAST_HIGHLIGHT[chroma-zi-ice-elements-id-as]="${match[4]}${match[6]}${match[7]}"
+  local _scmd="$1" _wrd="$4"
+  [[ "$_wrd" = (svn(\'|\")*|svn) ]] && FAST_HIGHLIGHT[chroma-zi-ice-elements-svn]=1
+  [[ "$_wrd" = (#b)(id-as(:|)(\'|\")(*)(\'|\")|id-as:(*)|id-as(*)) ]] && \
+  FAST_HIGHLIGHT[chroma-zi-ice-elements-id-as]="${match[4]}${match[6]}${match[7]}"
 
-    # Copy from lib/zsh/autoload.zsh / -zplg-recall
+    # .zi-recall
     local -a ice_order nval_ices ext_val_ices
-    ext_val_ices=( ${(@)${(@Ms.|.)ZI_EXTS[ice-mods]:#*\'\'*}//\'\'/} )
+    ext_val_ices=( ${(@)${(@Akons:|:u)${ZI_EXTS[ice-mods]//\'\'/}}/(#s)<->-/} )
 
     ice_order=(
-        svn proto from teleid bindmap cloneopts id-as depth if wait load
-        unload blockf pick bpick src as ver silent lucid notify mv cp
-        atinit atclone atload atpull nocd run-atpull has cloneonly make
-        service trackbinds multisrc compile nocompile nocompletions
-        reset-prompt wrap-track reset sh \!sh bash \!bash ksh \!ksh csh
-        \!csh aliases countdown ps-on-unload ps-on-update trigger-load
-        light-mode is-snippet atdelete pack git verbose on-update-of
-        subscribe param extract
-        # Include all additional ices – after
-        # stripping them from the possible: ''
-        ${(@s.|.)${ZI_EXTS[ice-mods]//\'\'/}}
+      ${${(s.|.)ZI[ice-list]}}
+      # Include all additional ices – after stripping them from the possible: ''
+      ${(@)${(@Akons:|:u)${ZI_EXTS[ice-mods]//\'\'/}}/(#s)<->-/}
     )
     nval_ices=(
-            blockf silent lucid trackbinds cloneonly nocd run-atpull
-            nocompletions sh \!sh bash \!bash ksh \!ksh csh \!csh
-            aliases countdown light-mode is-snippet git verbose
-
-            # Include only those additional ices,
-            # don't have the '' in their name, i.e.
-            # aren't designed to hold value
-            ${(@)${(@s.|.)ZI_EXTS[ice-mods]}:#*\'\'*}
-
-            # Must be last
-            svn
+      ${(s.|.)ZI[nval-ice-list]}
+      # Include only those additional ices,
+      # don't have the '' in their name, i.e. aren't designed to hold value
+      ${(@)${(@)${(@Akons:|:u)${ZI_EXTS[ice-mods]//\'\'/}}/(#s)<->-/}}
+      # Must be last
+      svn
     )
 
     if [[ "$_wrd" = (#b)(${(~j:|:)${ice_order[@]:#(${(~j:|:)nval_ices[@]:#(${(~j:|:)ext_val_ices[@]})})}})(*) ]]; then
@@ -375,4 +347,4 @@ fsh__zi__chroma__def=(
 
 return 0
 
-# vim:ft=zsh:et:sw=4
+# vim: ft=zsh sw=2 ts=2 et

@@ -1,13 +1,3 @@
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
-
-- [Theme Guide for F-Sy-H](#theme-guide-for-f-sy-h)
-  - [Secondary Theme](#secondary-theme)
-  - [Custom Working Directory](#custom-working-directory)
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
 # Theme Guide for F-Sy-H
 
 `fast-theme` tool is used to select a theme. There are 6 shipped themes, they can be listed with `fast-theme -l`.
@@ -64,12 +54,12 @@ Secondary theme (`zdharma` in the example) will be used for highlighting of argu
 and of `$( ... )` interior (i.e. of interior of command substitution). Basically, recursive
 highlighting uses alternate theme to make the highlighted code distinct:
 
-![sshot](https://raw.githubusercontent.com/z-shell/fast-syntax-highlighting/main/images/cmdsubst.png)
+![sshot](https://raw.githubusercontent.com/z-shell/F-Sy-H/main/docs/images/cmdsubst.png)
 
 In the above screen-shot the interior of `$( ... )` uses different colors than the rest of the
 code. Example for `eval`:
 
-![image](https://raw.githubusercontent.com/z-shell/fast-syntax-highlighting/main/images/eval_cmp.png)
+![image](https://raw.githubusercontent.com/z-shell/F-Sy-H/main/docs/images/eval_cmp.png)
 
 First line doesn't use recursive highlighting, highlights `eval` argument as regular string.
 Second line switches theme to `zdharma` and does full recursive highlighting of eval argument.

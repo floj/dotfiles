@@ -1,5 +1,4 @@
-# -*- mode: sh; sh-indentation: 4; indent-tabs-mode: nil; sh-basic-offset: 4; -*-
-# Copyright (c) 2018 Sebastian Gniazdowski
+# -*- mode: zsh; sh-indentation: 2; indent-tabs-mode: nil; sh-basic-offset: 2; -*-
 #
 # Chroma function for command `git'. It colorizes the part of command
 # line that holds `git' invocation.
@@ -69,11 +68,12 @@ fsh__git__chroma__def=(
               (--depth=|--deepen=|--shallow-exclude=|--shallow-since=|--receive-pack=|
                --refmap=|--recurse-submodules=|-j|--jobs=|--submodule-prefix=|
                --recurse-submodules-default=|-o|--server-option=|--upload-pack|
-               --negotiation-tip=)
+               --negotiation-tip=|--set-upstream=)
                        <<>> NO-OP // ::→chroma/main-chroma-std-aopt-action
                        <<>> NO-OP // ::→chroma/main-chroma-std-aopt-ARG-action
-           || (--help|--all|-a|--append|--unshallow|--update-shallow|--dry-run|-f|--force|
-               -k|--keep|--multiple|-p|--prune|-n|--no-tags|-t|--tags|--no-recurse-submodules|
+           || (--help|--all|-a|--append|--unshallow|--atomic|--auto-maintenance|--update-shallow|--dry-run|-f|--force|
+               -k|--keep|--multiple|-p|--prune|-n|--no-tags|-t|--tags|--prefetch |--no-recurse-submodules|--negotiation-tip|
+               --auto-gc|--filter|--write-fetch-head|--write-commit-graph|--show-forced-updates|--prune-tags|
                -u|--update-head-ok|-q|--quiet|-v|--verbose|--progress|
                -4|--ipv4|-6|--ipv6)
                    <<>> __style=\${FAST_THEME_NAME}single-hyphen-option // NO-OP"
@@ -951,4 +951,4 @@ fsh__git__chroma__def=(
 
 return 0
 
-# vim:ft=zsh:et:sw=4
+# vim: ft=zsh sw=2 ts=2 et
