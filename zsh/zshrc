@@ -5,7 +5,7 @@ if [[ -z "$TMUX" ]] && [[ "$TERM" == "alacritty" ]] && command -v tmux &>/dev/nu
   exit
 fi
 
-[[ -n "$TMUX" ]] && export TERM='screen-256color' 
+[[ -n "$TMUX" ]] && export TERM='screen-256color'
 [[ -f /etc/profile.d/vte.sh ]] && source /etc/profile.d/vte.sh
 
 # include users local bin dir in path first
