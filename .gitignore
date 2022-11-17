@@ -1,4 +1,5 @@
 config/nvim/plugged
+config/nvim/plugin/packer_compiled.lua
 bundle/cache/*
 home/.fonts
 home/bin/tfrs
