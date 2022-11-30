@@ -1,0 +1,7 @@
+{
+  "fbash": {
+    "prefix": ["fbash"],
+    "body": "#!/usr/bin/env bash\nset -euo pipefail\nscriptDir=$( cd \"$( dirname \"${BASH_SOURCE[0]}\" )\" >/dev/null 2>&1 && pwd )\nscriptName=$(basename \"${BASH_SOURCE[0]}\")\n\n",
+    "description": ["Useful bash file header\n"]
+  }
+}

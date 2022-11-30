@@ -9,16 +9,7 @@ if not snip_status_ok then
 end
 
 require("luasnip/loaders/from_vscode").lazy_load()
-
--- local check_backspace = function()
--- 	local col = vim.fn.col(".") - 1
--- 	return col == 0 or vim.fn.getline("."):sub(col, col):match("%s")
--- end
-
-local check_backspace = function()
-	local col = vim.fn.col(".") - 1
-	return col == 0 or vim.fn.getline("."):sub(col, col):match("%s")
-end
+require("luasnip.loaders.from_vscode").lazy_load({ paths = { "./luasnip-custom" } })
 
 cmp.setup({
 	snippet = {
@@ -29,7 +20,7 @@ cmp.setup({
 	sources = {
 		{ name = "nvim_lsp" },
 		{ name = "nvim_lua" },
-		{ name = "luasnip" },
+		{ name = "luasnip", option = { use_show_condition = false } },
 		{ name = "buffer" },
 		{ name = "path" },
 	},
@@ -49,6 +40,6 @@ cmp.setup({
 		["<C-f>"] = cmp.mapping.scroll_docs(4),
 		["<C-Space>"] = cmp.mapping.complete(),
 		["<C-e>"] = cmp.mapping.abort(),
-		["<CR>"] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+		["<CR>"] = cmp.mapping.confirm({ select = true }),
 	}),
 })

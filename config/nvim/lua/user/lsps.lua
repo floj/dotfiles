@@ -35,12 +35,8 @@ if ok_null then
 
 			null_ls.builtins.completion.spell,
 
-			null_ls.builtins.diagnostics.editorconfig_checker,
 			null_ls.builtins.diagnostics.luacheck,
 			null_ls.builtins.diagnostics.shellcheck,
-			null_ls.builtins.diagnostics.sqlfluff.with({
-				extra_args = { "--dialect", "postgres" },
-			}),
 			null_ls.builtins.diagnostics.standardrb,
 			null_ls.builtins.diagnostics.stylelint,
 			null_ls.builtins.diagnostics.todo_comments,
@@ -53,9 +49,6 @@ if ok_null then
 			null_ls.builtins.formatting.packer,
 			null_ls.builtins.formatting.prettier,
 			null_ls.builtins.formatting.shfmt,
-			null_ls.builtins.formatting.sqlfluff.with({
-				extra_args = { "--dialect", "postgres" },
-			}),
 			null_ls.builtins.formatting.standardrb,
 			null_ls.builtins.formatting.stylua,
 			null_ls.builtins.formatting.terraform_fmt,
