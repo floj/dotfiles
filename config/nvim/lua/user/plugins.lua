@@ -1,3 +1,5 @@
+-- luacheck: globals vim
+
 return require("packer").startup(function(use)
 	-- Packer can manage itself
 	use("wbthomason/packer.nvim")
@@ -7,12 +9,23 @@ return require("packer").startup(function(use)
 			require("impatient").enable_profile()
 		end,
 	})
-	-- use("folke/tokyonight.nvim")
+
 	use({
-		"luisiacc/gruvbox-baby",
-		branch = "main",
+		"folke/tokyonight.nvim",
+		-- config = function()
+		-- 	vim.cmd.colorscheme("tokyonight")
+		-- end,
+	})
+	use({
+		"EdenEast/nightfox.nvim",
+		-- config = function()
+		-- 	vim.cmd.colorscheme("nightfox")
+		-- end,
+	})
+	use({
+		"ellisonleao/gruvbox.nvim",
 		config = function()
-			pcall(vim.cmd, "colorscheme gruvbox-baby")
+			vim.cmd.colorscheme("gruvbox")
 		end,
 	})
 
@@ -62,12 +75,9 @@ return require("packer").startup(function(use)
 	use("hrsh7th/cmp-path")
 	use("saadparwaiz1/cmp_luasnip")
 	use("hrsh7th/cmp-nvim-lsp")
-	use("hrsh7th/cmp-nvim-lua")
 
 	use("neovim/nvim-lspconfig")
 	use("jose-elias-alvarez/null-ls.nvim")
-	use("williamboman/mason.nvim")
-	use("williamboman/mason-lspconfig.nvim")
 	use({
 		"L3MON4D3/LuaSnip",
 		tag = "v1.1.0",

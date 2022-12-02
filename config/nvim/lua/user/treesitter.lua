@@ -1,4 +1,4 @@
-local ok_ts, treesitter = pcall(require, "nvim-treesitter")
+local ok_ts, _ = pcall(require, "nvim-treesitter")
 if not ok_ts then
 	return
 end

@@ -1,3 +1,4 @@
+-- luacheck: globals vim
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
@@ -9,15 +10,15 @@ vim.opt.shell = "/bin/bash"
 vim.opt.termguicolors = true
 
 vim.opt.mouse = "a"
-vim.opt.undolevels=1000
-vim.opt.undoreload=20000
+vim.opt.undolevels = 1000
+vim.opt.undoreload = 20000
 vim.opt.undofile = true
 -- vim.opt.undodir = "$HOME/.vimundo"
 vim.opt.autoread = true
 vim.opt.scrolloff = 8
 vim.opt.ruler = true
 vim.opt.cmdheight = 2
-vim.opt.whichwrap:append("<,>,[,],h,l")         -- keys allowed to move to the previous/next line when the beginning/end of line is reached
+vim.opt.whichwrap:append("<,>,[,],h,l") -- keys allowed to move to the previous/next line when the beginning/end of line is reached
 
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
@@ -48,9 +49,8 @@ vim.opt.backup = false
 vim.opt.swapfile = false
 vim.opt.writebackup = false
 
-
 vim.opt.clipboard = "unnamedplus"
-vim.opt.completeopt = { "menuone", "noselect" } -- mostly just for cmp
+vim.opt.completeopt = { "menu", "menuone", "noselect" } -- mostly just for cmp
 
 -- vim.opt.conceallevel = 0                        -- so that `` is visible in markdown files
 -- vim.opt.pumheight = 10                          -- pop up menu height
