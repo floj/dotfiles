@@ -11,6 +11,7 @@ fi
 # include users local bin dir in path first
 [[ -d $HOME/.local/bin ]] && path=($HOME/.local/bin $path)
 [[ -d $HOME/bin ]] && path=($HOME/bin $path)
+[[ -d $HOME/.luarocks/bin/ ]] && path=($path $HOME/.luarocks/bin)
 [[ -d $HOME/go/bin ]] && path=($path $HOME/go/bin)
 
 ZSH_SOURCE_DIR="$HOME/dotfiles/zsh"
