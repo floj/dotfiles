@@ -25,6 +25,9 @@ return require("packer").startup(function(use)
 	use({
 		"ellisonleao/gruvbox.nvim",
 		config = function()
+			require("gruvbox").setup({
+				italic = false,
+			})
 			vim.cmd.colorscheme("gruvbox")
 		end,
 	})
