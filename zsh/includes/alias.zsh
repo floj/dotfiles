@@ -11,6 +11,12 @@ else
   alias ll='ls -AlhpN'
 fi
 
+if command -v llama &>/dev/null; then
+  lcd() {
+    cd "$(llama "$@")"
+  }
+fi
+
 if command -v bat &>/dev/null; then
   cat() {
     bat -p "$@"
@@ -108,3 +114,5 @@ alias update-mirrors='sudo reflector --verbose -c Germany -p https --age 12 --so
 alias whatismyip='curl ifconfig.me'
 
 alias nightfm='mpv --shuffle https://soundcloud.com/v-erse/sets/night'
+
+alias awsa='aws --cli-auto-prompt'
