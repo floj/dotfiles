@@ -34,7 +34,7 @@ return require("packer").startup(function(use)
 
 	use({
 		"lewis6991/gitsigns.nvim",
-		tag = "release",
+		branch = "release",
 		config = function()
 			require("gitsigns").setup()
 		end,
@@ -53,7 +53,11 @@ return require("packer").startup(function(use)
 		"nvim-tree/nvim-tree.lua",
 		requires = { "nvim-tree/nvim-web-devicons" },
 		config = function()
-			require("nvim-tree").setup()
+			require("nvim-tree").setup({
+				git = {
+					ignore = false,
+				},
+			})
 		end,
 	})
 
@@ -92,6 +96,14 @@ return require("packer").startup(function(use)
 		requires = "kyazdani42/nvim-web-devicons",
 		config = function()
 			require("trouble").setup()
+		end,
+	})
+	use("eandrju/cellular-automaton.nvim")
+	use({
+		"cshuaimin/ssr.nvim",
+		module = "ssr",
+		config = function()
+			require("ssr").setup()
 		end,
 	})
 end)
