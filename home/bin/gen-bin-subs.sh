@@ -36,7 +36,6 @@ if [[ -z ${AWS_PROFILE:-} ]]; then
   exec "<targetBin>" "$@"
 fi
 debug "exec via aws-vault: $(basename "${BASH_SOURCE[0]}") $*"
-debug "caller: $(ps -p "$(ps -o ppid= -p $BASHPID)")"
 exec aws-vault exec --ecs-server "$AWS_PROFILE" -- "<targetBin>" "$@"
 EOF
 	sed -i "s|<targetBin>|$targetBin|g" "$HOME/bin/$f"
