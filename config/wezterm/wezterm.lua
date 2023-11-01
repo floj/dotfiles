@@ -45,6 +45,7 @@ return {
 
 	exit_behavior = "Close",
 	check_for_updates = false,
+	warn_about_missing_glyphs = false,
 
 	use_fancy_tab_bar = false,
 	automatically_reload_config = false,

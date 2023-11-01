@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-#vim: ft=sh
+set -euo pipefail
 
-appName=$1
-appEnv=$2
+appName=${1:-}
+appEnv=${2:-}
 
 [[ -n $AWS_PROFILE ]] || export AWS_PROFILE=dev
 
@@ -17,7 +17,7 @@ eae() {
 }
 
 debug() {
-	[[ -n "${DEBUG:-}" ]] && echo "$*"
+	[[ -z "${DEBUG:-}" ]] || echo "$*"
 }
 
 echo "Fetching instances"
@@ -32,11 +32,11 @@ declare -a jqFilter=(
 	'.Reservations | map(.Instances[]) | map(select(.State.Name == "running")) | map({InstanceId, PrivateDnsName, LaunchTime} * (.Tags | map(select(.Key == "Environment" or .Key == "Application")) | map({key:.Key,value:.Value}) | from_entries )) | sort_by(.Environment,.Application,.LaunchTime,.PrivateDnsName) | map(select(.Application != null and .Environment != null))'
 )
 
-if [[ -n ${appName:-} ]]; then
-	debug "addig appname filter"
+if [[ -n "$appName" ]]; then
+	debug "adding appname filter"
 	jqFilter+=(" | map(select(.Application | test(\"${appName// /.*}\") ))")
 fi
-if [[ -n ${appEnv:-} ]]; then
+if [[ -n "$appEnv" ]]; then
 	debug "adding env filter"
 	jqFilter+=(" | map(select(.Environment | test(\"${appEnv// /.*}\") ))")
 fi
@@ -55,17 +55,8 @@ if [[ $numInstances -eq 1 ]]; then
 	instanceName=$(jq ".[0].PrivateDnsName" <<<"$instances")
 	eae ssh "$instanceName"
 fi
+tableData=$(jq 'to_entries | map(.value) | .[] | to_entries | sort_by(.key) | map(.value) | join("|")' <<<"$instances")
+tbl=$(column --table -s '|' --table-columns "App,Env,InstanceId,LaunchTime,Host" <<<"$tableData")
 
-tableData=$(jq 'to_entries | map({AAA: (.key+1)} * .value) | .[] | to_entries | sort_by(.key) | map(.value) | join("|")' <<<"$instances")
-column --table -s '|' --table-columns "Num,Application,Environment,InstanceId,LaunchTime,Host" <<<"$tableData"
-
-declare -i selection
-printf "Select an instance: "
-read -r selection
-if [[ $selection -gt $numInstances ]]; then
-	echo "invalid selection"
-	exit 1
-fi
-
-instanceName=$(jq ".[$((selection - 1))].PrivateDnsName" <<<"$instances")
+instanceName=$(fzf --header-lines=1 <<<"$tbl" | awk '{print $5}')
 eae ssh "$instanceName"

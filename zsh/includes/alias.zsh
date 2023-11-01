@@ -50,7 +50,7 @@ alias -s .log='less'
 alias -s .txt='less'
 
 alias meld='GTK_THEME=:light meld'
-alias rg='rg --smart-case --follow'
+alias rg='rg --hidden --no-ignore --smart-case --follow -g "!.terraform" -g "!node_modules"'
 alias fd='fd -uu'
 
 # terraform

@@ -3,6 +3,7 @@ aws
 awslogs
 cw
 packer
+s3surfer
 saw
 saws
 terraform

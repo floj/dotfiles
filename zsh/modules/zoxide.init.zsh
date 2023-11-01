@@ -11,7 +11,7 @@ function __zoxide_pwd() {
 # cd + custom logic based on the value of _ZO_ECHO.
 function __zoxide_cd() {
     # shellcheck disable=SC2164
-    \builtin cd -- "$@" >/dev/null
+    \builtin cd -- "$@"
 }
 
 # =============================================================================
@@ -45,7 +45,7 @@ function __zoxide_z() {
         __zoxide_cd ~
     elif [[ "$#" -eq 1 ]] && { [[ -d "$1" ]] || [[ "$1" = '-' ]] || [[ "$1" =~ ^[-+][0-9]$ ]]; }; then
         __zoxide_cd "$1"
-    elif [[ "$@[-1]" == "${__zoxide_z_prefix}"* ]]; then
+    elif [[ "$@[-1]" == "${__zoxide_z_prefix}"?* ]]; then
         # shellcheck disable=SC2124
         \builtin local result="${@[-1]}"
         __zoxide_cd "${result:${#__zoxide_z_prefix}}"
@@ -60,59 +60,42 @@ function __zoxide_z() {
 # Jump to a directory using interactive search.
 function __zoxide_zi() {
     \builtin local result
-    result="$(\command zoxide query -i -- "$@")" && __zoxide_cd "${result}"
+    result="$(\command zoxide query --interactive -- "$@")" && __zoxide_cd "${result}"
 }
+
+# Completions.
+if [[ -o zle ]]; then
+    function __zoxide_z_complete() {
+        # Only show completions when the cursor is at the end of the line.
+        # shellcheck disable=SC2154
+        [[ "${#words[@]}" -eq "${CURRENT}" ]] || return 0
+
+        if [[ "${#words[@]}" -eq 2 ]]; then
+            _files -/
+        elif [[ "${words[-1]}" == '' ]] && [[ "${words[-2]}" != "${__zoxide_z_prefix}"?* ]]; then
+            \builtin local result
+            # shellcheck disable=SC2086,SC2312
+            if result="$(\command zoxide query --exclude "$(__zoxide_pwd)" --interactive -- ${words[2,-1]})"; then
+                result="${__zoxide_z_prefix}${result}"
+                # shellcheck disable=SC2296
+                compadd -Q "${(q-)result}"
+            fi
+            \builtin printf '\e[5n'
+        fi
+        return 0
+    }
+
+    \builtin bindkey '\e[0n' 'reset-prompt'
+    [[ "${+functions[compdef]}" -ne 0 ]] && \compdef __zoxide_z_complete __zoxide_z
+fi
 
 # =============================================================================
 #
 # Commands for zoxide. Disable these using --no-cmd.
 #
 
-\builtin unalias z &>/dev/null || \builtin true
-function z() {
-    __zoxide_z "$@"
-}
-
-\builtin unalias zi &>/dev/null || \builtin true
-function zi() {
-    __zoxide_zi "$@"
-}
-
-if [[ -o zle ]]; then
-    function __zoxide_z_complete() {
-        # Only show completions when the cursor is at the end of the line.
-        # shellcheck disable=SC2154
-        [[ "${#words[@]}" -eq "${CURRENT}" ]] || return
-
-        if [[ "${#words[@]}" -eq 2 ]]; then
-            _files -/
-        elif [[ "${words[-1]}" == '' ]]; then
-            \builtin local result
-            # shellcheck disable=SC2086,SC2312
-            if result="$(\command zoxide query --exclude "$(__zoxide_pwd)" -i -- ${words[2,-1]})"; then
-                __zoxide_result="${result}"
-            else
-                __zoxide_result=''
-            fi
-            \builtin printf '\e[5n'
-        fi
-    }
-
-    function __zoxide_z_complete_helper() {
-        \builtin local result="${__zoxide_z_prefix}${__zoxide_result}"
-        # shellcheck disable=SC2296
-        [[ -n "${__zoxide_result}" ]] && LBUFFER="${LBUFFER}${(q-)result}"
-        \builtin zle reset-prompt
-    }
-
-    \builtin zle -N __zoxide_z_complete_helper
-    \builtin bindkey "\e[0n" __zoxide_z_complete_helper
-    if [[ "${+functions[compdef]}" -ne 0 ]]; then
-        \compdef -d z
-        \compdef -d zi
-        \compdef __zoxide_z_complete z
-    fi
-fi
+\builtin alias z=__zoxide_z
+\builtin alias zi=__zoxide_zi
 
 # =============================================================================
 #

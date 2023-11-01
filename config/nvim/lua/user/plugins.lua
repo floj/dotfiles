@@ -26,7 +26,11 @@ return require("packer").startup(function(use)
 		"ellisonleao/gruvbox.nvim",
 		config = function()
 			require("gruvbox").setup({
-				italic = false,
+				italic = {
+					strings = false,
+					operators = false,
+					comments = false,
+				},
 			})
 			vim.cmd.colorscheme("gruvbox")
 		end,
@@ -63,7 +67,7 @@ return require("packer").startup(function(use)
 
 	use({
 		"nvim-lualine/lualine.nvim",
-		requires = { "kyazdani42/nvim-web-devicons" },
+		requires = { "nvim-tree/nvim-web-devicons" },
 		config = function()
 			require("lualine").setup()
 		end,
@@ -93,7 +97,7 @@ return require("packer").startup(function(use)
 
 	use({
 		"folke/trouble.nvim",
-		requires = "kyazdani42/nvim-web-devicons",
+		requires = "nvim-tree/nvim-web-devicons",
 		config = function()
 			require("trouble").setup()
 		end,
@@ -105,5 +109,9 @@ return require("packer").startup(function(use)
 		config = function()
 			require("ssr").setup()
 		end,
+	})
+	use({
+		"isobit/vim-caddyfile",
+		ft = { "caddyfile" },
 	})
 end)

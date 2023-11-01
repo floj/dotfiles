@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -uo pipefail
+
 # remove $HOME/bin from path there. We want to find the real binaries
 PATH=":$PATH:"
 PATH="${PATH//:$HOME\/bin:/:}"
@@ -7,36 +8,44 @@ PATH="${PATH#:}"
 PATH="${PATH%:}"
 
 # if command -v aws-vault &>/dev/null; then
-  for f in aws packer terraform saw cw awslogs; do
-    targetBin=$(command -v "$f")
-    if [[ -z $targetBin ]]; then
-      [[ -x $HOME/bin/$f-bin ]] && targetBin=$HOME/bin/$f-bin
-    fi
-    if [[ -z $targetBin ]]; then
-      echo "$f not found in path, skipping"
-      continue
-    fi
-    echo "Generating binstub for $f ($targetBin)"
+for f in aws packer terraform saw cw awslogs s3surfer; do
+	targetBin=$(command -v "$f")
+	if [[ -z $targetBin ]]; then
+		[[ -x $HOME/bin/$f-bin ]] && targetBin=$HOME/bin/$f-bin
+	fi
+	if [[ -z $targetBin ]]; then
+		echo "$f not found in path, skipping"
+		continue
+	fi
+	echo "Generating binstub for $f ($targetBin)"
 
-    cat<<EOF>"$HOME/bin/$f"
+	cat <<'EOF' >"$HOME/bin/$f"
 #!/usr/bin/env bash
-set -e
-if [[ -n \$AWS_VAULT ]] || [[ -n \$VIMRUNTIME ]]; then
-  exec "$targetBin" "\$@"
+set -euo pipefail
+debug(){
+  if [[ ${DEBUG:-} == 1 ]]; then
+    printf "%s\n" "$*" >> "$HOME/binstubs.log"
+  fi
+}
+if [[ -n ${AWS_VAULT:-} ]] || [[ -n ${VIMRUNTIME:-} ]] || [[ -n ${TF_IN_AUTOMATION:-} ]]; then
+  debug "direct exec: $(basename "${BASH_SOURCE[0]}") $*"
+  exec "<targetBin>" "$@"
 fi
-aws_profile=\$AWS_PROFILE
-if [[ -z \$aws_profile ]]; then
-  exec "$targetBin" "\$@"
+if [[ -z ${AWS_PROFILE:-} ]]; then
+  debug "direct exec (no profile): $(basename "${BASH_SOURCE[0]}") $*"
+  exec "<targetBin>" "$@"
 fi
-assume_role_ttl=\${AWS_ASSUME_ROLE_TTL:-20}m
-exec aws-vault exec --ecs-server "\$aws_profile" -- "$targetBin" "\$@"
+debug "exec via aws-vault: $(basename "${BASH_SOURCE[0]}") $*"
+debug "caller: $(ps -p "$(ps -o ppid= -p $BASHPID)")"
+exec aws-vault exec --ecs-server "$AWS_PROFILE" -- "<targetBin>" "$@"
 EOF
-  echo "$f" >> .gitignore
-  chmod +x "$HOME/bin/$f"
-  done
+	sed -i "s|<targetBin>|$targetBin|g" "$HOME/bin/$f"
+	echo "$f" >>.gitignore
+	chmod +x "$HOME/bin/$f"
+done
 # else
 #   echo "aws-vault not found"
 # fi
 
 uniqGitignore=$(sort -u .gitignore)
-echo "$uniqGitignore" > .gitignore
+echo "$uniqGitignore" >.gitignore
