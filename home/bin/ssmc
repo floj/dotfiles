@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+set -euo pipefail
+appName=${1:-}
+appEnv=${2:-}
+
+[[ -n ${AWS_PROFILE:-} ]] || export AWS_PROFILE=dev
+
+requireCmd() {
+	for c in "$@"; do
+		if ! command -v "$c" &>/dev/null; then
+			echo "command $c not found, please install it via your packet manager"
+			exit
+		fi
+	done
+}
+
+requireCmd jq fzf aws column
+
+jqBin=$(command -v jq)
+jq() {
+	"$jqBin" -r "$@"
+}
+
+eae() {
+	echo "> $*"
+	exec "$@"
+}
+
+debug() {
+	[[ -z "${DEBUG:-}" ]] || echo "$*"
+}
+
+echo "Fetching instances"
+if ! resp=$(timeout 60 aws ec2 describe-instances); then
+	echo "Could not fetch instances"
+	exit 1
+fi
+
+debug "$resp"
+
+declare -a jqFilter=(
+	'.Reservations | map(.Instances[]) | map(select(.State.Name == "running")) | map({InstanceId, PrivateDnsName, LaunchTime} * (.Tags | map(select(.Key == "Environment" or .Key == "Application")) | map({key:.Key,value:.Value}) | from_entries )) | sort_by(.Environment,.Application,.LaunchTime,.PrivateDnsName) | map(select(.Application != null and .Environment != null)) | reverse'
+)
+echo "checking appname"
+if [[ -n "$appName" ]]; then
+	debug "adding appname filter"
+	jqFilter+=(" | map(select(.Application | test(\"${appName// /.*}\") ))")
+fi
+
+echo "checking appenv"
+if [[ -n "$appEnv" ]]; then
+	debug "adding env filter"
+	jqFilter+=(" | map(select(.Environment | test(\"${appEnv// /.*}\") ))")
+fi
+
+echo "Filtering instances"
+debug "jq \"${jqFilter[*]}\""
+
+instances=$(jq "${jqFilter[*]}" <<<"$resp")
+numInstances=$(jq 'length' <<<"$instances")
+if [[ $numInstances -eq 0 ]]; then
+	echo "No matching instances found"
+	exit 1
+fi
+
+if [[ $numInstances -eq 1 ]]; then
+	instanceId=$(jq ".[0].InstanceId" <<<"$instances")
+	eae aws ssm start-session --target "$instanceId"
+fi
+
+tableData=$(jq 'to_entries | map(.value) | .[] | to_entries | sort_by(.key) | map(.value) | join("|")' <<<"$instances")
+tbl=$(column --table -s '|' --table-columns "App,Env,InstanceId,LaunchTime,Host" <<<"$tableData")
+
+instanceId=$(fzf --header-lines=1 <<<"$tbl" | awk '{print $3}')
+eae aws ssm start-session --target "$instanceId"
