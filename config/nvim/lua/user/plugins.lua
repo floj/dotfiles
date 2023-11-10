@@ -76,9 +76,18 @@ return require("packer").startup(function(use)
 	use("RRethy/vim-illuminate")
 
 	use({
+		"nvim-telescope/telescope-fzf-native.nvim",
+		run = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build",
+	})
+	use({
 		"nvim-telescope/telescope.nvim",
-		tag = "0.1.0",
-		requires = { "nvim-lua/plenary.nvim" },
+		tag = "*",
+		requires = { "nvim-lua/plenary.nvim", "nvim-telescope/telescope-fzf-native.nvim" },
+		config = function()
+			local telescope = require("telescope")
+			telescope.setup()
+			telescope.load_extension("fzf")
+		end,
 	})
 
 	use("hrsh7th/nvim-cmp")
@@ -91,7 +100,7 @@ return require("packer").startup(function(use)
 	use("jose-elias-alvarez/null-ls.nvim")
 	use({
 		"L3MON4D3/LuaSnip",
-		tag = "v1.1.0",
+		tag = "*",
 	})
 	use("rafamadriz/friendly-snippets")
 
