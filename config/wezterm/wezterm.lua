@@ -39,7 +39,8 @@ end)
 
 return {
 	harfbuzz_features = { "calt=0", "clig=0", "liga=0" },
-	font = wezterm.font("Fira Code", {}),
+	-- font = wezterm.font("Fira Code", {}),
+	font = wezterm.font("Monaspace Neon", {}),
 
 	scrollback_lines = 50000,
 
