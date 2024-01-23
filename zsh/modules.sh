@@ -16,5 +16,5 @@ export subtreeBranches
 
 typeset -a moduleOrder
 #moduleOrder=(zsh-completions z zsh-history-substring-search fast-syntax-highlighting)
-moduleOrder=(zoxide mcfly zsh-history-substring-search fast-syntax-highlighting forgit)
+moduleOrder=(zoxide direnv mcfly zsh-history-substring-search fast-syntax-highlighting)
 export moduleOrder
