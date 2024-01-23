@@ -54,18 +54,6 @@ calc() {
   echo "scale=6; $@" | bc
 }
 
-mv() {
-  if [ "$#" -ne 1 ] || [ ! -e "$1" ]; then
-    command mv "$@"
-    return
-  fi
-  local newfilename="$1"
-  vared -p '> ' newfilename
-  if [[ -z "$newfilename" ]] || [[ "$newfilename" == "$1" ]]; then
-    return
-  fi
-  command mv -v -- "$1" "$newfilename"
-}
 
 fancy-ctrl-z () {
   if [[ $#BUFFER -eq 0 ]]; then
