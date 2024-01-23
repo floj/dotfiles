@@ -1,17 +1,22 @@
 # MIT (c) Chris Apple
 
 set INSTALL_DIR (dirname (dirname (status -f)))
-set FORGIT "$INSTALL_DIR/conf.d/bin/git-forgit"
+set -x FORGIT_INSTALL_DIR "$INSTALL_DIR/conf.d"
+set -x FORGIT "$FORGIT_INSTALL_DIR/bin/git-forgit"
+if [ ! -e "$FORGIT" ]
+    set -x FORGIT_INSTALL_DIR "$INSTALL_DIR/vendor_conf.d"
+    set -x FORGIT "$FORGIT_INSTALL_DIR/bin/git-forgit"
+end
 
 function forgit::warn
-    printf "%b[Warn]%b %s\n" '\e[0;33m' '\e[0m' "$argv" >&2;
+    printf "%b[Warn]%b %s\n" '\e[0;33m' '\e[0m' "$argv" >&2
 end
 
 # backwards compatibility:
 # export all user-defined FORGIT variables to make them available in git-forgit
 set unexported_vars 0
 set | awk -F ' ' '{ print $1 }' | grep FORGIT_ | while read var
-    if ! set -x | grep -q "^$var "
+    if not set -x | grep -q "^$var\b"
         if test $unexported_vars = 0
             forgit::warn "Config options have to be exported in future versions of forgit."
             forgit::warn "Please update your config accordingly:"
@@ -82,15 +87,15 @@ function forgit::checkout::commit -d "git checkout commit selector" --argument-n
     "$FORGIT" checkout_commit $argv
 end
 
-function forgit::branch::delete -d "git checkout branch deleter" --wraps "git branch --delete"
+function forgit::branch::delete -d "git branch deletion selector" --wraps "git branch --delete"
     "$FORGIT" branch_delete $argv
 end
 
-function forgit::revert::commit --argument-names 'commit_hash' --wraps "git revert --"
+function forgit::revert::commit -d "git revert commit selector" --argument-names 'commit_hash' --wraps "git revert --"
     "$FORGIT" revert_commit $argv
 end
 
-function forgit::blame
+function forgit::blame -d "git blame viewer"
     "$FORGIT" blame $argv
 end
 
@@ -164,7 +169,6 @@ if test -z "$FORGIT_NO_ALIASES"
         alias gbd 'forgit::branch::delete'
     end
 
-
     if test -n "$forgit_clean"
         alias $forgit_clean 'forgit::clean'
     else
@@ -211,6 +215,18 @@ if test -z "$FORGIT_NO_ALIASES"
         alias $forgit_revert_commit 'forgit::revert::commit'
     else
         alias grc 'forgit::revert::commit'
+    end
+
+    if test -n "$forgit_blame"
+        alias $forgit_blame 'forgit::blame'
+    else
+        alias gbl 'forgit::blame'
+    end
+
+    if test -n "$forgit_checkout_tag"
+        alias $forgit_checkout_tag 'forgit::checkout::tag'
+    else
+        alias gct 'forgit::checkout::tag'
     end
 
 end
