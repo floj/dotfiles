@@ -7,7 +7,7 @@
 #   local base=$1
 #   local file
 #   shift
-  
+
 #   for f in "$@"; do
 #     file="$base/$f"
 #     if [[ -f "$file" ]]; then
@@ -21,5 +21,5 @@
 # includeAutoCh "$HOME/bin/chs/go"   "auto.sh"
 # includeAutoCh "$HOME/bin/chs/nvm" "auto.sh"
 
-source "$HOME/bin/chs/auto.sh"
-ch_auto_init "$HOME/bin/chs/hooks"
+#source "$HOME/bin/chs/auto.sh"
+#ch_auto_init "$HOME/bin/chs/hooks"
