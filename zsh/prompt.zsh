@@ -47,7 +47,7 @@ function _prompt_left() {
 function prompt_flo_precmd() {
   RETVAL=$?
   vcs_info
-  ch_auto_do
+  #ch_auto_do
 }
 
 # Show remote ref name and number of commits ahead-of or behind
@@ -102,4 +102,3 @@ function prompt_setup() {
 }
 
 prompt_setup
-

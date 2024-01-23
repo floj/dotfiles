@@ -1,0 +1,12 @@
+use_ruby() {
+  local ruby_dir=$HOME/.rubies/$1
+  load_prefix $ruby_dir
+  layout ruby
+}
+
+use_java() {
+  local java_dir=$HOME/programs/java/$1
+  PATH_add $java_dir/bin
+  export JAVA_HOME=$java_dir
+  export JAVA_VERSION=$1
+}
