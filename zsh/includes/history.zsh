@@ -1,4 +1,4 @@
-HISTFILE="$HOME/.history"
+export HISTFILE="$HOME/.history"
 HISTSIZE=5000
 SAVEHIST=5000
 
@@ -27,4 +27,3 @@ unsetopt HIST_BEEP               # Don't Beep when accessing non-existent histor
 
 # Lists the ten most used commands.
 alias history-stat="history 0 | awk '{print \$2}' | sort | uniq -c | sort -n -r | head"
-
