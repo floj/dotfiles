@@ -16,5 +16,5 @@ export subtreeBranches
 
 typeset -a moduleOrder
 #moduleOrder=(zsh-completions z zsh-history-substring-search fast-syntax-highlighting)
-moduleOrder=(zoxide direnv atuin fast-syntax-highlighting vfox)
+moduleOrder=(zoxide direnv atuin fast-syntax-highlighting)
 export moduleOrder
