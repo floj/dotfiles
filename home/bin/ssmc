@@ -39,8 +39,15 @@ fi
 debug "$resp"
 
 declare -a jqFilter=(
-	'.Reservations | map(.Instances[]) | map(select(.State.Name == "running")) | map({InstanceId, PrivateDnsName, LaunchTime} * (.Tags | map(select(.Key == "Environment" or .Key == "Application")) | map({key:.Key,value:.Value}) | from_entries )) | sort_by(.Environment,.Application,.LaunchTime,.PrivateDnsName) | map(select(.Application != null and .Environment != null)) | reverse'
+	'.Reservations | map(.Instances[]) | map(select(.State.Name == "running")) | map({InstanceId, PrivateDnsName, LaunchTime} * (.Tags | map(select(.Key == "Environment" or .Key == "Application")) | map({key:.Key,value:.Value}) | from_entries )) | sort_by(.Environment,.Application,.LaunchTime,.PrivateDnsName)'
 )
+
+if [[ -n "${SSMC_ALL:-}" ]]; then
+	jqFilter+=(' | map(if .Application == null then .Application="unset" end)')
+	jqFilter+=(' | map(if .Environment == null then .Environment="unset" end)')
+fi
+jqFilter+=(' | map(select(.Application != null and .Environment != null)) | reverse')
+
 echo "checking appname"
 if [[ -n "$appName" ]]; then
 	debug "adding appname filter"
