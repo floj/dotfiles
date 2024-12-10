@@ -11,6 +11,6 @@ direnv hook zsh >"$scriptDir/direnv.init.zsh"
 echo "zoxide"
 zoxide init zsh >"$scriptDir/zoxide.init.zsh"
 
-echo "vfox"
+#echo "vfox"
 #vfox activate zsh | sed 's|;export PATH.*||' >"$scriptDir/vfox.init.zsh"
-vfox activate zsh >"$scriptDir/vfox.init.zsh"
+#vfox activate zsh >"$scriptDir/vfox.init.zsh"
