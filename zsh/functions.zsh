@@ -99,15 +99,24 @@ gen-password(){
   else
     s=$(dd if=/dev/urandom bs=1 count=36 2>/dev/null | base64)
   fi
-  case "${1:-}" in
-    -a)
-      s=$(tr '+' '-' <<<"$s" | tr '/' '_')
-      ;;
-    -n)
-      s=$(tr '+' '1' <<<"$s" | tr '/' '2')
-      ;;
-    *)
-      ;;
-  esac
+  while [[ $# -gt 0 ]]; do
+    opt=$1
+    shift
+    case "$opt" in
+      -a)
+        s=$(tr '+' '-' <<<"$s" | tr '/' '_')
+        ;;
+      -n)
+        s=$(tr '+' '1' <<<"$s" | tr '/' '2')
+        ;;
+      -l)
+        len=$1
+        shift
+        s=${s[1,$len]}
+        ;;
+      *)
+        ;;
+    esac
+  done
   echo "$s"
 }

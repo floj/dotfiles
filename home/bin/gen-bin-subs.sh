@@ -8,7 +8,7 @@ PATH="${PATH#:}"
 PATH="${PATH%:}"
 
 # if command -v aws-vault &>/dev/null; then
-for f in aws packer terraform saw cw awslogs s3surfer; do
+for f in aws packer saw cw s3surfer; do
 	targetBin=$(command -v "$f")
 	if [[ -z $targetBin ]]; then
 		[[ -x $HOME/bin/$f-bin ]] && targetBin=$HOME/bin/$f-bin
@@ -22,11 +22,14 @@ for f in aws packer terraform saw cw awslogs s3surfer; do
 	cat <<'EOF' >"$HOME/bin/$f"
 #!/usr/bin/env bash
 set -euo pipefail
-debug(){
-  if [[ ${DEBUG:-} == 1 ]]; then
-    printf "%s\n" "$*" >> "$HOME/binstubs.log"
-  fi
+scriptName=$(basename "${BASH_SOURCE[0]}")
+
+debug() {
+	if [[ -d "$HOME/binstubs" ]]; then
+    printf "(%d): %s\n" "$$" "$*" >>"$HOME/binstubs/$scriptName.log"
+	fi
 }
+
 if [[ -n ${AWS_VAULT:-} ]] || [[ -n ${VIMRUNTIME:-} ]] || [[ -n ${TF_IN_AUTOMATION:-} ]]; then
   debug "direct exec: $(basename "${BASH_SOURCE[0]}") $*"
   exec "<targetBin>" "$@"
@@ -36,6 +39,7 @@ if [[ -z ${AWS_PROFILE:-} ]]; then
   exec "<targetBin>" "$@"
 fi
 debug "exec via aws-vault: $(basename "${BASH_SOURCE[0]}") $*"
+# debug "$(printenv)"
 exec aws-vault exec --ecs-server "$AWS_PROFILE" -- "<targetBin>" "$@"
 EOF
 	sed -i "s|<targetBin>|$targetBin|g" "$HOME/bin/$f"

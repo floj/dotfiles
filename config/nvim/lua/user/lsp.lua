@@ -23,7 +23,7 @@ vim.diagnostic.config({
 vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
 vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" })
 
--- lspconfig.terraformls.setup({})
+lspconfig.terraformls.setup({})
 lspconfig.tflint.setup({})
 lspconfig.bashls.setup({})
 lspconfig.html.setup({})
@@ -40,6 +40,8 @@ null_ls.setup({
 		null_ls.builtins.diagnostics.luacheck,
 		null_ls.builtins.diagnostics.codespell,
 		null_ls.builtins.diagnostics.shellcheck,
+		null_ls.builtins.diagnostics.dotenv_linter,
+		null_ls.builtins.diagnostics.editorconfig_checker,
 		null_ls.builtins.diagnostics.standardrb,
 		null_ls.builtins.diagnostics.stylelint,
 		null_ls.builtins.diagnostics.terraform_validate,
@@ -51,6 +53,7 @@ null_ls.setup({
 		null_ls.builtins.diagnostics.zsh,
 
 		null_ls.builtins.formatting.packer,
+		null_ls.builtins.formatting.gofmt,
 		null_ls.builtins.formatting.prettier,
 		null_ls.builtins.formatting.shfmt,
 		null_ls.builtins.formatting.standardrb,

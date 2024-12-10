@@ -10,12 +10,10 @@ if [[ -d "$HOME/programs/apache-maven/current" ]]; then
   export MAVEN_HOME="$HOME/programs/apache-maven/current"
   export MAVEN_OPTS="-Xms128m -Xmx2g $COMMON_JAVA_OPTS"
   #path+=($MAVEN_HOME/bin)
-  # alias mvn='mvn -B' # use batch mode to supress download progress
+  # alias mvn='mvn -B' # use batch mode to suppress download progress
   mvn() {
     local params=()
-    
     "$MAVEN_HOME/bin/mvn" "${params[@]}" "$@"
   }
 
 fi
-

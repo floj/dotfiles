@@ -38,6 +38,7 @@ wezterm.on("gui-startup", function(cmd)
 end)
 
 return {
+	enable_wayland = false,
 	harfbuzz_features = { "calt=0", "clig=0", "liga=0" },
 	-- font = wezterm.font("Fira Code", {}),
 	font = wezterm.font("Monaspace Neon", {}),

@@ -1,7 +1,7 @@
 #!/bin/zsh
 #
 if command -v lsd &>/dev/null; then
-  alias ll='lsd -Alh --date relative --icon never --group-dirs first'
+  alias ll='lsd -Alh --date relative --icon never --group-dirs first -g'
   alias ls='lsd --icon never --group-dirs first'
   alias tree='lsd --icon never --group-dirs first --tree'
 elif command -v exa &>/dev/null; then

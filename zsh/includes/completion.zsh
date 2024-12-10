@@ -9,6 +9,7 @@
 # Load and initialize the completion system ignoring insecure directories.
 autoload -U compinit && compinit
 
+
 #
 # Options
 #
@@ -137,3 +138,5 @@ zstyle ':completion:*:(ssh|scp|rsync):*:hosts-ipaddr' ignored-patterns '^(<->.<-
 # }
 # zle -N expand-dot-to-parent-directory-path
 # bindkey "." expand-dot-to-parent-directory-path
+
+[[ -d $HOME/dotfiles/zsh/completions/ ]] && fpath=($HOME/dotfiles/zsh/completions/ $fpath)

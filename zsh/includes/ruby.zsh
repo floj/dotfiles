@@ -44,3 +44,10 @@ done
 
 export rspec_timeout=900
 
+if [[ -d $HOME/.local/share/gem/ruby/3.3.0/bin ]]; then
+  path=($path $HOME/.local/share/gem/ruby/3.3.0/bin)
+fi
+
+if [[ -e /usr/share/chruby/chruby.sh ]]; then
+  source /usr/share/chruby/chruby.sh
+fi
