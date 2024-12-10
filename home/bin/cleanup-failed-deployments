@@ -1,0 +1,92 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ead() {
+  echo "$*"
+  "$@"
+}
+
+fail() {
+  echo "$*"
+  exit 1
+}
+
+asksure() {
+  local answer
+  echo -n "Are you sure (Y/N)? "
+  while read -r -n 1 -s answer; do
+    if [[ $answer = [YyNn] ]]; then
+      [[ $answer = [Yy] ]] && retval=0
+      [[ $answer = [Nn] ]] && retval=1
+      break
+    fi
+  done
+  echo "$retval"
+  return $retval
+}
+
+declare -a failedDeployments
+declare -a abandonedAsgs
+declare -a asgNames
+
+echo "Looking up failed deployments"
+if ! awsOutput=$(aws deploy list-deployments --max-items 100 --include-only-statuses Failed | jq '.deployments'); then
+  fail "Could not list deployments"
+fi
+if [[ $(jq -r '. | length' <<<"$awsOutput") -eq 0 ]]; then
+  echo "No deployments found. Done."  
+  exit
+fi
+
+mapfile -t failedDeployments <<<"$(jq -r '.[]' <<<"$awsOutput")"
+for deployment in "${failedDeployments[@]}"; do
+  echo "  found $deployment"
+done
+echo
+
+echo "Looking up related AGSs..."
+
+if ! awsOutput=$(aws deploy batch-get-deployments --deployment-ids "${failedDeployments[@]}" | jq '.deploymentsInfo | map(.targetInstances.autoScalingGroups) | del(.[] | nulls) | flatten'); then
+  fail "Could not lookup deployments infos"
+fi
+if [[ $(jq -r '. | length'<<<"$awsOutput") -eq 0 ]]; then
+  echo "No ASGs found. Done."
+  exit
+fi
+
+mapfile -t asgNames <<<"$(jq -r '.[]' <<<"$awsOutput")"
+for asg in "${asgNames[@]}"; do
+  echo "  found $asg"
+done
+echo
+
+echo "Checking for abandoned ASGs..."
+if ! awsOutput=$(aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names "${asgNames[@]}" | jq '.AutoScalingGroups | map(.AutoScalingGroupName)'); then
+  fail "Could not describe auto scaling groups"
+fi
+if [[ $(jq -r '. | length' <<<"$awsOutput") -eq 0 ]]; then
+  echo "No abandoned ASGs found. Done."
+  exit
+fi
+
+mapfile -t abandonedAsgs <<<"$(jq -r '.[]' <<<"$awsOutput")"
+for asg in "${abandonedAsgs[@]}"; do
+  echo "  $asg is abandoned"
+done
+echo
+
+echo "The following ASGs will be deleted:"
+for asg in "${abandonedAsgs[@]}"; do
+  echo "  $asg"
+done
+
+if ! asksure; then
+  echo "Aborded."
+  exit
+fi
+
+echo "Deleting abandoned ASGs..."
+for asg in "${abandonedAsgs[@]}"; do
+  ead aws autoscaling delete-auto-scaling-group --force-delete --auto-scaling-group-name "$asg"
+done
+echo "Done."
