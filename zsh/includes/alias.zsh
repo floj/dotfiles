@@ -64,10 +64,6 @@ if command -v tfrs &> /dev/null; then
   alias tfp='tfrs --exec terraform --prefix=-target= -- plan -out state.out -compact-warnings'
 fi
 
-if command -v codium &> /dev/null; then
-  alias code='codium'
-fi
-
 #
 # ruby/rails
 #
@@ -113,6 +109,6 @@ alias update-mirrors='sudo reflector --verbose -c Germany -p https --age 12 --so
 
 alias whatismyip='curl ifconfig.me'
 
-alias nightfm='mpv --shuffle https://soundcloud.com/v-erse/sets/night'
+alias nightfm='mpv --no-vid --shuffle --loop-playlist=inf ~/Music/nightfm'
 
 alias awsa='aws --cli-auto-prompt'
