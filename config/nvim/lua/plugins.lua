@@ -38,10 +38,14 @@ require("lazy").setup({
             require("nvim-tree").setup({})
         end,
     },
+    {
+        "triarius/fileline.nvim",
+        opts = {},
+    },
     { "nvim-lua/plenary.nvim" },
     {
         "folke/trouble.nvim",
-        opts = {}, -- for default options, refer to the configuration section for custom setup.
+        opts = {},
         cmd = "Trouble",
         keys = {
             {
