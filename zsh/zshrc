@@ -1,24 +1,24 @@
 # vim: ft=zsh
 
-# if [[ -z "$TMUX" ]] && [[ "$TERM" == "alacritty" ]] && command -v tmux &>/dev/null; then
-#   tmux attach || tmux -2
-#   exit
-# fi
+if [[ -z "$TMUX" ]] && [[ "$TERM" == "alacritty" ]] && command -v tmux &>/dev/null; then
+  tmux attach || tmux -2
+  exit
+fi
 
-#[[ -n "$TMUX" ]] && export TERM='screen-256color'
+#[[ -n "$TMUX" ]] && export TERM='screen-255color'
 [[ -f /etc/profile.d/vte.sh ]] && source /etc/profile.d/vte.sh
 
 # include users local bin dir in path first
-[[ -d $HOME/.local/bin ]] && path=($HOME/.local/bin $path)
-[[ -d $HOME/bin ]] && path=($HOME/bin $path)
+[[ -d $HOME/.local/bin ]] && path=("$HOME/.local/bin" $path)
+[[ -d $HOME/bin ]] && path=("$HOME/bin" $path)
 # [[ -d $HOME/.luarocks/bin/ ]] && path=($path $HOME/.luarocks/bin)
-[[ -d $HOME/go/bin ]] && path=($path $HOME/go/bin)
+[[ -d $HOME/go/bin ]] && path=($path "$HOME/go/bin")
 
 ZSH_SOURCE_DIR="$HOME/dotfiles/zsh"
 source "$ZSH_SOURCE_DIR/functions.zsh" && sourceIncludeFiles "$ZSH_SOURCE_DIR"
 
 WORDCHARS="*?_-.[]~&;!#$%^(){}<>"
-source "$ZSH_SOURCE_DIR/kbd.zsh"
+# source "$ZSH_SOURCE_DIR/kbd.zsh"
 
 if [[ -f  "$ZSH_SOURCE_DIR/modules.sh" ]]; then
   source "$ZSH_SOURCE_DIR/modules.sh"

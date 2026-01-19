@@ -1,8 +1,2 @@
-require("user.plugins")
-require("user.opts")
-require("user.keymap")
-require("user.treesitter")
-require("user.autopairs")
-require("user.illuminate")
-require("user.lsp")
-require("user.cmp")
+-- bootstrap lazy.nvim, LazyVim and your plugins
+require("config.lazy")

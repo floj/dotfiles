@@ -38,7 +38,6 @@ end
 -- end)
 
 return {
-	-- enable_wayland = false,
 	harfbuzz_features = { "calt=0", "clig=0", "liga=0" },
 	font = wezterm.font("Fira Code", {}),
 	-- font = wezterm.font("Monaspace Neon", {}),
@@ -65,6 +64,7 @@ return {
 		top = 0,
 		bottom = 0,
 	},
+
 	initial_cols = 220,
 	initial_rows = 60,
 
