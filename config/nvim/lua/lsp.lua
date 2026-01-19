@@ -8,25 +8,30 @@ vim.keymap.del("n", "gO")
 -- Create keymapping
 -- LspAttach: After an LSP Client performs "initialize" and attaches to a buffer.
 vim.api.nvim_create_autocmd("LspAttach", {
-	callback = function(args)
-		local keymap = vim.keymap
-		local lsp = vim.lsp
-		local bufopts = { noremap = true, silent = true }
+    callback = function(args)
+        local keymap = vim.keymap
+        local lsp = vim.lsp
+        local bufopts = { noremap = true, silent = true }
 
-		keymap.set("n", "gr", lsp.buf.references, bufopts)
-		keymap.set("n", "gd", lsp.buf.definition, bufopts)
-		keymap.set("n", "<space>rn", lsp.buf.rename, bufopts)
-		keymap.set("n", "K", lsp.buf.hover, bufopts)
-		keymap.set("n", "<space>f", function()
-			vim.lsp.buf.format({ async = true })
-		end, bufopts)
+        keymap.set("n", "gr", lsp.buf.references, bufopts)
+        keymap.set("n", "gd", lsp.buf.definition, bufopts)
+        keymap.set("n", "<space>rn", lsp.buf.rename, bufopts)
+        keymap.set("n", "K", lsp.buf.hover, bufopts)
+        keymap.set("n", "<space>f", function()
+            vim.lsp.buf.format({ async = true })
+        end, bufopts)
 
-		-- Format on save
-		vim.api.nvim_create_autocmd("BufWritePre", {
-			buffer = args.buf,
-			callback = function()
-				vim.lsp.buf.format({ async = true, bufnr = args.buf })
-			end,
-		})
-	end,
+        -- Format on save
+        vim.api.nvim_create_autocmd("BufWritePre", {
+            buffer = args.buf,
+            callback = function()
+                vim.lsp.buf.format({ async = true, bufnr = args.buf })
+            end,
+        })
+    end,
 })
+
+-- vim.lsp.enable({
+-- 	"lua_ls",
+-- 	"ty",
+-- })
