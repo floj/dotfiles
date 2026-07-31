@@ -1,0 +1,20 @@
+# start maximized
+maximize = true
+
+window-theme = ghostty
+theme = Monokai Pro
+split-divider-color = 00FF00
+
+# disable font ligatures
+font-feature = -calt,-liga,-dlig
+font-family = "Fira Code"
+clipboard-trim-trailing-spaces = true
+
+auto-update = off
+
+shell-integration-features = title,ssh-env,sudo,cursor
+# 32MB scrollback
+scrollback-limit = 33554432
+
+quit-after-last-window-closed = true
+gtk-single-instance = false
