@@ -1,6 +1,7 @@
 "$schema" = "https://starship.rs/config-schema.json"
 add_newline = true
 continuation_prompt = "[.](bright-black) "
+scan_timeout = 150
 
 [aws]
   format = "\\[[$symbol($profile)(\\($region\\))(\\[$duration\\])]($style)\\]"
@@ -79,6 +80,8 @@ continuation_prompt = "[.](bright-black) "
 
 [directory]
   read_only = " ro"
+  truncate_to_repo = false
+  truncation_length = 255
 
 [direnv]
   format = "\\[[$symbol$loaded/$allowed]($style)\\]"
@@ -126,7 +129,7 @@ continuation_prompt = "[.](bright-black) "
 
 [git_branch]
   format = "\\[[$symbol$branch]($style)\\]"
-  symbol = "git "
+  # symbol = "git "
   truncation_symbol = "..."
 
 [git_commit]
@@ -140,12 +143,12 @@ continuation_prompt = "[.](bright-black) "
   format = "\\[[$state ($progress_current/$progress_total)]($style)\\]"
 
 [git_status]
-  ahead = ">"
-  behind = "<"
-  deleted = "x"
-  diverged = "<>"
+  # ahead = ">"
+  # behind = "<"
+  # deleted = "x"
+  # diverged = "<>"
   format = "([\\[$all_status$ahead_behind\\]]($style))"
-  renamed = "r"
+  # renamed = "r"
 
 [gleam]
   format = "\\[[$symbol($version)]($style)\\]"
@@ -186,7 +189,7 @@ continuation_prompt = "[.](bright-black) "
 
 [java]
   format = "\\[[$symbol($version)]($style)\\]"
-  symbol = "java "
+  # symbol = "java "
 
 [jobs]
   format = "\\[[$symbol$number]($style)\\]"
@@ -328,6 +331,7 @@ continuation_prompt = "[.](bright-black) "
     openSUSE = "osuse "
 
 [package]
+disabled = true
   format = "\\[[$symbol$version]($style)\\]"
   symbol = "pkg "
 
@@ -358,7 +362,7 @@ continuation_prompt = "[.](bright-black) "
 
 [python]
   format = "\\[[${symbol}${pyenv_prefix}(${version})(\\($virtualenv\\))]($style)\\]"
-  symbol = "py "
+  # symbol = "py "
 
 [quarto]
   format = "\\[[$symbol($version)]($style)\\]"
@@ -422,6 +426,7 @@ continuation_prompt = "[.](bright-black) "
   symbol = "swift "
 
 [terraform]
+  disabled = true
   format = "\\[[$symbol$workspace]($style)\\]"
   symbol = "terraform "
 
