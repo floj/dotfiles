@@ -1,3 +1,3 @@
 function n --wraps='nautilus . &' --description 'alias n=nautilus . &'
-    nautilus . & $argv
+    xdg-open . $argv &>/dev/null &
 end
