@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -euo pipefail
+declare ifc op
+ead(){
+	echo "> $*"
+	"$@"
+}
+
+for a in "$@"; do
+	ifc=$a
+	op=up
+	case ${a:0:1} in
+	+)
+		ifc=${a:1}
+		op=up
+		;;
+	-)
+		ifc=${a:1}
+		op=down
+		;;
+	esac
+	ead wg-quick "$op" "wg-$ifc"
+done

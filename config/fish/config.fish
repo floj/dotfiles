@@ -4,9 +4,10 @@ set -g fish_greeting
 if status is-interactive
     # Commands to run in interactive sessions can go here
     atuin init fish | source
-    direnv hook fish | source
+    #direnv hook fish | source
     zoxide init fish | source
     starship init fish | source
+    mise activate fish | source
 
     fish_add_path ~/.local/bin
     fish_add_path ~/bin
